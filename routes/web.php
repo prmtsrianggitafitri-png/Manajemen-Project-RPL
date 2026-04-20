@@ -32,3 +32,7 @@ require __DIR__.'/auth.php';
 Route::get('/cek', function () {
     return view('layouts.layoutAdmin');
 });
+
+Route::get('/admin', function () {
+    return view('admin.dashboardAdmin');
+});

@@ -24,6 +24,7 @@
     <link rel="icon" type="image/png" href="./assets/img/favicon.png" />
     <title>Soft UI Dashboard Tailwind</title>
     <!--     Fonts and icons     -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link
       href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700"
       rel="stylesheet" />
@@ -46,6 +47,8 @@
       defer
       data-site="YOUR_DOMAIN_HERE"
       src="https://api.nepcha.com/js/nepcha-analytics.js"></script>
+      <!-- script alert -->
+      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   </head>
 
   <body
@@ -125,7 +128,7 @@
           <li class="mt-0.5 w-full">
             <a
               class="py-2.7 text-sm ease-nav-brand my-0 mx-4 flex items-center whitespace-nowrap px-4 transition-colors"
-              href="./pages/tables.html">
+              href="/manajemenDataKategori">
               <div
                 class="shadow-soft-2xl mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-white bg-center stroke-0 text-center xl:p-2.5">
                 <svg
@@ -161,7 +164,7 @@
               </div>
               <span
                 class="ml-1 duration-300 opacity-100 pointer-events-none ease-soft"
-                >Tables</span
+                >Data Kategori</span
               >
             </a>
           </li>

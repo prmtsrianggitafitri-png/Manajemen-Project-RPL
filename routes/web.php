@@ -25,6 +25,7 @@ Route::middleware('auth')->group(function () {
 
 //Belum di middleware buat admin
  //kategori
+ Route::get('/manajemenDataKategori', [KategoriController::class, 'index']);
  Route::resource('kategori', KategoriController::class);
 
 require __DIR__.'/auth.php';

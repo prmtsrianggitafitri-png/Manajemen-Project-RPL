@@ -25,14 +25,16 @@ Route::middleware('auth')->group(function () {
 
 //Belum di middleware buat admin
  //kategori
- Route::resource('kategori', kategoriController::class);
+ Route::resource('kategori', KategoriController::class);
 
 require __DIR__.'/auth.php';
 
+// layout admin belum di midleware
 Route::get('/cek', function () {
     return view('layouts.layoutAdmin');
 });
 
+// dasboard admin blm di midleware
 Route::get('/admin', function () {
     return view('admin.dashboardAdmin');
 });

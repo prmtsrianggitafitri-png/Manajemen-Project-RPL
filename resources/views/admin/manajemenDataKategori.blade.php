@@ -90,7 +90,7 @@
 function konfirmasiHapus(id, nama) {
     Swal.fire({
         title: 'Beneran mau hapus?',
-        text: "Kategori " + nama + " bakal ilang dari sistem, Lan!",
+        text: "Kategori " + nama + " bakal ilang dari sistem!",
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#cb0c9f', 

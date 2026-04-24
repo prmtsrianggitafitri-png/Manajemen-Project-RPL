@@ -2,10 +2,14 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\kategoriController;
 
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -17,4 +21,21 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+//dashboard admin
+
+//Belum di middleware buat admin
+ //kategori
+ Route::get('/manajemenDataKategori', [KategoriController::class, 'index']);
+ Route::resource('kategori', KategoriController::class);
+
 require __DIR__.'/auth.php';
+
+// layout admin belum di midleware
+Route::get('/cek', function () {
+    return view('layouts.layoutAdmin');
+});
+
+// dasboard admin blm di midleware
+Route::get('/admin', function () {
+    return view('admin.dashboardAdmin');
+});

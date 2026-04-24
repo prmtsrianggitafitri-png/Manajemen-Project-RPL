@@ -37,11 +37,11 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin-bottom: 2.5rem;
+            margin-bottom: 1.75rem;
         }
 
         .card-logo {
-            height: 60px;
+            height: 350px;
             width: auto;
             margin-bottom: 0rem;
         }
@@ -52,7 +52,7 @@
             color: #111;
             margin-bottom: 6px;
             text-align: center;
-            margin-top: -30px;
+            margin-top: -80px;
         }
 
         .card-subtitle {
@@ -176,7 +176,6 @@
             <div class="card-header">
                 <img src="/logo-sipresma.png" alt="SIPRESMA" class="card-logo">
                 <p class="card-title">Regristrasi Akun Sipresma</p>
-                <p class="card-subtitle">Sign up in less than 2 minutes.</p>
             </div>
 
             @if(session('success'))

@@ -9,7 +9,7 @@ class Mahasiswa extends Authenticatable
 {
     use Notifiable;
 
-    protected $table = 'mahasiswas';
+    protected $table = 'mahasiswas'; // Sesuaikan dengan nama di database kamu
     protected $primaryKey = 'nim';
     public $incrementing = false;
     protected $keyType = 'string';
@@ -29,6 +29,12 @@ class Mahasiswa extends Authenticatable
         'password',
         'remember_token',
     ];
+
+    // INI DIA TAMBAHANNYA:
+    public function username()
+    {
+        return 'nim';
+    }
 
     protected function casts(): array
     {

@@ -51,7 +51,7 @@
         .card-title {
             font-size: 24px;
             font-weight: 700;
-            color: #111;
+            color: #1a3a5c;
             margin-bottom: 6px;
             text-align: center;
             margin-top: -80px;

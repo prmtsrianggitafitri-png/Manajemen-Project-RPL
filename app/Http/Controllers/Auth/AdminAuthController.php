@@ -11,7 +11,7 @@ class AdminAuthController extends Controller
     // Tampilkan halaman login
     public function showLoginForm()
     {
-        return view('auth.admin-login');
+        return view('auth.adminAdmin');
     }
 
     // Proses login

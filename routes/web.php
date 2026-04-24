@@ -38,8 +38,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     // Belum login
     Route::middleware('guest:admin')->group(function () {
-        Route::get('/login', [AdminAuthController::class, 'showLoginForm'])->name('login');
-        Route::post('/login', [AdminAuthController::class, 'login']);
+        Route::get('/loginAdmin', [AdminAuthController::class, 'showLoginForm'])->name('login');
+        Route::post('/loginAdmin', [AdminAuthController::class, 'login']);
     });
 
     // Sudah login

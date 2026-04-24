@@ -167,6 +167,57 @@
         }
 
         .footer-text a:hover { text-decoration: underline; }
+
+        /* === POPUP MODAL === */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.35);
+    z-index: 999;
+    align-items: center;
+    justify-content: center;
+}
+.modal-overlay.active { display: flex; }
+
+.modal-box {
+    background: #fff;
+    border-radius: 12px;
+    padding: 1.75rem 1.5rem;
+    width: 90%;
+    max-width: 320px;
+    text-align: center;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+}
+.modal-icon {
+    font-size: 2.5rem;
+    margin-bottom: 0.75rem;
+}
+.modal-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #111;
+    margin-bottom: 6px;
+}
+.modal-message {
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 1.25rem;
+    line-height: 1.5;
+}
+.modal-btn {
+    display: inline-block;
+    padding: 8px 28px;
+    background: #c8dff7;
+    color: #1a3a5c;
+    font-size: 14px;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+.modal-btn:hover { background: #aecfed; }
     </style>
 </head>
 <body>
@@ -266,21 +317,49 @@
         </div>
     </section>
 
-    <script>
-        const form = document.querySelector('form');
-        const password = document.querySelector('input[name="password"]');
-        const confirm = document.querySelector('input[name="password_confirmation"]');
+    <!-- Modal Popup -->
+<div class="modal-overlay" id="modalOverlay">
+    <div class="modal-box">
+        <div class="modal-icon" id="modalIcon"></div>
+        <p class="modal-title" id="modalTitle"></p>
+        <p class="modal-message" id="modalMessage"></p>
+        <button class="modal-btn" onclick="closeModal()">OK</button>
+    </div>
+</div>
 
-        form.addEventListener('submit', function(e) {
-            if (password.value.length < 8) {
-                e.preventDefault();
-                alert('Password harus minimal 8 karakter!');
-            } else if (password.value !== confirm.value) {
-                e.preventDefault();
-                alert('Password dan konfirmasi password tidak sama!');
-            }
+<script>
+    function showModal(icon, title, message) {
+        document.getElementById('modalIcon').textContent = icon;
+        document.getElementById('modalTitle').textContent = title;
+        document.getElementById('modalMessage').textContent = message;
+        document.getElementById('modalOverlay').classList.add('active');
+    }
+
+    function closeModal() {
+        document.getElementById('modalOverlay').classList.remove('active');
+    }
+
+    /* Cek apakah ada session success dari Laravel — tampilkan popup */
+    @if(session('success'))
+        window.addEventListener('DOMContentLoaded', function() {
+            showModal('✅', 'Registrasi Berhasil!', 'Akun kamu berhasil dibuat. Silakan masuk.');
         });
-    </script>
+    @endif
+
+    const form = document.querySelector('form');
+    const password = document.querySelector('input[name="password"]');
+    const confirm = document.querySelector('input[name="password_confirmation"]');
+
+    form.addEventListener('submit', function(e) {
+        if (password.value.length < 8) {
+            e.preventDefault();
+            showModal('⚠️', 'Password Terlalu Pendek', 'Password harus minimal 8 karakter.');
+        } else if (password.value !== confirm.value) {
+            e.preventDefault();
+            showModal('❌', 'Password Tidak Sama', 'Password dan konfirmasi password tidak cocok.');
+        }
+    });
+</script>
 
 </body>
 </html>

@@ -40,6 +40,6 @@ class RegisteredUserController extends Controller
             'password'      => Hash::make($request->password),
         ]);
 
-        return redirect(route('login'))->with('success', 'Registrasi berhasil!');
+       return redirect(route('register'))->with('success', 'Registrasi berhasil!');
     }
 }

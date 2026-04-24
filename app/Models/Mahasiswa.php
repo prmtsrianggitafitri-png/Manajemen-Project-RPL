@@ -37,4 +37,3 @@ class Mahasiswa extends Authenticatable
         ];
     }
 }
-g

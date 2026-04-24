@@ -1,15 +1,18 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Auth\AdminAuthController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\kategoriController;
+
+/*
+|--------------------------------------------------------------------------
+| Mahasiswa Routes
+|--------------------------------------------------------------------------
+*/
 
 Route::get('/', function () {
     return view('welcome');
 });
-
-
-
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -21,21 +24,30 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-//dashboard admin
-
-//Belum di middleware buat admin
- //kategori
- Route::get('/manajemenDataKategori', [KategoriController::class, 'index']);
- Route::resource('kategori', KategoriController::class);
-
+// Login Mahasiswa (email & password)
 require __DIR__.'/auth.php';
 
-// layout admin belum di midleware
-Route::get('/cek', function () {
-    return view('layouts.layoutAdmin');
-});
+/*
+|--------------------------------------------------------------------------
+| Admin Routes
+|--------------------------------------------------------------------------
+*/
 
-// dasboard admin blm di midleware
-Route::get('/admin', function () {
-    return view('admin.dashboardAdmin');
+// Login Admin (NPSN & password)
+Route::prefix('admin')->name('admin.')->group(function () {
+
+    // Belum login
+    Route::middleware('guest:admin')->group(function () {
+        Route::get('/login', [AdminAuthController::class, 'showLoginForm'])->name('login');
+        Route::post('/login', [AdminAuthController::class, 'login']);
+    });
+
+    // Sudah login
+    Route::middleware('auth:admin')->group(function () {
+        Route::post('/logout', [AdminAuthController::class, 'logout'])->name('logout');
+        Route::get('/dashboard', function () {
+            return view('layouts.layoutAdmin');
+        })->name('dashboard');
+    });
 });
+    

@@ -226,7 +226,7 @@
         <div class="card">
             <div class="card-header">
                 <img src="/logo-sipresma.png" alt="SIPRESMA" class="card-logo">
-                <p class="card-title">Regristrasi Akun Sipresma</p>
+                <p class="card-title">Registrasi Akun Sipresma</p>
             </div>
 
             @if(session('success'))

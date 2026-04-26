@@ -2,9 +2,27 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class admin extends Model
+class Admin extends Authenticatable
 {
-    //
+    protected $table = 'admins';
+    protected $primaryKey = 'NPSN';
+    public $incrementing = false;
+    protected $keyType = 'string';
+
+    protected $fillable = [
+        'NPSN',
+        'nama',
+        'email',
+        'password',
+    ];
+
+    protected $hidden = [
+        'password',
+    ];
+
+    protected $casts = [
+        'password' => 'hashed',
+    ];
 }

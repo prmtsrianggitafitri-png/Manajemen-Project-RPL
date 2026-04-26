@@ -10,10 +10,9 @@ class AdminAuthController extends Controller
 {
     // Tampilkan halaman login
     public function showLoginForm()
-    {
-        return view('auth.adminAdmin');
-    }
-
+{
+    return view('auth.loginAdmin');
+}
     // Proses login
     public function login(Request $request)
     {

@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Auth\AdminAuthController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\KategoriController;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,5 +50,20 @@ Route::prefix('admin')->name('admin.')->group(function () {
             return view('layouts.layoutAdmin');
         })->name('dashboard');
     });
+});
+
+Route::get('/manajemenDataKategori', [KategoriController::class, 'index']);
+Route::resource('kategori', KategoriController::class);
+
+require __DIR__.'/auth.php';
+
+// layout admin belum di midleware
+Route::get('/cek', function () {
+    return view('layouts.layoutAdmin');
+});
+
+// dasboard admin blm di midleware
+Route::get('/admin', function () {
+    return view('admin.dashboardAdmin');
 });
     

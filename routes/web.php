@@ -39,3 +39,10 @@ Route::get('/cek', function () {
 Route::get('/admin', function () {
     return view('admin.dashboardAdmin');
 });
+
+use App\Http\Controllers\PrestasiController;
+
+Route::middleware('auth')->group(function () {
+    Route::get('/prestasi/upload', [PrestasiController::class, 'index'])->name('prestasi.upload');
+    Route::post('/prestasi/upload', [PrestasiController::class, 'store'])->name('prestasi.store');
+});

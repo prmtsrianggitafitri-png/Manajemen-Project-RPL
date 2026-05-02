@@ -1,7 +1,7 @@
 <?php
-
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Auth\AdminAuthController;
+use App\Http\Controllers\PrestasiController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -35,7 +35,6 @@ require __DIR__.'/auth.php';
 
 // Login Admin (NPSN & password)
 Route::prefix('admin')->name('admin.')->group(function () {
-
     // Belum login
     Route::middleware('guest:admin')->group(function () {
         Route::get('/loginAdmin', [AdminAuthController::class, 'showLoginForm'])->name('login');
@@ -50,4 +49,14 @@ Route::prefix('admin')->name('admin.')->group(function () {
         })->name('dashboard');
     });
 });
-    
+
+/*
+|--------------------------------------------------------------------------
+| Prestasi Routes
+|--------------------------------------------------------------------------
+*/
+
+Route::middleware('auth')->group(function () {
+    Route::get('/prestasi/upload', [PrestasiController::class, 'index'])->name('prestasi.upload');
+    Route::post('/prestasi/upload', [PrestasiController::class, 'store'])->name('prestasi.store');
+});

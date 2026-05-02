@@ -29,7 +29,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/prestasi/upload', [PrestasiController::class, 'index'])->name('prestasi.upload');
     Route::post('/prestasi/upload', [PrestasiController::class, 'store'])->name('prestasi.store');
     
-    // BAGIAN KAMU: Route Hapus Prestasi
+    // Route Hapus Prestasi
     Route::delete('/prestasi/{id}', [PrestasiController::class, 'destroy'])->name('prestasi.destroy');
 });
 

@@ -227,29 +227,10 @@
             @csrf
             <div class="form-rows">
 
-                <div class="input-wrapper">
-                    <label class="field-label">Kategori Prestasi</label>
-                    <select name="id_kategori" required>
-                        <option value="">-- Pilih Kategori --</option>
-                        @foreach($kategoris as $kategori)
-                            <option value="{{ $kategori->id_kategori }}" {{ old('id_kategori') == $kategori->id_kategori ? 'selected' : '' }}>
-                                {{ $kategori->nama_kategori }}
-                            </option>
-                        @endforeach
-                    </select>
-                    @error('id_kategori') <span class="error-message">{{ $message }}</span> @enderror
-                </div>
-
-                <div class="input-wrapper">
+            <div class="input-wrapper">
                     <label class="field-label">Judul Prestasi</label>
                     <input type="text" name="judul" value="{{ old('judul') }}" placeholder="Contoh: Juara 1 Olimpiade Matematika" required>
                     @error('judul') <span class="error-message">{{ $message }}</span> @enderror
-                </div>
-
-                <div class="input-wrapper">
-                    <label class="field-label">Deskripsi</label>
-                    <textarea name="deskripsi" placeholder="Ceritakan prestasi kamu...">{{ old('deskripsi') }}</textarea>
-                    @error('deskripsi') <span class="error-message">{{ $message }}</span> @enderror
                 </div>
 
                 <div class="input-wrapper">
@@ -261,6 +242,29 @@
                     </select>
                     @error('bidang') <span class="error-message">{{ $message }}</span> @enderror
                 </div>
+
+                <div class="input-wrapper">
+                    <label class="field-label">Pilih Kategori & Peringkat</label>
+                    <select name="id_kategori" required>
+                        <option value="">-- Pilih Kategori Prestasi --</option>
+                        @foreach($kategoris as $k)
+                            <option value="{{ $k->id_kategori }}" {{ old('id_kategori') == $k->id_kategori ? 'selected' : '' }}>
+                                {{ $k->nama_kategori }} - {{ $k->peringkat }} ({{ $k->poin }} Poin)
+                            </option>
+                        @endforeach
+                    </select>
+                    <span class="hint">Contoh: Nasional - Juara 1</span>
+                    @error('id_kategori') <span class="error-message">{{ $message }}</span> @enderror
+                </div>
+
+                
+
+                <div class="input-wrapper">
+                    <label class="field-label">Deskripsi</label>
+                    <textarea name="deskripsi" placeholder="Ceritakan prestasi kamu...">{{ old('deskripsi') }}</textarea>
+                    @error('deskripsi') <span class="error-message">{{ $message }}</span> @enderror
+                </div>
+
 
                 <div class="input-wrapper">
                     <label class="field-label">Bukti Prestasi <span style="color:#e24b4a">*</span></label>

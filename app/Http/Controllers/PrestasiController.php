@@ -18,13 +18,15 @@ class PrestasiController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'id_kategori'         => 'required',
+            'id_kategori'         => 'required|exists:kategoris,id_kategori',
             'judul'               => 'required|string|max:255',
             'deskripsi'           => 'required|string',
             'bidang'              => 'required|in:akademik,non-akademik',
-            'bukti_prestasi'      => 'required|file|max:512000',
+            'bukti_prestasi'      => 'required|file|max:512000', 
             'dokumentasi_pribadi' => 'nullable|file|max:512000',
         ]);
+
+        $kategori = Kategori::findOrFail($request->id_kategori);
 
         $buktiPath = $request->file('bukti_prestasi')->store('prestasi/bukti', 'public');
 
@@ -34,13 +36,14 @@ class PrestasiController extends Controller
         }
 
         Prestasi::create([
-            'id_kategori'         => $request->id_kategori,
-            'nim'                 => Auth::user()->nim,
+            'id_kategori'         => $kategori->id_kategori,
+            'nim'                 => Auth::user()->nim, 
             'judul'               => $request->judul,
-            'deskripsi'           => $request->deskripsi,
             'bidang'              => $request->bidang,
-            'status'              => 'menunggu',
-            'poin'                => 0,
+            'deskripsi'           => $request->deskripsi,
+            'status'              => 'menunggu', 
+            'peringkat'           => $kategori->peringkat,
+            'jumlah_poin'          => $kategori->jumlah_poin,      
             'bukti_prestasi'      => $buktiPath,
             'dokumentasi_pribadi' => $dokPath,
         ]);

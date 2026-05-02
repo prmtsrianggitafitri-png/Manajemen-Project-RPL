@@ -15,6 +15,8 @@ class Prestasi extends Model
         'judul',
         'deskripsi',
         'bidang',
+        'peringkat',
+        'jumlah_poin',
         'status',
         'poin',
         'bukti_prestasi',

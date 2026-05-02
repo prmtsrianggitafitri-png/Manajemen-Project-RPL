@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Auth\AdminAuthController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\KategoriController;
+use App\Http\Controllers\PrestasiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -67,3 +68,8 @@ Route::get('/admin', function () {
     return view('admin.dashboardAdmin');
 });
     
+
+Route::middleware('auth')->group(function () {
+    Route::get('/prestasi/upload', [PrestasiController::class, 'index'])->name('prestasi.upload');
+    Route::post('/prestasi/upload', [PrestasiController::class, 'store'])->name('prestasi.store');
+});

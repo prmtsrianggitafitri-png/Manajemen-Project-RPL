@@ -13,13 +13,16 @@ return new class extends Migration
     {
         Schema::create('prestasis', function (Blueprint $table) {
             $table->id('id_prestasi');
-            $table->foreignId('id_kategori')->references('id_kategori')->on('kategoris')->onDelete('cascade');
-            $table->foreignId('nim')->references('nim')->on('mahasiswas')->onDelete('cascade');
+            $table->unsignedBigInteger('id_kategori');
+            $table->string('nim');
             $table->string('judul');
-            $table->longText('deskripsi');
-            $table->enum('bidang', ['akademik', 'non-akademik']);
-            $table->enum('status', ['disetujui', 'menunggu']);
-            $table->integer('poin');
+            $table->text('deskripsi');
+            $table->string('bidang');
+            $table->string('status')->default('menunggu');
+            $table->string('peringkat')->nullable();
+            $table->integer('jumlah_poin')->default(0); 
+            $table->string('bukti_prestasi')->nullable();
+            $table->string('dokumentasi_pribadi')->nullable();
             $table->timestamps();
         });
     }

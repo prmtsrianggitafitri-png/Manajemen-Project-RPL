@@ -72,4 +72,8 @@ Route::get('/admin', function () {
 Route::middleware('auth')->group(function () {
     Route::get('/prestasi/upload', [PrestasiController::class, 'index'])->name('prestasi.upload');
     Route::post('/prestasi/upload', [PrestasiController::class, 'store'])->name('prestasi.store');
+    Route::get('/tabelPrestasi', [PrestasiController::class, 'tabelPrestasi']);
+    Route::get('/prestasi/edit/{id}', [PrestasiController::class, 'edit'])->name('prestasi.edit');
+    Route::put('/prestasi/update/{id}', [PrestasiController::class, 'update'])->name('prestasi.update');
+    Route::delete('/prestasi/delete/{id}', [PrestasiController::class, 'destroy'])->name('prestasi.destroy');
 });

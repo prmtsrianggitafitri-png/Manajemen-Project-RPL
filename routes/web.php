@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Mahasiswa\LayoutController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Auth\AdminAuthController;
 use Illuminate\Support\Facades\Route;
@@ -12,7 +13,7 @@ use App\Http\Controllers\KategoriController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('mahasiswa.index');
 });
 
 Route::get('/dashboard', function () {
@@ -67,3 +68,5 @@ Route::get('/admin', function () {
     return view('admin.dashboardAdmin');
 });
     
+// Tampilan awal web tanpa register/login
+Route::get('/sipresma', [LayoutController::class, 'index']);

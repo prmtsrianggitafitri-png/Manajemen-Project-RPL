@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Mahasiswa\LayoutController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Auth\AdminAuthController;
 use App\Http\Controllers\KategoriController;
@@ -13,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('mahasiswa.index');
 });
 
 Route::get('/dashboard', function () {
@@ -58,5 +59,25 @@ Route::prefix('admin')->name('admin.')->group(function () {
     });
 });
 
+<<<<<<< HEAD
 // Load auth routes hanya satu kali saja
 require __DIR__.'/auth.php';
+=======
+Route::get('/manajemenDataKategori', [KategoriController::class, 'index']);
+Route::resource('kategori', KategoriController::class);
+
+require __DIR__.'/auth.php';
+
+// layout admin belum di midleware
+Route::get('/cek', function () {
+    return view('layouts.layoutAdmin');
+});
+
+// dasboard admin blm di midleware
+Route::get('/admin', function () {
+    return view('admin.dashboardAdmin');
+});
+    
+// Tampilan awal web tanpa register/login
+Route::get('/sipresma', [LayoutController::class, 'index']);
+>>>>>>> 15ddec2 (Inisialisasi branch akunMahasiswa)

@@ -29,7 +29,7 @@ Route::middleware('auth')->group(function () {
     // FITUR PRESTASI (Gabungan Upload & Hapus)
     Route::get('/prestasi/upload', [PrestasiController::class, 'index'])->name('prestasi.upload');
     Route::post('/prestasi/upload', [PrestasiController::class, 'store'])->name('prestasi.store');
-    
+
     // Route Hapus Prestasi
     Route::delete('/prestasi/{id}', [PrestasiController::class, 'destroy'])->name('prestasi.destroy');
 });
@@ -59,10 +59,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
     });
 });
 
-<<<<<<< HEAD
-// Load auth routes hanya satu kali saja
-require __DIR__.'/auth.php';
-=======
 Route::get('/manajemenDataKategori', [KategoriController::class, 'index']);
 Route::resource('kategori', KategoriController::class);
 
@@ -80,4 +76,3 @@ Route::get('/admin', function () {
     
 // Tampilan awal web tanpa register/login
 Route::get('/sipresma', [LayoutController::class, 'index']);
->>>>>>> 15ddec2 (Inisialisasi branch akunMahasiswa)

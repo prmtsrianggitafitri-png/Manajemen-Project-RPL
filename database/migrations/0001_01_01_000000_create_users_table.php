@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             $table->string('nama');
             $table->string('email')->unique();
-            $table->string('username')->unique(); 
+            $table->string('username')->nullable(); 
             $table->string('password');
             
             // Kolom buat mahasiswa

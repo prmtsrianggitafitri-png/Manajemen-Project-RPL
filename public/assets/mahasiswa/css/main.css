@@ -1,17 +1,5 @@
-/**
-* Template Name: Blogy
-* Template URL: https://bootstrapmade.com/blogy-bootstrap-blog-template/
-* Updated: Feb 22 2025 with Bootstrap v5.3.3
-* Author: BootstrapMade.com
-* License: https://bootstrapmade.com/license/
-*/
-
 @charset "UTF-8";
 
-/*--------------------------------------------------------------
-# Font & Color Variables
-# Help: https://bootstrapmade.com/color-system/
---------------------------------------------------------------*/
 /* Fonts */
 :root {
   --default-font: "Roboto",  system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
@@ -21,10 +9,10 @@
 
 /* Global Colors - The following color variables are used throughout the website. Updating them here will change the color scheme of the entire website */
 :root { 
-  --background-color: #ffffff; /* Background color for the entire website, including individual sections */
+  --background-color: linear-gradient(160deg, #98bdf4 0%, #c8dff7 35%, #e8f2fb 65%, #ffffff 100%); /* Background color for the entire website, including individual sections */
   --default-color: #212529; /* Default color used for the majority of the text content across the entire website */
   --heading-color: #2d465e; /* Color for headings, subheadings and title throughout the website */
-  --accent-color: #f75815; /* Accent color that represents your brand on the website. It's used for buttons, links, and other elements that need to stand out */
+  --accent-color:  #107ec2; /* Accent color that represents your brand on the website. It's used for buttons, links, and other elements that need to stand out */
   --surface-color: #ffffff; /* The surface color is used as a background of boxed elements within sections, such as cards, icon boxes, or other elements that require a visual separation from the global background. */
   --contrast-color: #ffffff; /* Contrast color for text, ensuring readability against backgrounds of accent, heading, or default colors. */
 }
@@ -32,11 +20,11 @@
 /* Nav Menu Colors - The following color variables are used specifically for the navigation menu. They are separate from the global colors to allow for more customization options */
 :root {
   --nav-color: #000000;  /* The default color of the main navmenu links */
-  --nav-hover-color: #f75815; /* Applied to main navmenu links when they are hovered over or active */
+  --nav-hover-color: #107ec2; /* Applied to main navmenu links when they are hovered over or active */
   --nav-mobile-background-color: #ffffff; /* Used as the background color for mobile navigation menu */
   --nav-dropdown-background-color: #ffffff; /* Used as the background color for dropdown items that appear when hovering over primary navigation items */
   --nav-dropdown-color: #212529; /* Used for navigation links of the dropdown items in the navigation menu. */
-  --nav-dropdown-hover-color: #f75815; /* Similar to --nav-hover-color, this color is applied to dropdown navigation links when they are hovered over. */
+  --nav-dropdown-hover-color: #107ec2; /* Similar to --nav-hover-color, this color is applied to dropdown navigation links when they are hovered over. */
 }
 
 /* Color Presets - These classes override global colors when applied to any section or element, providing reuse of the sam color scheme. */
@@ -64,7 +52,7 @@
 --------------------------------------------------------------*/
 body {
   color: var(--default-color);
-  background-color: var(--background-color);
+  background: var(--background-color) !important; 
   font-family: var(--default-font);
 }
 
@@ -141,212 +129,76 @@ h6 {
   }
 }
 
-/* Pulsating Play Button
-------------------------------*/
-.pulsating-play-btn {
-  width: 94px;
-  height: 94px;
-  background: radial-gradient(var(--accent-color) 50%, color-mix(in srgb, var(--accent-color), transparent 75%) 52%);
-  border-radius: 50%;
-  display: block;
-  position: relative;
-  overflow: hidden;
-}
-
-.pulsating-play-btn:before {
-  content: "";
-  position: absolute;
-  width: 120px;
-  height: 120px;
-  animation-delay: 0s;
-  animation: pulsate-play-btn 2s;
-  animation-direction: forwards;
-  animation-iteration-count: infinite;
-  animation-timing-function: steps;
-  opacity: 1;
-  border-radius: 50%;
-  border: 5px solid color-mix(in srgb, var(--accent-color), transparent 30%);
-  top: -15%;
-  left: -15%;
-  background: rgba(198, 16, 0, 0);
-}
-
-.pulsating-play-btn:after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translateX(-40%) translateY(-50%);
-  width: 0;
-  height: 0;
-  border-top: 10px solid transparent;
-  border-bottom: 10px solid transparent;
-  border-left: 15px solid #fff;
-  z-index: 100;
-  transition: all 400ms cubic-bezier(0.55, 0.055, 0.675, 0.19);
-}
-
-.pulsating-play-btn:hover:before {
-  content: "";
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translateX(-40%) translateY(-50%);
-  width: 0;
-  height: 0;
-  border: none;
-  border-top: 10px solid transparent;
-  border-bottom: 10px solid transparent;
-  border-left: 15px solid #fff;
-  z-index: 200;
-  animation: none;
-  border-radius: 0;
-}
-
-.pulsating-play-btn:hover:after {
-  border-left: 15px solid var(--accent-color);
-  transform: scale(20);
-}
-
-@keyframes pulsate-play-btn {
-  0% {
-    transform: scale(0.6, 0.6);
-    opacity: 1;
-  }
-
-  100% {
-    transform: scale(1, 1);
-    opacity: 0;
-  }
-}
-
 /*--------------------------------------------------------------
 # Global Header
 --------------------------------------------------------------*/
-.header {
-  transition: all 0.5s ease-in-out;
-  z-index: 997;
-  padding: 15px 0;
-  position: fixed; 
-  top: 0;
-  left: 0;
-  width: 100%;
-  background: rgba(255, 255, 255, 0.90); /* Sedikit lebih pekat agar teks terbaca jelas */
-  backdrop-filter: blur(8px); 
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+.custom-header {
+    background:#e8f2fb;
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease-in-out;
+    width: 100%;
+    top: 0;
+    left: 0;
+    height: 76px;
 }
 
-.header .top-row {
-  padding-bottom: 10px;
+.custom-container {
+    max-width: 1300px; 
+    padding: 0 24px;
 }
 
-.header .top-row .logo {
-  text-decoration: none;
+.custom-logo {
+    font-size: 1.6rem;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    color:  #107ec2;
 }
 
-.header .top-row .logo img {
-  max-height: 40px;
-  margin-right: 10px;
+.custom-nav-link {
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: 0.3s;
+    text-decoration: none;
 }
 
-.header .top-row .logo .sitename {
-  font-size: 32px;
-  font-weight: 400;
-  color: var(--heading-color);
-  font-family: var(--heading-font);
-  margin: 0;
+.custom-nav-link-normal {
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: 0.3s;
+    text-decoration: none;
 }
 
-/* Bagian Logo yang diubah ke Biru Muda */
-.header .top-row .logo span {
-  color: #007bff; /* Diubah dari warna aksen ke biru muda */
-  font-size: 28px;
-  font-weight: 700;
-  line-height: 1.1;
+.custom-search-input {
+    border-radius: 20px;
+    border: 1px solid #ced4da;
+    font-size: 0.85rem;
+    width: 160px;
+    height: 38px;
 }
 
-.header .social-links a {
-  color: var(--heading-color);
-  padding: 0 8px;
-  display: inline-block;
-  font-size: 18px;
-  transition: 0.3s;
+.custom-btn-login {
+    color: #212529;
+    background-color: #ffffff;
+    border: 1px solid #ced4da;
+    border-radius: 20px;
+    font-weight: 500;
+    font-size: 0.85rem;
+    height: 38px;
+    line-height: 1.4;
+    text-decoration: none;
 }
 
-/* Ikon sosial link saat di-hover (diubah ke biru muda) */
-.header .social-links a:hover {
-  color: #007bff; 
-}
-
-@media (max-width: 1200px) {
-  .header .social-links {
-    padding-right: 40px;
-  }
-}
-
-.header .search-form {
-  position: relative;
-  width: 250px;
-  display: flex;
-  align-items: center;
-  padding: 0;
-  margin: 0;
-}
-
-.header .search-form .form-control {
-  border: 1px solid color-mix(in srgb, var(--default-color), transparent 90%);
-  padding: 7px 40px 7px 15px;
-  background: transparent;
-  transition: 0.3s;
-  color: var(--default-color);
-  font-size: 14px;
-}
-
-.header .search-form .form-control::placeholder {
-  color: color-mix(in srgb, var(--default-color), transparent 70%);
-}
-
-.header .search-form .form-control:focus {
-  border-color: #007bff; /* Fokus border diubah ke biru muda */
-  box-shadow: none;
-}
-
-.header .search-form button {
-  position: absolute;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  border: 0;
-  background: none;
-  font-size: 16px;
-  padding: 0 15px;
-  margin: 0;
-  color: var(--heading-color);
-  transition: 0.3s;
-}
-
-/* Tombol pencarian saat di-hover (diubah ke biru muda) */
-.header .search-form button:hover {
-  color: #007bff; 
-}
-
-@media (max-width: 1200px) {
-  .header .search-form {
-    display: none;
-  }
-}
-
-.header .nav-wrap {
-  background-color: color-mix(in srgb, var(--default-color), transparent 96%);
-  margin-top: 10px;
-  display: flex;
-  justify-content: center;
-}
-
-.header .mobile-nav-toggle {
-  position: fixed;
-  top: 20px;
-  right: 5px;
+.custom-btn-register {
+    color: #212529;
+    background-color:  #107ec2;
+    border: 1px solid #ced4da;
+    border-radius: 20px;
+    font-weight: 500;
+    font-size: 0.85rem;
+    height: 38px;
+    line-height: 1.4;
+    text-decoration: none;
 }
 
 /*--------------------------------------------------------------
@@ -436,33 +288,10 @@ main {
     color: var(--nav-dropdown-color);
   }
 
-  .navmenu .dropdown ul a i {
-    font-size: 12px;
-  }
-
   .navmenu .dropdown ul a:hover,
   .navmenu .dropdown ul .active:hover,
   .navmenu .dropdown ul li:hover>a {
     color: var(--nav-dropdown-hover-color);
-  }
-
-  .navmenu .dropdown:hover>ul {
-    opacity: 1;
-    top: 100%;
-    visibility: visible;
-  }
-
-  .navmenu .dropdown .dropdown ul {
-    top: 0;
-    left: -90%;
-    visibility: hidden;
-  }
-
-  .navmenu .dropdown .dropdown:hover>ul {
-    opacity: 1;
-    top: 0;
-    left: -100%;
-    visibility: visible;
   }
 }
 
@@ -609,100 +438,6 @@ main {
   background-color: var(--background-color);
   font-size: 14px;
   position: relative;
-}
-
-.footer .footer-top {
-  padding-top: 50px;
-  border-top: 1px solid color-mix(in srgb, var(--default-color), transparent 90%);
-}
-
-.footer .footer-about .logo {
-  line-height: 1;
-  margin-bottom: 25px;
-}
-
-.footer .footer-about .logo img {
-  max-height: 40px;
-  margin-right: 6px;
-}
-
-.footer .footer-about .logo span {
-  color: var(--heading-color);
-  font-family: var(--heading-font);
-  font-size: 26px;
-  font-weight: 400;
-  letter-spacing: 1px;
-}
-
-.footer .footer-about p {
-  font-size: 14px;
-  font-family: var(--heading-font);
-}
-
-.footer .social-links a {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  border: 1px solid color-mix(in srgb, var(--default-color), transparent 50%);
-  font-size: 16px;
-  color: color-mix(in srgb, var(--default-color), transparent 20%);
-  margin-right: 10px;
-  transition: 0.3s;
-}
-
-.footer .social-links a:hover {
-  color: var(--accent-color);
-  border-color: var(--accent-color);
-}
-
-.footer h4 {
-  font-size: 16px;
-  font-weight: bold;
-  position: relative;
-  padding-bottom: 12px;
-}
-
-.footer .footer-links {
-  margin-bottom: 30px;
-}
-
-.footer .footer-links ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.footer .footer-links ul i {
-  padding-right: 2px;
-  font-size: 12px;
-  line-height: 0;
-}
-
-.footer .footer-links ul li {
-  padding: 10px 0;
-  display: flex;
-  align-items: center;
-}
-
-.footer .footer-links ul li:first-child {
-  padding-top: 0;
-}
-
-.footer .footer-links ul a {
-  color: color-mix(in srgb, var(--default-color), transparent 30%);
-  display: inline-block;
-  line-height: 1;
-}
-
-.footer .footer-links ul a:hover {
-  color: var(--accent-color);
-}
-
-.footer .footer-contact p {
-  margin-bottom: 5px;
 }
 
 .footer .copyright {
@@ -863,7 +598,7 @@ section,
   color: var(--default-color);
   background-color: var(--background-color);
   padding: 60px 0;
-  scroll-margin-top: 90px;
+  scroll-margin-top: 0px;
   overflow: clip;
 }
 
@@ -1398,21 +1133,11 @@ section,
 .call-to-action-2 {
   position: relative;
   padding: 3rem;
-  background-color: color-mix(in srgb, var(--accent-color), transparent 97%);
   border-radius: 1rem;
   overflow: hidden;
 }
 
-.call-to-action-2 .badge {
-  background-color: color-mix(in srgb, var(--accent-color), transparent 90%);
-  color: var(--accent-color);
-  padding: 0.5rem 1rem;
-  font-size: 0.875rem;
-  font-weight: 500;
-  border-radius: 2rem;
-}
-
-.call-to-action-2 h2 {
+.call-to-action-2 h1 {
   font-size: clamp(1.75rem, 3vw, 2.5rem);
   font-weight: 700;
   line-height: 1.2;
@@ -1423,30 +1148,7 @@ section,
   font-size: 1.125rem;
   line-height: 1.6;
   opacity: 0.9;
-}
-
-.call-to-action-2 .features .feature-item {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 1rem;
-  background-color: var(--surface-color);
-  border-radius: 0.5rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  transition: transform 0.3s ease;
-}
-
-.call-to-action-2 .features .feature-item:hover {
-  transform: translateY(-2px);
-}
-
-.call-to-action-2 .features .feature-item i {
-  color: var(--accent-color);
-  font-size: 1.25rem;
-}
-
-.call-to-action-2 .features .feature-item span {
-  font-weight: 500;
+  max-width: 500px;
 }
 
 .call-to-action-2 .cta-buttons .btn {
@@ -1483,7 +1185,7 @@ section,
 .call-to-action-2 .content-right {
   flex-shrink: 0;
   max-width: 100%;
-  width: 450px;
+  width: 600px;
 }
 
 .call-to-action-2 .content-right img {
@@ -1492,10 +1194,10 @@ section,
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
 
-.call-to-action-2 .content-right .floating-card {
+/* Kotak Melayang */
+.call-to-action-2 .content-right .floating-card,
+.call-to-action-2 .content-right .floating-card-top {
   position: absolute;
-  bottom: 2rem;
-  right: -1rem;
   background: var(--surface-color);
   padding: 1rem;
   border-radius: 1rem;
@@ -1504,68 +1206,18 @@ section,
   align-items: center;
   gap: 1rem;
   animation: float 3s ease-in-out infinite;
+  z-index: 2;
 }
 
-.call-to-action-2 .content-right .floating-card .card-icon {
-  width: 3rem;
-  height: 3rem;
-  background-color: color-mix(in srgb, var(--accent-color), transparent 90%);
-  border-radius: 0.75rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.call-to-action-2 .content-right .floating-card {
+  bottom: 2rem;
+  right: -2rem;
 }
 
-.call-to-action-2 .content-right .floating-card .card-icon i {
-  color: var(--accent-color);
-  font-size: 1.5rem;
-}
-
-.call-to-action-2 .content-right .floating-card .card-content {
-  display: flex;
-  flex-direction: column;
-}
-
-.call-to-action-2 .content-right .floating-card .card-content .stats-number {
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: var(--accent-color);
-}
-
-.call-to-action-2 .content-right .floating-card .card-content .stats-text {
-  font-size: 0.875rem;
-  opacity: 0.8;
-}
-
-.call-to-action-2 .decoration {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  overflow: hidden;
-  z-index: 0;
-}
-
-.call-to-action-2 .decoration .circle-1,
-.call-to-action-2 .decoration .circle-2 {
-  position: absolute;
-  border-radius: 50%;
-  background-color: color-mix(in srgb, var(--accent-color), transparent 90%);
-}
-
-.call-to-action-2 .decoration .circle-1 {
-  width: 300px;
-  height: 300px;
-  top: -150px;
-  right: -150px;
-  opacity: 0.5;
-}
-
-.call-to-action-2 .decoration .circle-2 {
-  width: 200px;
-  height: 200px;
-  bottom: -100px;
-  left: -100px;
-  opacity: 0.3;
+.call-to-action-2 .content-right .floating-card-top {
+  top: 2rem;      
+  left: -3rem;   
+  animation-delay: 1.5s; 
 }
 
 @media (max-width: 991.98px) {

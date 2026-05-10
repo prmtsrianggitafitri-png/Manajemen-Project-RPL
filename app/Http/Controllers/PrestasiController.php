@@ -46,13 +46,32 @@ class PrestasiController extends Controller
             'deskripsi'           => $request->deskripsi,
             'status'              => 'menunggu', 
             'peringkat'           => $kategori->peringkat,
-            'jumlah_poin'          => $kategori->jumlah_poin,      
+            'jumlah_poin'         => $kategori->jumlah_poin,      
             'bukti_prestasi'      => $buktiPath,
             'dokumentasi_pribadi' => $dokPath,
         ]);
 
         return redirect()->back()->with('success', 'Prestasi berhasil diunggah!');
     }
+
+   public function edit(Request $request)
+{
+    $prestasis = \App\Models\Prestasi::where('nim', $request->user()->nim)->get();
+
+    $stats = [
+        'diunggah'   => $prestasis->count(),
+        'disetujui'  => $prestasis->where('status', 'disetujui')->count(),
+        'direvisi'   => $prestasis->where('status', 'revisi')->count(),
+        'total_poin' => $prestasis->where('status', 'disetujui')->sum('jumlah_poin'),
+    ];
+
+    return view('profile.edit', [
+        'user' => $request->user(),
+        'prestasis' => $prestasis, // Data untuk tabel
+        'stats' => $stats,         // Data untuk kotak statistik
+        'status' => session('status'),
+    ]);
+}
 
     /**
      * Fitur Hapus Prestasi

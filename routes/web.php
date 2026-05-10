@@ -4,7 +4,7 @@ use App\Http\Controllers\Mahasiswa\LayoutController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Auth\AdminAuthController;
 use App\Http\Controllers\KategoriController;
-use App\Http\Controllers\PrestasiController; // Pindahkan ke atas agar rapi
+use App\Http\Controllers\PrestasiController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,7 +18,7 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    return redirect('/');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {

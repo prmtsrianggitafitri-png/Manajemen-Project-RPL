@@ -51,10 +51,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::middleware('auth:admin')->group(function () {
         Route::post('/logout', [AdminAuthController::class, 'logout'])->name('logout');
         Route::get('/dashboard', function () {
-            return view('admin.dashboardAdmin'); // Diarahkan ke dashboard utama admin
+            return view('admin.dashboardAdmin'); 
         })->name('dashboard');
         
-        // Manajemen Kategori (Sebaiknya di dalam middleware auth:admin)
         Route::resource('kategori', KategoriController::class);
     });
 });

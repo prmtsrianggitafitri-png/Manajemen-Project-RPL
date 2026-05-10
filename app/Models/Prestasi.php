@@ -10,22 +10,17 @@ class Prestasi extends Model
     protected $primaryKey = 'id_prestasi';
 
     protected $fillable = [
-        'id_kategori',
-        'nim',
-        'judul',
-        'deskripsi',
-        'bidang',
-        'peringkat',
-        'jumlah_poin',
-        'status',
-        'poin',
-        'bukti_prestasi',
-        'dokumentasi_pribadi',
+        'user_id', 
+        'nama_prestasi',
+        'skala',
+        'tahun_perolehan',
+        'file_sertifikat',
+        'status_verifikasi',
     ];
-
-    public function mahasiswa()
+    
+    public function user()
     {
-        return $this->belongsTo(Mahasiswa::class, 'nim', 'nim');
+        return $this->belongsTo(User::class);
     }
 
     public function kategori()

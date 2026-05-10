@@ -19,25 +19,30 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nim' => ['required', 'string'],
+            'login' => ['required', 'string'], 
             'password' => ['required', 'string'],
         ];
     }
 
     public function authenticate(): void
     {
-        $this->ensureIsNotRateLimited();
+    $this->ensureIsNotRateLimited();
 
-        // REVISI: Pakai 'nim', bukan 'email'
-        if (! Auth::attempt($this->only('nim', 'password'), $this->boolean('remember'))) {
+    $loginValue = $this->input('login');
+    $password = $this->password;
+
+    $attemptNim = Auth::attempt(['nim' => $loginValue, 'password' => $password], $this->boolean('remember'));
+    
+    if (!$attemptNim) {
+        $attemptNpsn = Auth::attempt(['npsn' => $loginValue, 'password' => $password], $this->boolean('remember'));
+
+        if (!$attemptNpsn) {
             RateLimiter::hit($this->throttleKey());
-
-            throw ValidationException::withMessages([
-                'nim' => trans('auth.failed'), // Pesan error nempel di input NIM
-            ]);
+            throw ValidationException::withMessages(['login' => trans('auth.failed')]);
         }
+    }
 
-        RateLimiter::clear($this->throttleKey());
+    RateLimiter::clear($this->throttleKey());
     }
 
     public function ensureIsNotRateLimited(): void
@@ -47,11 +52,10 @@ class LoginRequest extends FormRequest
         }
 
         event(new Lockout($this));
-
         $seconds = RateLimiter::availableIn($this->throttleKey());
 
         throw ValidationException::withMessages([
-            'nim' => trans('auth.throttle', [
+            'login' => trans('auth.throttle', [
                 'seconds' => $seconds,
                 'minutes' => ceil($seconds / 60),
             ]),
@@ -60,6 +64,6 @@ class LoginRequest extends FormRequest
 
     public function throttleKey(): string
     {
-        return Str::transliterate(Str::lower($this->string('nim')).'|'.$this->ip());
+        return Str::transliterate(Str::lower($this->string('login')).'|'.$this->ip());
     }
 }

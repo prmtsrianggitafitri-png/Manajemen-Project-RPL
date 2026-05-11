@@ -3,8 +3,9 @@
 use App\Http\Controllers\Mahasiswa\LayoutController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Auth\AdminAuthController;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\KategoriController;
+use App\Http\Controllers\PrestasiController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,17 +18,21 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    return redirect('/');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
 
-// Login Mahasiswa (email & password)
-require __DIR__.'/auth.php';
+    // FITUR PRESTASI (Gabungan Upload & Hapus)
+    Route::get('/prestasi/upload', [PrestasiController::class, 'index'])->name('prestasi.upload');
+    Route::post('/prestasi/upload', [PrestasiController::class, 'store'])->name('prestasi.store');
+
+    // Route Hapus Prestasi
+    Route::delete('/prestasi/{id}', [PrestasiController::class, 'destroy'])->name('prestasi.destroy');
+});
 
 /*
 |--------------------------------------------------------------------------
@@ -35,9 +40,7 @@ require __DIR__.'/auth.php';
 |--------------------------------------------------------------------------
 */
 
-// Login Admin (NPSN & password)
 Route::prefix('admin')->name('admin.')->group(function () {
-
     // Belum login
     Route::middleware('guest:admin')->group(function () {
         Route::get('/loginAdmin', [AdminAuthController::class, 'showLoginForm'])->name('login');
@@ -48,8 +51,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::middleware('auth:admin')->group(function () {
         Route::post('/logout', [AdminAuthController::class, 'logout'])->name('logout');
         Route::get('/dashboard', function () {
-            return view('layouts.layoutAdmin');
+            return view('admin.dashboardAdmin'); 
         })->name('dashboard');
+        
+        Route::resource('kategori', KategoriController::class);
     });
 });
 

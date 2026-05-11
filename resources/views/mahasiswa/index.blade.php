@@ -31,6 +31,7 @@
 </head>
 
 <body class="index-page">
+<<<<<<< HEAD
   <header id="header" class="header d-flex align-items-center fixed-top"
     style="background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(8px); border-bottom: 1px solid rgba(0, 0, 0, 0.05); transition: all 0.3s ease-in-out; width: 100%; top: 0; left: 0; height: 76px;">
 
@@ -40,10 +41,18 @@
       <a class="logo d-flex align-items-center text-decoration-none m-0 p-0">
         <span class="sitename fw-bold"
           style="color: #ff6600; font-size: 1.6rem; font-weight: 800; letter-spacing: 0.5px;">SIPRESMA</span>
+=======
+  <header id="header" class="header d-flex align-items-center fixed-top custom-header">
+    <div class="container-fluid container-xl d-flex align-items-center justify-content-between custom-container">
+
+      <a class="logo d-flex align-items-center text-decoration-none m-0 p-0">
+        <span class="sitename fw-bold custom-logo">SIPRESMA</span>
+>>>>>>> main
       </a>
 
       <nav id="navmenu" class="navmenu m-0 p-0 d-none d-xl-flex">
         <ul class="d-flex align-items-center gap-4 mb-0 list-unstyled">
+<<<<<<< HEAD
           <li><a href="index.html" class="active text-decoration-none"
               style="font-weight: 600; font-size: 0.95rem; transition: 0.3s;">Beranda</a></li>
           <li><a href="about.html" class="text-decoration-none"
@@ -54,6 +63,11 @@
               style="font-weight: 500; font-size: 0.95rem; transition: 0.3s;">Alumni</a></li>
           <li><a href="faq.html" class="text-decoration-none"
               style="font-weight: 500; font-size: 0.95rem; transition: 0.3s;">FAQ</a></li>
+=======
+          <li><a href="{{ url('/') }}" class="active custom-nav-link">Beranda</a></li>
+          <li><a href="about.html" class="custom-nav-link-normal">Mahasiswa</a></li>
+          <li><a href="category.html" class="custom-nav-link-normal">Alumni</a></li>
+>>>>>>> main
         </ul>
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
       </nav>
@@ -61,12 +75,17 @@
       <div class="header-right d-flex align-items-center gap-3 m-0 p-0">
 
         <div class="search-bar position-relative d-none d-md-block">
+<<<<<<< HEAD
           <input type="text" placeholder="Search..." class="form-control ps-3 pe-5 py-2"
             style="border-radius: 20px; border: 1px solid #ced4da; font-size: 0.85rem; width: 160px; height: 38px;">
+=======
+          <input type="text" placeholder="Search..." class="form-control ps-4 pe-6 py-2 custom-search-input">
+>>>>>>> main
           <i class="bi bi-search position-absolute top-50 end-0 translate-middle-y pe-3 text-muted"
             style="font-size: 0.85rem;"></i>
         </div>
 
+<<<<<<< HEAD
         <a href="{{ route('login') }}" class="btn px-3 py-2"
           style="color: #212529; background-color: #ffffff; border: 1px solid #ced4da; border-radius: 20px; font-weight: 500; font-size: 0.85rem; height: 38px; line-height: 1.4;">
           Login
@@ -80,18 +99,66 @@
     </div>
   </header>
 
+=======
+        @auth
+          <div class="dropdown">
+            <button class="btn dropdown-toggle d-flex align-items-center gap-2 custom-btn-login" type="button"
+              id="userMenu" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="bi bi-person-circle"></i> {{ Auth::user()->name }}
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end shadow border-0" aria-labelledby="userMenu">
+              <li><a class="dropdown-item" href="{{ route('profile.edit') }}"><i class="bi bi-person me-2"></i> Info
+                  Profile</a></li>
+              <li>
+                <hr class="dropdown-divider">
+              </li>
+              <li>
+                <form method="POST" action="{{ route('logout') }}">
+                  @csrf
+                  <button type="submit" class="dropdown-item text-danger">
+                    <i class="bi bi-box-arrow-right me-2"></i> Logout
+                  </button>
+                </form>
+              </li>
+            </ul>
+          </div>
+
+        @else
+          <a href="{{ route('login') }}" class="btn px-3 py-2 custom-btn-login">
+            Login
+          </a>
+          <a href="{{ route('register') }}" class="btn px-3 py-2 custom-btn-register">
+            Register
+          </a>
+        @endauth
+
+      </div>
+    </div>
+  </header>
+
+  <main style="margin-top: 70px;"></main>
+  @if(Request::is('profile*'))
+        @yield('content')
+  @else
+
+>>>>>>> main
   <main class="main">
 
     <!-- Call To Action 2 Section -->
     <section id="call-to-action-2" class="call-to-action-2 section">
       <div class="container" data-aos="fade-up" data-aos-delay="100">
+<<<<<<< HEAD
         <div class="advertise-1 d-flex flex-column flex-lg-row gap-4 align-items-center position-relative">
+=======
+        <div class="d-flex flex-column flex-lg-row gap-4 align-items-center position-relative">
+>>>>>>> main
 
           <div class="content-left flex-grow-1" data-aos="fade-right" data-aos-delay="200">
             <h1>Galeri Prestasi Mahasiswa PSTI</h1>
             <p class="my-4">Dokumentasi digital perjalanan prestasi mahasiswa Program Studi Pendidikan Sistem dan
               Teknologi Informasi.</p>
 
+<<<<<<< HEAD
             <div class="features d-flex flex-wrap gap-3 mb-4">
               <div class="feature-item">
                 <span>Prestasi</span>
@@ -104,6 +171,8 @@
               </div>
             </div>
 
+=======
+>>>>>>> main
             <div class="cta-buttons d-flex flex-wrap gap-3">
               <a href="#" class="btn btn-primary">Mulai Berprestasi</a>
               <a href="#" class="btn btn-outline">Eksplorasi</a>
@@ -113,6 +182,7 @@
           <div class="content-right position-relative" data-aos="fade-left" data-aos-delay="300">
             <img src="{{ asset('assets/mahasiswa/img/misc/misc-1.webp') }}" alt="Digital Platform"
               class="img-fluid rounded-4">
+<<<<<<< HEAD
             <div class="floating-card">
               <div class="card-icon">
                 <i class="bi bi-graph-up-arrow"></i>
@@ -123,6 +193,26 @@
               </div>
             </div>
           </div>
+=======
+
+            <div class="floating-card">
+              <div class="card-icon"><i class="bi bi-people"></i></div>
+              <div class="card-content">
+                <span class="stats-number">200+</span>
+                <span class="stats-text">Mahasiswa Aktif</span>
+              </div>
+            </div>
+
+            <div class="floating-card-top">
+              <div class="card-icon"><i class="bi bi-trophy"></i></div>
+              <div class="card-content">
+                <span class="stats-number">300+</span>
+                <span class="stats-text">Total Prestasi</span>
+              </div>
+            </div>
+          </div>
+
+>>>>>>> main
         </div>
       </div>
     </section>
@@ -345,10 +435,13 @@
     <div class="container copyright text-center mt-4">
       <p>© <span>Copyright</span> <span>Mahasiswa PSTI</span></p>
       <div class="credits">
+<<<<<<< HEAD
         <!-- All the links in the footer should remain intact. -->
         <!-- You can delete the links only if you've purchased the pro version. -->
         <!-- Licensing information: https://bootstrapmade.com/license/ -->
         <!-- Purchase the pro version with working PHP/AJAX contact form: [buy-url] -->
+=======
+>>>>>>> main
         Designed by <a>Kelompok 3 - Rekayasa Perangkat Lunak</a> | <a>Commit & Chill</a>
       </div>
     </div>
@@ -370,6 +463,10 @@
   <!-- Main JS File -->
   <script src="{{ asset('assets/mahasiswa/js/main.js') }}"></script>
 
+<<<<<<< HEAD
+=======
+@endif
+>>>>>>> main
 </body>
 
 </html>

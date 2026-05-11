@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /**
 * Template Name: Blogy
 * Template URL: https://bootstrapmade.com/blogy-bootstrap-blog-template/
@@ -12,6 +13,10 @@
 # Font & Color Variables
 # Help: https://bootstrapmade.com/color-system/
 --------------------------------------------------------------*/
+=======
+@charset "UTF-8";
+
+>>>>>>> main
 /* Fonts */
 :root {
   --default-font: "Roboto",  system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
@@ -21,10 +26,17 @@
 
 /* Global Colors - The following color variables are used throughout the website. Updating them here will change the color scheme of the entire website */
 :root { 
+<<<<<<< HEAD
   --background-color: #ffffff; /* Background color for the entire website, including individual sections */
   --default-color: #212529; /* Default color used for the majority of the text content across the entire website */
   --heading-color: #2d465e; /* Color for headings, subheadings and title throughout the website */
   --accent-color: #f75815; /* Accent color that represents your brand on the website. It's used for buttons, links, and other elements that need to stand out */
+=======
+  --background-color: linear-gradient(160deg, #98bdf4 0%, #c8dff7 35%, #e8f2fb 65%, #ffffff 100%); /* Background color for the entire website, including individual sections */
+  --default-color: #212529; /* Default color used for the majority of the text content across the entire website */
+  --heading-color: #2d465e; /* Color for headings, subheadings and title throughout the website */
+  --accent-color:  #107ec2; /* Accent color that represents your brand on the website. It's used for buttons, links, and other elements that need to stand out */
+>>>>>>> main
   --surface-color: #ffffff; /* The surface color is used as a background of boxed elements within sections, such as cards, icon boxes, or other elements that require a visual separation from the global background. */
   --contrast-color: #ffffff; /* Contrast color for text, ensuring readability against backgrounds of accent, heading, or default colors. */
 }
@@ -32,11 +44,19 @@
 /* Nav Menu Colors - The following color variables are used specifically for the navigation menu. They are separate from the global colors to allow for more customization options */
 :root {
   --nav-color: #000000;  /* The default color of the main navmenu links */
+<<<<<<< HEAD
   --nav-hover-color: #f75815; /* Applied to main navmenu links when they are hovered over or active */
   --nav-mobile-background-color: #ffffff; /* Used as the background color for mobile navigation menu */
   --nav-dropdown-background-color: #ffffff; /* Used as the background color for dropdown items that appear when hovering over primary navigation items */
   --nav-dropdown-color: #212529; /* Used for navigation links of the dropdown items in the navigation menu. */
   --nav-dropdown-hover-color: #f75815; /* Similar to --nav-hover-color, this color is applied to dropdown navigation links when they are hovered over. */
+=======
+  --nav-hover-color: #107ec2; /* Applied to main navmenu links when they are hovered over or active */
+  --nav-mobile-background-color: #ffffff; /* Used as the background color for mobile navigation menu */
+  --nav-dropdown-background-color: #ffffff; /* Used as the background color for dropdown items that appear when hovering over primary navigation items */
+  --nav-dropdown-color: #212529; /* Used for navigation links of the dropdown items in the navigation menu. */
+  --nav-dropdown-hover-color: #107ec2; /* Similar to --nav-hover-color, this color is applied to dropdown navigation links when they are hovered over. */
+>>>>>>> main
 }
 
 /* Color Presets - These classes override global colors when applied to any section or element, providing reuse of the sam color scheme. */
@@ -64,7 +84,11 @@
 --------------------------------------------------------------*/
 body {
   color: var(--default-color);
+<<<<<<< HEAD
   background-color: var(--background-color);
+=======
+  background: var(--background-color) !important; 
+>>>>>>> main
   font-family: var(--default-font);
 }
 
@@ -141,6 +165,7 @@ h6 {
   }
 }
 
+<<<<<<< HEAD
 /* Pulsating Play Button
 ------------------------------*/
 .pulsating-play-btn {
@@ -347,6 +372,78 @@ h6 {
   position: fixed;
   top: 20px;
   right: 5px;
+=======
+/*--------------------------------------------------------------
+# Global Header
+--------------------------------------------------------------*/
+.custom-header {
+    background:#e8f2fb;
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease-in-out;
+    width: 100%;
+    top: 0;
+    left: 0;
+    height: 76px;
+}
+
+.custom-container {
+    max-width: 1300px; 
+    padding: 0 24px;
+}
+
+.custom-logo {
+    font-size: 1.6rem;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    color:  #107ec2;
+}
+
+.custom-nav-link {
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: 0.3s;
+    text-decoration: none;
+}
+
+.custom-nav-link-normal {
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: 0.3s;
+    text-decoration: none;
+}
+
+.custom-search-input {
+    border-radius: 20px;
+    border: 1px solid #ced4da;
+    font-size: 0.85rem;
+    width: 160px;
+    height: 38px;
+}
+
+.custom-btn-login {
+    color: #212529;
+    background-color: #ffffff;
+    border: 1px solid #ced4da;
+    border-radius: 20px;
+    font-weight: 500;
+    font-size: 0.85rem;
+    height: 38px;
+    line-height: 1.4;
+    text-decoration: none;
+}
+
+.custom-btn-register {
+    color: #212529;
+    background-color:  #107ec2;
+    border: 1px solid #ced4da;
+    border-radius: 20px;
+    font-weight: 500;
+    font-size: 0.85rem;
+    height: 38px;
+    line-height: 1.4;
+    text-decoration: none;
+>>>>>>> main
 }
 
 /*--------------------------------------------------------------
@@ -436,15 +533,19 @@ main {
     color: var(--nav-dropdown-color);
   }
 
+<<<<<<< HEAD
   .navmenu .dropdown ul a i {
     font-size: 12px;
   }
 
+=======
+>>>>>>> main
   .navmenu .dropdown ul a:hover,
   .navmenu .dropdown ul .active:hover,
   .navmenu .dropdown ul li:hover>a {
     color: var(--nav-dropdown-hover-color);
   }
+<<<<<<< HEAD
 
   .navmenu .dropdown:hover>ul {
     opacity: 1;
@@ -464,6 +565,8 @@ main {
     left: -100%;
     visibility: visible;
   }
+=======
+>>>>>>> main
 }
 
 /* Navmenu - Mobile */
@@ -611,6 +714,7 @@ main {
   position: relative;
 }
 
+<<<<<<< HEAD
 .footer .footer-top {
   padding-top: 50px;
   border-top: 1px solid color-mix(in srgb, var(--default-color), transparent 90%);
@@ -705,6 +809,8 @@ main {
   margin-bottom: 5px;
 }
 
+=======
+>>>>>>> main
 .footer .copyright {
   padding: 25px 0;
   border-top: 1px solid color-mix(in srgb, var(--default-color), transparent 90%);
@@ -863,7 +969,11 @@ section,
   color: var(--default-color);
   background-color: var(--background-color);
   padding: 60px 0;
+<<<<<<< HEAD
   scroll-margin-top: 90px;
+=======
+  scroll-margin-top: 0px;
+>>>>>>> main
   overflow: clip;
 }
 
@@ -1398,11 +1508,15 @@ section,
 .call-to-action-2 {
   position: relative;
   padding: 3rem;
+<<<<<<< HEAD
   background-color: color-mix(in srgb, var(--accent-color), transparent 97%);
+=======
+>>>>>>> main
   border-radius: 1rem;
   overflow: hidden;
 }
 
+<<<<<<< HEAD
 .call-to-action-2 .badge {
   background-color: color-mix(in srgb, var(--accent-color), transparent 90%);
   color: var(--accent-color);
@@ -1413,6 +1527,9 @@ section,
 }
 
 .call-to-action-2 h2 {
+=======
+.call-to-action-2 h1 {
+>>>>>>> main
   font-size: clamp(1.75rem, 3vw, 2.5rem);
   font-weight: 700;
   line-height: 1.2;
@@ -1423,6 +1540,7 @@ section,
   font-size: 1.125rem;
   line-height: 1.6;
   opacity: 0.9;
+<<<<<<< HEAD
 }
 
 .call-to-action-2 .features .feature-item {
@@ -1447,6 +1565,9 @@ section,
 
 .call-to-action-2 .features .feature-item span {
   font-weight: 500;
+=======
+  max-width: 500px;
+>>>>>>> main
 }
 
 .call-to-action-2 .cta-buttons .btn {
@@ -1483,7 +1604,11 @@ section,
 .call-to-action-2 .content-right {
   flex-shrink: 0;
   max-width: 100%;
+<<<<<<< HEAD
   width: 450px;
+=======
+  width: 600px;
+>>>>>>> main
 }
 
 .call-to-action-2 .content-right img {
@@ -1492,10 +1617,17 @@ section,
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
 
+<<<<<<< HEAD
 .call-to-action-2 .content-right .floating-card {
   position: absolute;
   bottom: 2rem;
   right: -1rem;
+=======
+/* Kotak Melayang */
+.call-to-action-2 .content-right .floating-card,
+.call-to-action-2 .content-right .floating-card-top {
+  position: absolute;
+>>>>>>> main
   background: var(--surface-color);
   padding: 1rem;
   border-radius: 1rem;
@@ -1504,6 +1636,7 @@ section,
   align-items: center;
   gap: 1rem;
   animation: float 3s ease-in-out infinite;
+<<<<<<< HEAD
 }
 
 .call-to-action-2 .content-right .floating-card .card-icon {
@@ -1566,6 +1699,20 @@ section,
   bottom: -100px;
   left: -100px;
   opacity: 0.3;
+=======
+  z-index: 2;
+}
+
+.call-to-action-2 .content-right .floating-card {
+  bottom: 2rem;
+  right: -2rem;
+}
+
+.call-to-action-2 .content-right .floating-card-top {
+  top: 2rem;      
+  left: -3rem;   
+  animation-delay: 1.5s; 
+>>>>>>> main
 }
 
 @media (max-width: 991.98px) {

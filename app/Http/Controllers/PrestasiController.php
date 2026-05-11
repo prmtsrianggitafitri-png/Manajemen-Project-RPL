@@ -6,7 +6,11 @@ use App\Models\Prestasi;
 use App\Models\Kategori;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+<<<<<<< HEAD
 use Illuminate\Support\Facades\Storage;
+=======
+use Illuminate\Support\Facades\Storage; // Tambahkan ini untuk fungsi hapus file
+>>>>>>> main
 
 class PrestasiController extends Controller
 {
@@ -21,7 +25,9 @@ class PrestasiController extends Controller
     public function index()
     {
         $kategoris = Kategori::all();
-        return view('prestasi.upload', compact('kategoris'));
+        // Pastikan variabel prestasi juga dikirim ke view agar bisa dilooping untuk dihapus
+        $prestasis = Prestasi::where('nim', Auth::user()->nim)->get();
+        return view('prestasi.upload', compact('kategoris', 'prestasis'));
     }
 
     public function store(Request $request)
@@ -53,7 +59,7 @@ class PrestasiController extends Controller
             'deskripsi'           => $request->deskripsi,
             'status'              => 'menunggu', 
             'peringkat'           => $kategori->peringkat,
-            'jumlah_poin'          => $kategori->jumlah_poin,      
+            'jumlah_poin'         => $kategori->jumlah_poin,      
             'bukti_prestasi'      => $buktiPath,
             'dokumentasi_pribadi' => $dokPath,
         ]);
@@ -61,6 +67,7 @@ class PrestasiController extends Controller
         return redirect()->back()->with('success', 'Prestasi berhasil diunggah!');
     }
 
+<<<<<<< HEAD
     public function edit($id)
     {
         $prestasi = Prestasi::findOrFail($id);
@@ -137,5 +144,48 @@ class PrestasiController extends Controller
         $prestasi->delete();
 
         return redirect('/tabelPrestasi')->with('success', 'Data prestasi dan filenya berhasil dihapus!');
+=======
+   public function edit(Request $request)
+{
+    $prestasis = \App\Models\Prestasi::where('nim', $request->user()->nim)->get();
+
+    $stats = [
+        'diunggah'   => $prestasis->count(),
+        'disetujui'  => $prestasis->where('status', 'disetujui')->count(),
+        'direvisi'   => $prestasis->where('status', 'revisi')->count(),
+        'total_poin' => $prestasis->where('status', 'disetujui')->sum('jumlah_poin'),
+    ];
+
+    return view('profile.edit', [
+        'user' => $request->user(),
+        'prestasis' => $prestasis, // Data untuk tabel
+        'stats' => $stats,         // Data untuk kotak statistik
+        'status' => session('status'),
+    ]);
+}
+
+    /**
+     * Fitur Hapus Prestasi
+     */
+    public function destroy($id)
+    {
+        // 1. Cari data prestasi berdasarkan ID
+        $prestasi = Prestasi::findOrFail($id);
+
+        // 2. Hapus file bukti_prestasi dari storage jika ada
+        if ($prestasi->bukti_prestasi && Storage::disk('public')->exists($prestasi->bukti_prestasi)) {
+            Storage::disk('public')->delete($prestasi->bukti_prestasi);
+        }
+
+        // 3. Hapus file dokumentasi_pribadi dari storage jika ada
+        if ($prestasi->dokumentasi_pribadi && Storage::disk('public')->exists($prestasi->dokumentasi_pribadi)) {
+            Storage::disk('public')->delete($prestasi->dokumentasi_pribadi);
+        }
+
+        // 4. Hapus data dari database
+        $prestasi->delete();
+
+        return redirect()->back()->with('success', 'Data prestasi berhasil dihapus!');
+>>>>>>> main
     }
 }

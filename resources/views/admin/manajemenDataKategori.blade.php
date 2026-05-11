@@ -61,17 +61,20 @@
                 </td>
 
                 <td class="p-2 text-center align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
-                     <a href="/kategori/{{ $k->id_kategori }}/edit" class="inline-block px-4 py-2 mb-0 font-bold text-center uppercase align-middle transition-all bg-transparent border-0 rounded-lg shadow-none leading-pro text-xs ease-soft-in bg-150 tracking-tight-soft bg-x-25 text-slate-400">
-                     <i class="fas fa-edit text-info"></i> </a>
+                  <a href="/kategori/{{ $k->id_kategori }}/edit" 
+                    onclick="return konfirmasiEdit(event, this.href)"
+                    class="inline-block px-4 py-2 mb-0 font-bold text-center uppercase align-middle transition-all bg-transparent border-0 rounded-lg shadow-none leading-pro text-xs ease-soft-in bg-150 tracking-tight-soft bg-x-25 text-slate-400">
+                    <i class="fas fa-edit text-info"></i> 
+                  </a>
 
-                     <form action="/kategori/{{ $k->id_kategori }}" method="POST" id="form-hapus-{{ $k->id_kategori }}" class="inline">
-                        @csrf
-                        @method('DELETE')
-                        <button type="button" onclick="konfirmasiHapus('{{ $k->id_kategori }}', '{{ $k->nama_kategori }}')" class="inline-block px-4 py-2 mb-0 font-bold text-center uppercase align-middle transition-all bg-transparent border-0 rounded-lg shadow-none leading-pro text-xs ease-soft-in bg-150 tracking-tight-soft bg-x-25 text-slate-400">
-                      <i class="fas fa-trash text-danger"></i>
+                  <form action="/kategori/{{ $k->id_kategori }}" method="POST" id="form-hapus-{{ $k->id_kategori }}" class="inline">
+                      @csrf
+                      @method('DELETE')
+                      <button type="button" onclick="konfirmasiHapus('{{ $k->id_kategori }}', '{{ $k->nama_kategori }}')" class="inline-block px-4 py-2 mb-0 font-bold text-center uppercase align-middle transition-all bg-transparent border-0 rounded-lg shadow-none leading-pro text-xs ease-soft-in bg-150 tracking-tight-soft bg-x-25 text-slate-400">
+                          <i class="fas fa-trash text-danger"></i>
                       </button>
-                     </form>
-                </td>
+                  </form>
+              </td>
 
               </tr>
               @endforeach
@@ -85,6 +88,26 @@
 @endsection
 
 <script>
+function konfirmasiEdit(event, url) {
+    event.preventDefault(); 
+
+    Swal.fire({
+        title: 'Yakin mau edit?',
+        text: "Apakah kamu yakin ingin melakukan perubahan pada data ini?",
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#17c1e8',
+        cancelButtonColor: '#8392ab',
+        confirmButtonText: 'Ya, Lanjut Edit',
+        cancelButtonText: 'Batal',
+        reverseButtons: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window.location.href = url;
+        }
+    });
+}
+
 function konfirmasiHapus(id, nama) {
     Swal.fire({
         title: 'Beneran mau hapus?',

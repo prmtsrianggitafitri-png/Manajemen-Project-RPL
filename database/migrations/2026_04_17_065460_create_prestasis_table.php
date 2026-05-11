@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('prestasis', function (Blueprint $table) {
             $table->id('id_prestasi');
             $table->unsignedBigInteger('id_kategori');
-            $table->string('nim');
+            $table->string('nim'); 
             $table->string('judul');
             $table->text('deskripsi');
             $table->string('bidang');
@@ -24,6 +24,10 @@ return new class extends Migration
             $table->string('bukti_prestasi')->nullable();
             $table->string('dokumentasi_pribadi')->nullable();
             $table->timestamps();
+    
+            $table->foreign('nim')->references('nim')->on('users')->onDelete('cascade');
+            
+            $table->foreign('id_kategori')->references('id_kategori')->on('kategoris')->onDelete('cascade');
         });
     }
 

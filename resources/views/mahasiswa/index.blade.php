@@ -109,7 +109,7 @@
               Teknologi Informasi.</p>
 
             <div class="cta-buttons d-flex flex-wrap gap-3">
-              <a href="#" class="btn btn-primary">Mulai Berprestasi</a>
+              <a href="{{ route('prestasi.upload') }}" class="btn btn-primary">Mulai Berprestasi</a>
               <a href="#" class="btn btn-outline">Eksplorasi</a>
             </div>
           </div>
@@ -148,7 +148,6 @@
         <h2>Hall of Fame</h2>
         <div><span>Mahasiswa Terbaik PSTI</span></div>
       </div>
-      <!-- End Section Title -->
 
       <div class="container" data-aos="fade-up" data-aos-delay="100">
 
@@ -196,7 +195,6 @@
                 </div>
               </div>
             </div>
-            <!-- End slide item -->
 
             <div class="swiper-slide">
               <div class="blog-post-item">
@@ -213,7 +211,7 @@
                   <a href="#" class="read-more">Read More <i class="bi bi-arrow-right"></i></a>
                 </div>
               </div>
-            </div><!-- End slide item -->
+            </div>
 
             <div class="swiper-slide">
               <div class="blog-post-item">
@@ -230,7 +228,7 @@
                   <a href="#" class="read-more">Read More <i class="bi bi-arrow-right"></i></a>
                 </div>
               </div>
-            </div><!-- End slide item -->
+            </div>
 
             <div class="swiper-slide">
               <div class="blog-post-item">
@@ -242,43 +240,36 @@
                     <span><i class="bi bi-chat-dots"></i> 10 Comments</span>
                   </div>
                   <h2><a href="#">Et harum quidem rerum facilis est et expedita distinctio</a></h2>
-                  <p>Donec quam felis ultricies nec pellentesque eu pretium quis sem nulla consequat massa quis enim.
-                  </p>
+                  <p>Donec quam felis ultricies nec pellentesque eu pretium quis sem nulla consequat massa quis enim.</p>
                   <a href="#" class="read-more">Read More <i class="bi bi-arrow-right"></i></a>
                 </div>
               </div>
-            </div><!-- End slide item -->
+            </div>
           </div>
         </div>
       </div>
     </section>
-    <!-- /Hall of Fame Section -->
 
     <!-- Wall of Inspiration Section -->
     <section id="latest-posts" class="latest-posts section">
 
-      <!-- Section Title -->
       <div class="container section-title" data-aos="fade-up">
         <h2>Wall of Inspiration</h2>
         <div><span>Galeri Prestasi Mahasiswa PSTI</span></div>
-      </div><!-- End Section Title -->
+      </div>
 
       <div class="container" data-aos="fade-up" data-aos-delay="100">
         <div class="row gy-4">
 
           <div class="col-lg-4">
             <article>
-
               <div class="post-img">
                 <img src="{{ asset('assets/mahasiswa/img/blog/blog-post-1.webp') }}" alt="" class="img-fluid">
               </div>
-
               <p class="post-category">Politics</p>
-
               <h2 class="title">
                 <a href="blog-details.html">Dolorum optio tempore voluptas dignissimos</a>
               </h2>
-
               <div class="d-flex align-items-center">
                 <img src="{{ asset('assets/mahasiswa/img/person/person-f-12.webp') }}" alt=""
                   class="img-fluid post-author-img flex-shrink-0">
@@ -289,23 +280,18 @@
                   </p>
                 </div>
               </div>
-
             </article>
-          </div><!-- End post list item -->
+          </div>
 
           <div class="col-lg-4">
             <article>
-
               <div class="post-img">
                 <img src="{{ asset('assets/mahasiswa/img/blog/blog-post-2.webp') }}" alt="" class="img-fluid">
               </div>
-
               <p class="post-category">Sports</p>
-
               <h2 class="title">
                 <a href="blog-details.html">Nisi magni odit consequatur autem nulla dolorem</a>
               </h2>
-
               <div class="d-flex align-items-center">
                 <img src="{{ asset('assets/mahasiswa/img/person/person-f-13.webp') }}" alt=""
                   class="img-fluid post-author-img flex-shrink-0">
@@ -316,23 +302,18 @@
                   </p>
                 </div>
               </div>
-
             </article>
-          </div><!-- End post list item -->
+          </div>
 
           <div class="col-lg-4">
             <article>
-
               <div class="post-img">
                 <img src="{{ asset('assets/mahasiswa/img/blog/blog-post-3.webp') }}" alt="" class="img-fluid">
               </div>
-
               <p class="post-category">Entertainment</p>
-
               <h2 class="title">
                 <a href="blog-details.html">Possimus soluta ut id suscipit ea ut in quo quia et soluta</a>
               </h2>
-
               <div class="d-flex align-items-center">
                 <img src="{{ asset('assets/mahasiswa/img/person/person-m-10.webp') }}" alt=""
                   class="img-fluid post-author-img flex-shrink-0">
@@ -343,39 +324,33 @@
                   </p>
                 </div>
               </div>
-
             </article>
-          </div><!-- End post list item -->
+          </div>
+
         </div>
       </div>
 
-    </section><!-- /Wall of Inspiration Section -->
+    </section>
   </main>
 
   <footer id="footer" class="footer">
-
     <div class="container copyright text-center mt-4">
       <p>© <span>Copyright</span> <span>Mahasiswa PSTI</span></p>
       <div class="credits">
         Designed by <a>Kelompok 3 - Rekayasa Perangkat Lunak</a> | <a>Commit & Chill</a>
       </div>
     </div>
-
   </footer>
 
-  <!-- Scroll Top -->
   <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i
       class="bi bi-arrow-up-short"></i></a>
 
-  <!-- Vendor JS Files -->
   <script src="{{ asset('assets/mahasiswa/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
   <script src="{{ asset('assets/mahasiswa/vendor/php-email-form/validate.js') }}"></script>
   <script src="{{ asset('assets/mahasiswa/vendor/aos/aos.js') }}"></script>
   <script src="{{ asset('assets/mahasiswa/vendor/swiper/swiper-bundle.min.js') }}"></script>
   <script src="{{ asset('assets/mahasiswa/vendor/purecounter/purecounter_vanilla.js') }}"></script>
   <script src="{{ asset('assets/mahasiswa/vendor/glightbox/js/glightbox.min.js') }}"></script>
-
-  <!-- Main JS File -->
   <script src="{{ asset('assets/mahasiswa/js/main.js') }}"></script>
 
 @endif

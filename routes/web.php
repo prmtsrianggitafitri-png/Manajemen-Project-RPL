@@ -4,9 +4,14 @@ use App\Http\Controllers\Mahasiswa\LayoutController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\PrestasiController;
-use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Route; // Tambahkan ini biar Route-nya kenal
 
-// akses tanpa login
+/*
+|--------------------------------------------------------------------------
+| Mahasiswa Routes
+|--------------------------------------------------------------------------
+*/
+
 Route::get('/', function () {
     return view('mahasiswa.index');
 })->name('home');
@@ -44,11 +49,28 @@ Route::middleware(['auth', 'verified'])->group(function () {
         })->name('dashboard');
 
         // CRUD Kategori
+        Route::get('/manajemenDataKategori', [KategoriController::class, 'index']);
         Route::resource('kategori', KategoriController::class);
-        
-        // Layout
-        Route::get('/cek', function () {
-            return view('layouts.layoutAdmin');
-        });
+    }); // <--- INI PENUTUP ADMIN GROUP YANG TADI HILANG
+
+    // layout admin belum di middleware
+    Route::get('/cek', function () {
+        return view('layouts.layoutAdmin');
     });
+
+    // dashboard admin blm di middleware
+    Route::get('/admin', function () {
+        return view('admin.dashboardAdmin');
+    });
+
+    // Route Prestasi Tambahan
+    Route::middleware('auth')->group(function () {
+        Route::get('/prestasi/upload', [PrestasiController::class, 'index'])->name('prestasi.upload');
+        Route::post('/prestasi/upload', [PrestasiController::class, 'store'])->name('prestasi.store');
+        Route::get('/tabelPrestasi', [PrestasiController::class, 'tabelPrestasi']);
+        Route::get('/prestasi/edit/{id}', [PrestasiController::class, 'edit'])->name('prestasi.edit');
+        Route::put('/prestasi/update/{id}', [PrestasiController::class, 'update'])->name('prestasi.update');
+        Route::delete('/prestasi/delete/{id}', [PrestasiController::class, 'destroy'])->name('prestasi.destroy');
+    });
+
 });

@@ -10,6 +10,14 @@ use Illuminate\Support\Facades\Storage; // Tambahkan ini untuk fungsi hapus file
 
 class PrestasiController extends Controller
 {
+
+    public function tabelPrestasi(){
+        $kategoris = Kategori::all();
+        $prestasis = Prestasi::all();
+        
+        // Tambahkan 'prestasis' di dalam compact
+        return view('prestasi.tabelPrestasi', compact('kategoris', 'prestasis'));
+    }
     public function index()
     {
         $kategoris = Kategori::all();
@@ -20,6 +28,7 @@ class PrestasiController extends Controller
 
     public function store(Request $request)
     {
+        
         $request->validate([
             'id_kategori'         => 'required|exists:kategoris,id_kategori',
             'judul'               => 'required|string|max:255',

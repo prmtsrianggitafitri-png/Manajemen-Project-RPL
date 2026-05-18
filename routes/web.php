@@ -5,6 +5,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\KategoriController;
 use Illuminate\Support\Facades\Route; 
 use App\Http\Controllers\PrestasiController;
+use App\Http\Controllers\MahasiswaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -51,6 +52,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
         // CRUD Kategori
         Route::get('/manajemenDataKategori', [KategoriController::class, 'index']);
         Route::resource('kategori', KategoriController::class);
+
+        // data mahasiswa
+        Route::get('/dataMahasiswa', [MahasiswaController::class, 'index'])->name('admin.mahasiswa.index');
+        Route::resource('mahasiswa', MahasiswaController::class)->names([
+            'edit' => 'admin.mahasiswa.edit',
+            'update' => 'admin.mahasiswa.update',
+            'destroy' => 'admin.mahasiswa.destroy',
+        ]);
     }); 
 
     // layout admin belum di middleware

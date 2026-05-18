@@ -38,6 +38,7 @@ class RegisteredUserController extends Controller
             'jenis_kelamin' => $request->jenis_kelamin,
             'tahun_masuk'   => $request->tahun_masuk,
             'no_telepon'    => $request->no_telepon,
+            'status_mahasiswa' => 'aktif',
             'role'          => 'mahasiswa', 
             'password'      => Hash::make($request->password),
         ]);

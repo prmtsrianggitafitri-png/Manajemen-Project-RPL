@@ -249,7 +249,7 @@
                         <option value="">-- Pilih Kategori Prestasi --</option>
                         @foreach($kategoris as $k)
                             <option value="{{ $k->id_kategori }}" {{ old('id_kategori') == $k->id_kategori ? 'selected' : '' }}>
-                                {{ $k->nama_kategori }} - {{ $k->peringkat }} ({{ $k->poin }} Poin)
+                                {{ $k->nama_kategori }} - {{ $k->peringkat }} ({{ $k->jumlah_poin }} Poin)
                             </option>
                         @endforeach
                     </select>
@@ -257,14 +257,11 @@
                     @error('id_kategori') <span class="error-message">{{ $message }}</span> @enderror
                 </div>
 
-                
-
                 <div class="input-wrapper">
                     <label class="field-label">Deskripsi</label>
                     <textarea name="deskripsi" placeholder="Ceritakan prestasi kamu...">{{ old('deskripsi') }}</textarea>
                     @error('deskripsi') <span class="error-message">{{ $message }}</span> @enderror
                 </div>
-
 
                 <div class="input-wrapper">
                     <label class="field-label">Bukti Prestasi <span style="color:#e24b4a">*</span></label>
@@ -289,16 +286,6 @@
     </div>
 </section>
 
-<!-- Modal Popup -->
-<div class="modal-overlay" id="modalOverlay">
-    <div class="modal-box">
-        <div class="modal-icon" id="modalIcon"></div>
-        <p class="modal-title" id="modalTitle"></p>
-        <p class="modal-message" id="modalMessage"></p>
-        <button class="modal-btn" onclick="closeModal()">OK</button>
-    </div>
-</div>
-
 <script>
     const MAX_SIZE = 500 * 1024 * 1024;
 
@@ -311,23 +298,6 @@
             alertEl.style.display = 'none';
         }
     }
-
-    function showModal(icon, title, message) {
-        document.getElementById('modalIcon').textContent = icon;
-        document.getElementById('modalTitle').textContent = title;
-        document.getElementById('modalMessage').textContent = message;
-        document.getElementById('modalOverlay').classList.add('active');
-    }
-
-    function closeModal() {
-        document.getElementById('modalOverlay').classList.remove('active');
-    }
-
-    @if(session('success'))
-        window.addEventListener('DOMContentLoaded', function() {
-            showModal('✅', 'Upload Berhasil!', 'Prestasi kamu berhasil diunggah dan sedang menunggu verifikasi.');
-        });
-    @endif
 
     document.getElementById('formPrestasi').addEventListener('submit', function(e) {
         const bukti = document.getElementById('bukti_prestasi');

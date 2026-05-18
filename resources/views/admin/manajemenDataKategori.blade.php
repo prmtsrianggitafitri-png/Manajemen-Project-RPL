@@ -74,7 +74,7 @@
                           <i class="fas fa-trash text-danger"></i>
                       </button>
                   </form>
-              </td>
+                </td>
 
               </tr>
               @endforeach

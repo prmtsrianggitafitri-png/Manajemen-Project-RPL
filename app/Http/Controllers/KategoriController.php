@@ -76,7 +76,6 @@ class KategoriController extends Controller
     {
         return view("admin.UbahKategori",
         [
-
             "kategori"=> $kategori,
         ]
         );
@@ -106,7 +105,7 @@ class KategoriController extends Controller
     return redirect("/manajemenDataKategori")->with("berhasil", "Data kategori berhasil diubah!");
 }
 
-    /**
+    /**AA
      * Remove the specified resource from storage.
      */
     public function destroy(string $id)

@@ -28,6 +28,33 @@
 
   <!-- Main CSS File -->
   <link href="{{ asset('assets/mahasiswa/css/main.css') }}" rel="stylesheet">
+  <style>
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.active { 
+            display: flex !important; 
+        }
+
+        .modal-box {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            min-width: 300px;
+        }
+        
+        /* Tambahin warna teks biar kelihatan */
+        .modal-title { font-weight: bold; font-size: 18px; margin-bottom: 10px; }
+        .modal-message { color: #666; margin-bottom: 20px; }
+    </style>
 </head>
 
 <body class="index-page">
@@ -344,6 +371,36 @@
 
   <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i
       class="bi bi-arrow-up-short"></i></a>
+
+<div class="modal-overlay" id="modalOverlay">
+    <div class="modal-box">
+        <div class="modal-icon" id="modalIcon"></div>
+        <p class="modal-title" id="modalTitle"></p>
+        <p class="modal-message" id="modalMessage"></p>
+        <button class="modal-btn" onclick="closeModal()">OK</button>
+    </div>
+</div>
+
+<script>
+    // 2. Fungsi buat nampilin & nutup modal
+    function showModal(icon, title, message) {
+        document.getElementById('modalIcon').textContent = icon;
+        document.getElementById('modalTitle').textContent = title;
+        document.getElementById('modalMessage').textContent = message;
+        document.getElementById('modalOverlay').classList.add('active');
+    }
+
+    function closeModal() {
+        document.getElementById('modalOverlay').classList.remove('active');
+    }
+
+    // 3. INI KUNCINYA: Cek session pas halaman home kelar loading
+    @if(session('success'))
+        window.addEventListener('DOMContentLoaded', function() {
+            showModal('✅', 'Upload Berhasil!', '{{ session("success") }}');
+        });
+    @endif
+</script>
 
   <script src="{{ asset('assets/mahasiswa/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
   <script src="{{ asset('assets/mahasiswa/vendor/php-email-form/validate.js') }}"></script>

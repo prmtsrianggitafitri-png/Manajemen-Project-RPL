@@ -176,7 +176,11 @@
                     
                     <td>
                         @if($p->status == 'menunggu' || $p->status == 'revisi')
-                            <a href="{{ url('/prestasi/edit/'.$p->id_prestasi) }}" class="btn-edit">Edit</a>
+                            <a href="javascript:void(0)" 
+                                class="btn-edit" 
+                                onclick="confirmEdit('{{ url('/prestasi/edit/'.$p->id_prestasi) }}', '{{ $p->judul }}')">
+                                Edit
+                             </a>
                             
                             <button type="button" class="btn-hapus" onclick="confirmDelete('{{ $p->id_prestasi }}', '{{ $p->judul }}')">Hapus</button>
 
@@ -194,6 +198,18 @@
         </table>
     </div>
 
+    <div class="modal-overlay" id="modalEdit">
+    <div class="modal-box">
+        <div class="modal-icon" style="border-color: #f39c12; color: #f39c12;">?</div>
+        <div class="modal-title">Konfirmasi Perubahan?</div>
+        <div class="modal-text" id="modalEditText">Apakah Anda ingin mengubah data prestasi ini?</div>
+        <div class="modal-footer">
+            <button class="btn-modal btn-batal" onclick="closeEditModal()">Batal</button>
+            <button class="btn-modal" style="background: #f39c12; color: white;" id="btnConfirmEdit">Ya, Edit!</button>
+        </div>
+    </div>
+</div>
+
     <div class="modal-overlay" id="modalDelete">
         <div class="modal-box">
             <div class="modal-icon">!</div>
@@ -207,7 +223,24 @@
     </div>
 
     <script>
+        let currentEditUrl = null;
         let currentDeleteId = null;
+
+        function confirmEdit(url, judul) {
+        currentEditUrl = url;
+        document.getElementById('modalEditText').innerText = `Anda akan masuk ke halaman edit untuk prestasi "${judul}".`;
+        document.getElementById('modalEdit').style.display = 'flex';
+    }
+
+    function closeEditModal() {
+        document.getElementById('modalEdit').style.display = 'none';
+    }
+
+    document.getElementById('btnConfirmEdit').addEventListener('click', function() {
+        if (currentEditUrl) {
+            window.location.href = currentEditUrl; // Pindah halaman ke URL edit
+        }
+    });
 
         function confirmDelete(id, judul) {
             currentDeleteId = id;

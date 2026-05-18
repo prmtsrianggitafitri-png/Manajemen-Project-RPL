@@ -3,8 +3,8 @@
 use App\Http\Controllers\Mahasiswa\LayoutController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\KategoriController;
+use Illuminate\Support\Facades\Route; 
 use App\Http\Controllers\PrestasiController;
-use Illuminate\Support\Facades\Route; // Tambahkan ini biar Route-nya kenal
 
 /*
 |--------------------------------------------------------------------------
@@ -29,7 +29,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name('dashboard');
 
     // manajemen profile
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::get('/profile', [PrestasiController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
@@ -42,16 +42,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
     });
 
     // punya admin
-    Route::middleware('role:admin')->prefix('admin')->name('admin.')->group(function () {
+    Route::middleware('role:admin')->group(function () {
         // Dashboard Admin
         Route::get('/dashboard', function () {
             return view('admin.dashboardAdmin'); 
-        })->name('dashboard');
+        })->name('admin.dashboard');
 
         // CRUD Kategori
         Route::get('/manajemenDataKategori', [KategoriController::class, 'index']);
         Route::resource('kategori', KategoriController::class);
-    }); // <--- INI PENUTUP ADMIN GROUP YANG TADI HILANG
+    }); 
 
     // layout admin belum di middleware
     Route::get('/cek', function () {

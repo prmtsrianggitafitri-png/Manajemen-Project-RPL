@@ -1,82 +1,104 @@
-import Image from "next/image";
-import Link from "next/link";
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login SIPRESMA</title>
+    
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; min-height: 100vh; background: linear-gradient(160deg, #a8cfe8 0%, #c8dff7 35%, #e8f2fb 65%, #ffffff 100%); display: flex; align-items: center; justify-content: center; }
+        .section { width: 100%; padding: 3rem 1rem 5rem; display: flex; justify-content: center; }
+        .card { background: rgba(255, 255, 255, 0.92); border: 1px solid rgba(200, 215, 235, 0.8); border-radius: 16px; padding: 2.25rem 2rem; width: 100%; max-width: 420px; backdrop-filter: blur(8px); box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
+        .card-header { display: flex; flex-direction: column; align-items: center; margin-bottom: 2.5rem; }
+        .card-logo { height: 350px; width: auto; margin-bottom: 0rem; }
+        .card-title { font-size: 24px; font-weight: 700; color: #1a3a5c; margin-bottom: 6px; text-align: center; margin-top: -80px; }
+        .form-rows { display: flex; flex-direction: column; gap: 12px; }
+        .input-wrapper { display: flex; flex-direction: column; gap: 4px; }
+        label.field-label { font-size: 12px; font-weight: 500; color: #555; }
+        input[type="text"], input[type="password"] { width: 100%; height: 42px; padding: 0 14px; font-size: 14px; color: #111; background: #fff; border: 1px solid #dce6f0; border-radius: 8px; outline: none; transition: border-color 0.15s, box-shadow 0.15s; }
+        input:hover { border-color: #b0c4d8; }
+        input:focus { border-color: #7aa8d2; box-shadow: 0 0 0 3px rgba(122, 168, 210, 0.15); }
+        input.is-invalid { border-color: #e24b4a; }
+        .btn-primary { width: 100%; height: 42px; padding: 0 16px; font-size: 14px; font-weight: 600; border-radius: 8px; cursor: pointer; border: none; background: #c8dff7; color: #1a3a5c; margin-top: 4px; transition: background 0.15s, transform 0.1s; }
+        .btn-primary:hover { background: #aecfed; }
+        .btn-primary:active { transform: scale(0.98); }
+        .footer-text { display: flex; justify-content: center; gap: 4px; font-size: 13px; color: #9aacbb; margin-top: 1.75rem; }
+        .footer-text a { color: #7aa8d2; font-weight: 500; text-decoration: none; }
+        .footer-text a:hover { text-decoration: underline; }
+        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.35); z-index: 999; align-items: center; justify-content: center; }
+        .modal-overlay.active { display: flex; }
+        .modal-box { background: #fff; border-radius: 12px; padding: 1.75rem 1.5rem; width: 90%; max-width: 320px; text-align: center; box-shadow: 0 8px 30px rgba(0,0,0,0.15); }
+        .modal-icon { font-size: 2.5rem; margin-bottom: 0.75rem; }
+        .modal-title { font-size: 16px; font-weight: 700; color: #111; margin-bottom: 6px; }
+        .modal-message { font-size: 13px; color: #666; margin-bottom: 1.25rem; line-height: 1.5; }
+        .modal-btn { display: inline-block; padding: 8px 28px; background: #c8dff7; color: #1a3a5c; font-size: 14px; font-weight: 600; border: none; border-radius: 8px; cursor: pointer; transition: background 0.15s; }
+        .modal-btn:hover { background: #aecfed; }
+    </style>
+</head>
+<body>
 
-import { FcGoogle } from "react-icons/fc";
+    <section class="section">
+        <div class="card">
+            <div class="card-header">
+                <img src="/logo-sipresma.png" alt="SIPRESMA" class="card-logo">
+                <h1 class="card-title">Masuk ke SIPRESMA</h1>
+            </div>
 
-import { Background } from "@/components/background";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Input } from "@/components/ui/input";
-
-const Login = () => {
-  return (
-    <Background>
-      <section className="py-28 lg:pt-44 lg:pb-32">
-        <div className="container">
-          <div className="flex flex-col gap-4">
-            <Card className="mx-auto w-full max-w-sm">
-              <CardHeader className="flex flex-col items-center space-y-0">
-                <Image
-                  src="/logo.svg"
-                  alt="logo"
-                  width={94}
-                  height={18}
-                  className="mb-7 dark:invert"
-                />
-                <p className="mb-2 text-2xl font-bold">Welcome back</p>
-                <p className="text-muted-foreground">
-                  Please enter your details.
-                </p>
-              </CardHeader>
-              <CardContent>
-                <div className="grid gap-4">
-                  <Input type="email" placeholder="Enter your email" required />
-                  <div>
-                    <Input
-                      type="password"
-                      placeholder="Enter your password"
-                      required
-                    />
-                  </div>
-                  <div className="flex justify-between">
-                    <div className="flex items-center space-x-2">
-                      <Checkbox
-                        id="remember"
-                        className="border-muted-foreground"
-                      />
-                      <label
-                        htmlFor="remember"
-                        className="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                      >
-                        Remember me
-                      </label>
+            <form id="loginForm" method="POST" action="{{ route('login') }}">
+                @csrf
+                <div class="form-rows">
+                    <div class="input-wrapper">
+                        <label class="field-label">NIM (Mahasiswa) atau NPSN (Admin)</label>
+                        <input type="text" name="login" placeholder="Masukkan identitas Anda" value="{{ old('login') }}" class="{{ $errors->has('login') ? 'is-invalid' : '' }}" required autofocus />
                     </div>
-                    <a href="#" className="text-primary text-sm font-medium">
-                      Forgot password
-                    </a>
-                  </div>
-                  <Button type="submit" className="mt-2 w-full">
-                    Create an account
-                  </Button>
-                  <Button variant="outline" className="w-full">
-                    <FcGoogle className="mr-2 size-5" />
-                    Sign up with Google
-                  </Button>
-                </div>
-                <div className="text-muted-foreground mx-auto mt-8 flex justify-center gap-1 text-sm">
-                  <p>Don&apos;t have an account?</p>
-                  <Link href="/signup" className="text-primary font-medium">
-                    Sign up
-                  </Link>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </section>
-    </Background>
-  );
-};
 
-export default Login;
+                    <div class="input-wrapper">
+                        <label class="field-label">Password</label>
+                        <input type="password" name="password" placeholder="Masukkan password" class="{{ $errors->has('password') ? 'is-invalid' : '' }}" required />
+                    </div>
+
+                    <button type="submit" class="btn-primary">Masuk Sekarang</button>
+                </div>
+
+                <div class="footer-text">
+                    <p>Belum memiliki akun?</p>
+                    <a href="{{ route('register') }}">Daftar Disini</a>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-box">
+            <div class="modal-icon" id="modalIcon"></div>
+            <p class="modal-title" id="modalTitle"></p>
+            <p class="modal-message" id="modalMessage"></p>
+            <button class="modal-btn" onclick="closeModal()">OK</button>
+        </div>
+    </div>
+
+    <script>
+        function showModal(icon, title, message) {
+            document.getElementById('modalIcon').textContent = icon;
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalMessage').textContent = message;
+            document.getElementById('modalOverlay').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('modalOverlay').classList.remove('active');
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            @if(session('success'))
+                showModal('✅', 'Berhasil!', '{{ session("success") }}');
+            @endif
+
+            @if($errors->any())
+                showModal('❌', 'Gagal Masuk', '{{ $errors->first() }}');
+            @endif
+        });
+    </script>
+</body>
+</html>

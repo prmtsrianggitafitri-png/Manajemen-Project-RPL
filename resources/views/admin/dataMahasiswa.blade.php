@@ -12,8 +12,7 @@
     <div class="relative flex flex-col flex-auto min-w-0 p-4 break-words bg-white border-0 shadow-xl rounded-2xl bg-clip-border mb-4">
         <div class="flex flex-wrap flex-row justify-between items-center p-6 px-4 pb-2 bg-white border-b-0 rounded-t-2xl">
             <div>
-                <h5 class="text-xl font-bold tracking-tight bg-gradient-to-tl from-slate-900 to-slate-800 bg-clip-text text-transparent">Manajemen Data Mahasiswa</h5>
-                <p class="mb-0 text-sm leading-normal text-slate-400">Daftar seluruh mahasiswa Terdaftar di Sistem SIPRESMA</p>
+                <h5 class="text-xl font-bold tracking-tight text-slate-800">Data Mahasiswa</h5>
             </div>
         </div>
 

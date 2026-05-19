@@ -396,7 +396,7 @@
 
     // 3. INI KUNCINYA: Cek session pas halaman home kelar loading
     @if(session('success'))
-        window.addEventListener('DOMContentLoaded', function() {
+    window.addEventListener('DOMContentLoaded', function() {
             showModal('✅', 'Upload Berhasil!', '{{ session("success") }}');
         });
     @endif

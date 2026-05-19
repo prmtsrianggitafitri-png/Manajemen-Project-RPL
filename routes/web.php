@@ -7,12 +7,6 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PrestasiController;
 use App\Http\Controllers\MahasiswaController;
 
-/*
-|--------------------------------------------------------------------------
-| Mahasiswa Routes
-|--------------------------------------------------------------------------
-*/
-
 Route::get('/', function () {
     return view('mahasiswa.index');
 })->name('home');
@@ -45,16 +39,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // punya admin
     Route::middleware('role:admin')->group(function () {
         // Dashboard Admin
-        Route::get('/dashboard', function () {
+        Route::get('/Dashboard', function () {
             return view('admin.dashboardAdmin'); 
         })->name('admin.dashboard');
 
         // CRUD Kategori
-        Route::get('/manajemenDataKategori', [KategoriController::class, 'index']);
+        Route::get('/DataKategori', [KategoriController::class, 'index']);
         Route::resource('kategori', KategoriController::class);
 
         // data mahasiswa
-        Route::get('/dataMahasiswa', [MahasiswaController::class, 'index'])->name('admin.mahasiswa.index');
+        Route::get('/DataMahasiswa', [MahasiswaController::class, 'index'])->name('admin.mahasiswa.index');
         Route::resource('mahasiswa', MahasiswaController::class)->names([
             'edit' => 'admin.mahasiswa.edit',
             'update' => 'admin.mahasiswa.update',

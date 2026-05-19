@@ -8,7 +8,7 @@
       <div class="p-6 pb-0 mb-0 bg-white border-b-0 border-b-solid rounded-t-2xl border-b-transparent">
         <div class="flex flex-wrap -mx-3">
           <div class="flex items-center flex-none w-1/2 max-w-full px-3">
-            <h6 class="mb-0">Data Kategori</h6>
+            <h5 class="text-xl font-bold tracking-tight text-slate-800">Data Kategori</h5>
           </div>
           <div class="flex-none w-1/2 max-w-full px-3 text-right">
             <a href="/kategori/create" class="inline-block px-6 py-3 font-bold text-center text-white uppercase align-middle transition-all bg-transparent border-0 rounded-lg cursor-pointer shadow-soft-md bg-x-25 bg-150 leading-pro text-xs ease-soft-in tracking-tight-soft bg-gradient-to-tl from-blue-600 to-cyan-400 hover:scale-102 active:opacity-85">

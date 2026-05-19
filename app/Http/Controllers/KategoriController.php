@@ -58,7 +58,7 @@ class KategoriController extends Controller
 
         Kategori::create($validasiData);
 
-        return redirect("/manajemenDataKategori")->with("berhasil", "Data kategori berhasil ditambahkan!");
+        return redirect("/DataKategori")->with("berhasil", "Data kategori berhasil ditambahkan!");
     }
 
     /**
@@ -102,7 +102,7 @@ class KategoriController extends Controller
 
     $kategori->update($validasiData);
 
-    return redirect("/manajemenDataKategori")->with("berhasil", "Data kategori berhasil diubah!");
+    return redirect("/DataKategori")->with("berhasil", "Data kategori berhasil diubah!");
 }
 
     /**AA
@@ -112,6 +112,6 @@ class KategoriController extends Controller
     {
         $kategori = Kategori::where('id_kategori', $id)->firstOrFail();
         $kategori->delete();
-        return redirect("/manajemenDataKategori")->with("berhasil", "Data kategori berhasil dihapus!");
+        return redirect("/DataKategori")->with("berhasil", "Data kategori berhasil dihapus!");
     }
 }

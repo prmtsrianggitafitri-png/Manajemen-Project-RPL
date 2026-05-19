@@ -24,10 +24,10 @@ class AuthenticatedSessionController extends Controller
         $user = Auth::user();
 
         if ($user && $user->role === 'admin') {
-            return redirect()->intended(route('admin.dashboard'))->with('success', 'Selamat datang kembali, Admin!');
+            return redirect()->intended(route('admin.dashboard'));
         }
 
-        return redirect()->intended('/')->with('success', 'Selamat datang di SIPRESMA!'); 
+        return redirect()->intended('/'); 
     }
 
     public function destroy(Request $request): RedirectResponse

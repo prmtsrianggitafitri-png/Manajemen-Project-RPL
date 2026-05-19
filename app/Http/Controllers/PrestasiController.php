@@ -26,7 +26,6 @@ class PrestasiController extends Controller
         return view('prestasi.upload', compact('kategoris', 'prestasis'));
     }
 
-
     public function store(Request $request)
     {
         

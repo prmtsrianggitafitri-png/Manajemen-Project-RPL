@@ -164,4 +164,13 @@ class PrestasiController extends Controller
 
         return redirect()->back()->with('success', 'Data prestasi berhasil dihapus!');
     }
+    public function approve($id)
+    {
+        $prestasi = Prestasi::findOrFail($id);
+
+        $prestasi->status = 'disetujui';
+        $prestasi->save();
+
+        return redirect()->back()->with('success', 'Prestasi berhasil disetujui!');
+    }
 }

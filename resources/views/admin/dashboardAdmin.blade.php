@@ -10,11 +10,9 @@
           <div class="flex flex-row -mx-3">
             <div class="flex-none w-2/3 max-w-full px-3">
               <div>
-                <p class="mb-0 font-sans text-sm font-semibold leading-normal">
-                  Mahasiswa
-                </p>
+                <p class="mb-0 font-sans text-sm font-semibold leading-normal text-slate-600">Mahasiswa</p>
                 <h5 class="mb-0 font-bold">
-                  380 Orang
+                  {{ $stats['total_mahasiswa'] }} Orang
                 </h5>
               </div>
             </div>
@@ -39,7 +37,7 @@
                   Jumlah Prestasi
                 </p>
                 <h5 class="mb-0 font-bold">
-                 550 Data
+                  {{ $stats['total_prestasi'] }} Data
                 </h5>
               </div>
             </div>
@@ -64,7 +62,7 @@
                   Menunggu Validasi
                 </p>
                 <h5 class="mb-0 font-bold">
-                20 Antrean
+                  {{ $stats['menunggu'] }} Antrean
                 </h5>
               </div>
             </div>
@@ -89,7 +87,7 @@
                   Total Perolehan Poin
                 </p>
                 <h5 class="mb-0 font-bold">
-                  400 Poin
+                  {{ $stats['total_poin'] }} Poin
                 </h5>
               </div>
             </div>
@@ -107,7 +105,8 @@
   <div class="flex flex-wrap my-6 -mx-3">
     <!-- card 1 -->
     <div class="w-full max-w-full px-3 mt-0 mb-6 md:mb-0">
-      <div class="border-black/12.5 shadow-soft-xl relative flex min-w-0 flex-col break-words rounded-2xl border-0 border-solid bg-white bg-clip-border">
+      <div
+        class="border-black/12.5 shadow-soft-xl relative flex min-w-0 flex-col break-words rounded-2xl border-0 border-solid bg-white bg-clip-border">
         <div class="border-black/12.5 mb-0 rounded-t-2xl border-b-0 border-solid bg-white p-6 pb-0">
           <div class="flex flex-wrap mt-0 -mx-3">
             <div class="flex-none w-7/12 max-w-full px-3 mt-0 lg:w-1/2 lg:flex-none">
@@ -148,9 +147,78 @@
               </thead>
 
               <tbody>
-               
+                @forelse($prestasis as $prestasi)
+                  <tr>
+                    <td class="px-6 py-3 align-middle bg-transparent border-b whitespace-nowrap">
+                      <span class="text-sm font-semibold leading-tight text-slate-600">{{ $prestasi->judul }}</span>
+                    </td>
+
+                    <td class="px-6 py-3 align-middle bg-transparent border-b whitespace-nowrap">
+                      <span class="text-sm leading-tight text-slate-600">
+                        {{ $prestasi->user->nama ?? $prestasi->user->nama_lengkap ?? $prestasi->nim }}
+                      </span>
+                    </td>
+
+                    <td class="px-6 py-3 text-center align-middle bg-transparent border-b whitespace-nowrap">
+                      <span class="text-sm leading-tight text-slate-600">{{ ucfirst($prestasi->bidang) }}</span>
+                    </td>
+
+                    <td class="px-6 py-3 text-center align-middle bg-transparent border-b whitespace-nowrap">
+                      <span class="text-sm leading-tight text-slate-600">{{ $prestasi->peringkat ?? '-' }}</span>
+                    </td>
+
+                    <td class="px-6 py-3 text-center align-middle bg-transparent border-b whitespace-nowrap">
+                      <span class="text-sm leading-tight text-slate-600">{{ $prestasi->jumlah_poin }}</span>
+                    </td>
+
+                    <td class="px-6 py-3 text-center align-middle bg-transparent border-b whitespace-nowrap">
+                      @if($prestasi->status == 'menunggu')
+                        <form id="form-approve-{{ $prestasi->id_prestasi }}"
+                          action="{{ route('prestasi.approve', $prestasi->id_prestasi) }}" method="POST"
+                          style="display:inline;">
+                          @csrf
+                          <button type="button"
+                            class="bg-gradient-to-tl from-green-600 to-lime-400 text-white px-3 py-1 rounded text-xs font-bold uppercase cursor-pointer hover:shadow-md"
+                            onclick="konfirmasiApprove('{{ $prestasi->id_prestasi }}')">
+                            Setujui
+                          </button>
+                        </form>
+                      @else
+                        <span class="text-xxs font-bold tracking-normal uppercase text-slate-400 opacity-70">
+                          Disetujui
+                        </span>
+                      @endif
+                    </td>
+                  </tr>
+                @empty
+                  <tr>
+                    <td colspan="6" class="px-6 py-4 text-center text-sm text-slate-400">Belum ada data prestasi yang
+                      di-upload.</td>
+                  </tr>
+                @endforelse
               </tbody>
             </table>
+
+            <script>
+              function konfirmasiApprove(id) {
+                Swal.fire({
+                  title: 'Apakah Anda yakin?',
+                  text: "Prestasi ini akan langsung disetujui dan tampil di beranda mahasiswa!",
+                  icon: 'question',
+                  showCancelButton: true,
+                  confirmButtonColor: '#2dce89', /* Warna hijau sukses Argon */
+                  cancelButtonColor: '#f5365c',  /* Warna merah danger Argon */
+                  confirmButtonText: 'Ya, Setujui!',
+                  cancelButtonText: 'Batal'
+                }).then((result) => {
+                  if (result.isConfirmed) {
+                    // Submit form HTML sesuai dengan ID prestasi yang diklik
+                    document.getElementById('form-approve-' + id).submit();
+                  }
+                })
+              }
+            </script>
+
           </div>
         </div>
       </div>

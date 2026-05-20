@@ -8,63 +8,64 @@
   <meta name="description" content="">
   <meta name="keywords" content="">
 
-  <!-- Favicons -->
   <link href="{{ asset('assets/mahasiswa/img/favicon.png') }}" rel="icon">
   <link href="{{ asset('assets/mahasiswa/img/apple-touch-icon.png') }}" rel="apple-touch-icon">
-
-  <!-- Fonts -->
   <link href="https://fonts.googleapis.com" rel="preconnect">
   <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Nunito:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
-    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&family=Nunito:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap" rel="stylesheet">
 
-  <!-- Vendor CSS Files -->
   <link href="{{ asset('assets/mahasiswa/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
   <link href="{{ asset('assets/mahasiswa/vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet">
   <link href="{{ asset('assets/mahasiswa/vendor/aos/aos.css') }}" rel="stylesheet">
   <link href="{{ asset('assets/mahasiswa/vendor/swiper/swiper-bundle.min.css') }}" rel="stylesheet">
   <link href="{{ asset('assets/mahasiswa/vendor/glightbox/css/glightbox.min.css') }}" rel="stylesheet">
-
-  <!-- Main CSS File -->
   <link href="{{ asset('assets/mahasiswa/css/main.css') }}" rel="stylesheet">
+
   <style>
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 9999;
-            align-items: center;
-            justify-content: center;
-        }
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-overlay.active { display: flex !important; }
+    .modal-box {
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      text-align: center;
+      min-width: 300px;
+    }
+    .modal-title { font-weight: bold; font-size: 18px; margin-bottom: 10px; }
+    .modal-message { color: #666; margin-bottom: 20px; }
 
-        .modal-overlay.active { 
-            display: flex !important; 
-        }
-
-        .modal-box {
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            text-align: center;
-            min-width: 300px;
-        }
-        
-        /* Tambahin warna teks biar kelihatan */
-        .modal-title { font-weight: bold; font-size: 18px; margin-bottom: 10px; }
-        .modal-message { color: #666; margin-bottom: 20px; }
-    </style>
+    /* Like button */
+    .btn-like {
+      border: none;
+      background: none;
+      cursor: pointer;
+      color: #aaa;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 0;
+      transition: color 0.2s;
+    }
+    .btn-like.liked { color: #e74c3c; }
+    .btn-like:hover { color: #e74c3c; }
+  </style>
 </head>
 
 <body class="index-page">
   <header id="header" class="header d-flex align-items-center fixed-top custom-header">
     <div class="container-fluid container-xl d-flex align-items-center justify-content-between custom-container">
-
       <a class="logo d-flex align-items-center text-decoration-none m-0 p-0">
         <span class="sitename fw-bold custom-logo">SIPRESMA</span>
       </a>
-
       <nav id="navmenu" class="navmenu m-0 p-0 d-none d-xl-flex">
         <ul class="d-flex align-items-center gap-4 mb-0 list-unstyled">
           <li><a href="{{ url('/') }}" class="active custom-nav-link">Beranda</a></li>
@@ -73,15 +74,11 @@
         </ul>
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
       </nav>
-
       <div class="header-right d-flex align-items-center gap-3 m-0 p-0">
-
         <div class="search-bar position-relative d-none d-md-block">
           <input type="text" placeholder="Search..." class="form-control ps-4 pe-6 py-2 custom-search-input">
-          <i class="bi bi-search position-absolute top-50 end-0 translate-middle-y pe-3 text-muted"
-            style="font-size: 0.85rem;"></i>
+          <i class="bi bi-search position-absolute top-50 end-0 translate-middle-y pe-3 text-muted" style="font-size: 0.85rem;"></i>
         </div>
-
         @auth
           <div class="dropdown">
             <button class="btn dropdown-toggle d-flex align-items-center gap-2 custom-btn-login" type="button"
@@ -89,11 +86,8 @@
               <i class="bi bi-person-circle"></i> {{ Auth::user()->name }}
             </button>
             <ul class="dropdown-menu dropdown-menu-end shadow border-0" aria-labelledby="userMenu">
-              <li><a class="dropdown-item" href="{{ route('profile.edit') }}"><i class="bi bi-person me-2"></i> Info
-                  Profile</a></li>
-              <li>
-                <hr class="dropdown-divider">
-              </li>
+              <li><a class="dropdown-item" href="{{ route('profile.edit') }}"><i class="bi bi-person me-2"></i> Info Profile</a></li>
+              <li><hr class="dropdown-divider"></li>
               <li>
                 <form method="POST" action="{{ route('logout') }}">
                   @csrf
@@ -104,47 +98,35 @@
               </li>
             </ul>
           </div>
-
         @else
-          <a href="{{ route('login') }}" class="btn px-3 py-2 custom-btn-login">
-            Login
-          </a>
-          <a href="{{ route('register') }}" class="btn px-3 py-2 custom-btn-register">
-            Register
-          </a>
+          <a href="{{ route('login') }}" class="btn px-3 py-2 custom-btn-login">Login</a>
+          <a href="{{ route('register') }}" class="btn px-3 py-2 custom-btn-register">Register</a>
         @endauth
-
       </div>
     </div>
   </header>
 
   <main style="margin-top: 70px;"></main>
   @if(Request::is('profile*'))
-        @yield('content')
+    @yield('content')
   @else
 
   <main class="main">
 
-    <!-- Call To Action 2 Section -->
+    <!-- Hero Section -->
     <section id="call-to-action-2" class="call-to-action-2 section">
       <div class="container" data-aos="fade-up" data-aos-delay="100">
         <div class="d-flex flex-column flex-lg-row gap-4 align-items-center position-relative">
-
           <div class="content-left flex-grow-1" data-aos="fade-right" data-aos-delay="200">
             <h1>Galeri Prestasi Mahasiswa PSTI</h1>
-            <p class="my-4">Dokumentasi digital perjalanan prestasi mahasiswa Program Studi Pendidikan Sistem dan
-              Teknologi Informasi.</p>
-
+            <p class="my-4">Dokumentasi digital perjalanan prestasi mahasiswa Program Studi Pendidikan Sistem dan Teknologi Informasi.</p>
             <div class="cta-buttons d-flex flex-wrap gap-3">
               <a href="{{ route('prestasi.upload') }}" class="btn btn-primary">Mulai Berprestasi</a>
               <a href="#" class="btn btn-outline">Eksplorasi</a>
             </div>
           </div>
-
           <div class="content-right position-relative" data-aos="fade-left" data-aos-delay="300">
-            <img src="{{ asset('assets/mahasiswa/img/misc/misc-1.webp') }}" alt="Digital Platform"
-              class="img-fluid rounded-4">
-
+            <img src="{{ asset('assets/mahasiswa/img/misc/misc-1.webp') }}" alt="Digital Platform" class="img-fluid rounded-4">
             <div class="floating-card">
               <div class="card-icon"><i class="bi bi-people"></i></div>
               <div class="card-content">
@@ -152,126 +134,70 @@
                 <span class="stats-text">Mahasiswa Aktif</span>
               </div>
             </div>
-
             <div class="floating-card-top">
               <div class="card-icon"><i class="bi bi-trophy"></i></div>
               <div class="card-content">
-                <span class="stats-number">300+</span>
+                <span class="stats-number">{{ $prestasis->count() }}+</span>
                 <span class="stats-text">Total Prestasi</span>
               </div>
             </div>
           </div>
-
         </div>
       </div>
     </section>
-    <!-- /Call To Action 2 Section -->
 
     <!-- Hall of Fame Section -->
     <section id="featured-posts" class="featured-posts section">
-
-      <!-- Section Title -->
       <div class="container section-title" data-aos="fade-up">
         <h2>Hall of Fame</h2>
         <div><span>Mahasiswa Terbaik PSTI</span></div>
       </div>
-
       <div class="container" data-aos="fade-up" data-aos-delay="100">
-
         <div class="blog-posts-slider swiper init-swiper">
           <script type="application/json" class="swiper-config">
             {
               "loop": true,
               "speed": 800,
-              "autoplay": {
-                "delay": 3000
-              },
+              "autoplay": { "delay": 3000 },
               "slidesPerView": 3,
               "spaceBetween": 30,
               "breakpoints": {
-                "320": {
-                  "slidesPerView": 1,
-                  "spaceBetween": 20
-                },
-                "768": {
-                  "slidesPerView": 2,
-                  "spaceBetween": 20
-                },
-                "1200": {
-                  "slidesPerView": 3,
-                  "spaceBetween": 30
-                }
+                "320": { "slidesPerView": 1, "spaceBetween": 20 },
+                "768": { "slidesPerView": 2, "spaceBetween": 20 },
+                "1200": { "slidesPerView": 3, "spaceBetween": 30 }
               }
             }
           </script>
-
           <div class="swiper-wrapper">
+            @forelse($prestasis->take(6) as $p)
             <div class="swiper-slide">
               <div class="blog-post-item">
-                <img src="{{ asset('assets/mahasiswa/img/blog/blog-post-portrait-1.webp') }}" alt="Blog Image">
+                @if($p->bukti_prestasi)
+                  <img src="{{ asset('storage/' . $p->bukti_prestasi) }}" alt="{{ $p->judul }}" style="width:100%; height:220px; object-fit:cover;">
+                @else
+                  <img src="{{ asset('assets/mahasiswa/img/blog/blog-post-portrait-1.webp') }}" alt="Default">
+                @endif
                 <div class="blog-post-content">
                   <div class="post-meta">
-                    <span><i class="bi bi-person"></i> Julia Parker</span>
-                    <span><i class="bi bi-clock"></i> Jan 15, 2025</span>
-                    <span><i class="bi bi-chat-dots"></i> 6 Comments</span>
+                    <span><i class="bi bi-person"></i> {{ $p->mahasiswa->nama ?? ($p->user->name ?? 'Mahasiswa') }}</span>
+                    <span><i class="bi bi-trophy"></i> {{ $p->jumlah_poin ?? $p->poin }} Poin</span>
                   </div>
-                  <h2><a href="#">Neque porro quisquam est qui dolorem ipsum quia dolor sit amet</a></h2>
-                  <p>Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Fusce
-                    porttitor metus eget lectus consequat, sit amet feugiat magna vulputate.</p>
+                  <h2><a href="#">{{ $p->judul }}</a></h2>
+                  <p>{{ Str::limit($p->deskripsi, 100) }}</p>
                   <a href="#" class="read-more">Read More <i class="bi bi-arrow-right"></i></a>
                 </div>
               </div>
             </div>
-
+            @empty
             <div class="swiper-slide">
               <div class="blog-post-item">
-                <img src="{{ asset('assets/mahasiswa/img/blog/blog-post-portrait-2.webp') }}" alt="Blog Image">
+                <img src="{{ asset('assets/mahasiswa/img/blog/blog-post-portrait-1.webp') }}" alt="Default">
                 <div class="blog-post-content">
-                  <div class="post-meta">
-                    <span><i class="bi bi-person"></i> Mark Wilson</span>
-                    <span><i class="bi bi-clock"></i> Jan 18, 2025</span>
-                    <span><i class="bi bi-chat-dots"></i> 6 Comments</span>
-                  </div>
-                  <h2><a href="#">Sed ut perspiciatis unde omnis iste natus error sit voluptatem</a></h2>
-                  <p>Maecenas tempus tellus eget condimentum rhoncus sem quam semper libero sit amet adipiscing sem
-                    neque sed ipsum.</p>
-                  <a href="#" class="read-more">Read More <i class="bi bi-arrow-right"></i></a>
+                  <p>Belum ada prestasi yang disetujui.</p>
                 </div>
               </div>
             </div>
-
-            <div class="swiper-slide">
-              <div class="blog-post-item">
-                <img src="{{ asset('assets/mahasiswa/img/blog/blog-post-portrait-3.webp') }}" alt="Blog Image">
-                <div class="blog-post-content">
-                  <div class="post-meta">
-                    <span><i class="bi bi-person"></i> Sarah Johnson</span>
-                    <span><i class="bi bi-clock"></i> Jan 21, 2025</span>
-                    <span><i class="bi bi-chat-dots"></i> 15 Comments</span>
-                  </div>
-                  <h2><a href="#">At vero eos et accusamus et iusto odio dignissimos ducimus</a></h2>
-                  <p>Nullam dictum felis eu pede mollis pretium integer tincidunt cras dapibus vivamus elementum semper
-                    nisi.</p>
-                  <a href="#" class="read-more">Read More <i class="bi bi-arrow-right"></i></a>
-                </div>
-              </div>
-            </div>
-
-            <div class="swiper-slide">
-              <div class="blog-post-item">
-                <img src="{{ asset('assets/mahasiswa/img/blog/blog-post-portrait-4.webp') }}" alt="Blog Image">
-                <div class="blog-post-content">
-                  <div class="post-meta">
-                    <span><i class="bi bi-person"></i> David Brown</span>
-                    <span><i class="bi bi-clock"></i> Jan 24, 2025</span>
-                    <span><i class="bi bi-chat-dots"></i> 10 Comments</span>
-                  </div>
-                  <h2><a href="#">Et harum quidem rerum facilis est et expedita distinctio</a></h2>
-                  <p>Donec quam felis ultricies nec pellentesque eu pretium quis sem nulla consequat massa quis enim.</p>
-                  <a href="#" class="read-more">Read More <i class="bi bi-arrow-right"></i></a>
-                </div>
-              </div>
-            </div>
+            @endforelse
           </div>
         </div>
       </div>
@@ -279,85 +205,70 @@
 
     <!-- Wall of Inspiration Section -->
     <section id="latest-posts" class="latest-posts section">
-
       <div class="container section-title" data-aos="fade-up">
         <h2>Wall of Inspiration</h2>
         <div><span>Galeri Prestasi Mahasiswa PSTI</span></div>
       </div>
-
       <div class="container" data-aos="fade-up" data-aos-delay="100">
         <div class="row gy-4">
-
+          @forelse($prestasis as $p)
           <div class="col-lg-4">
             <article>
               <div class="post-img">
-                <img src="{{ asset('assets/mahasiswa/img/blog/blog-post-1.webp') }}" alt="" class="img-fluid">
+                @if($p->bukti_prestasi)
+                  <img src="{{ asset('storage/' . $p->bukti_prestasi) }}" alt="{{ $p->judul }}" class="img-fluid" style="height:200px; object-fit:cover; width:100%;">
+                @else
+                  <img src="{{ asset('assets/mahasiswa/img/blog/blog-post-1.webp') }}" alt="" class="img-fluid">
+                @endif
               </div>
-              <p class="post-category">Politics</p>
+
+              <p class="post-category">{{ $p->bidang }}</p>
               <h2 class="title">
-                <a href="blog-details.html">Dolorum optio tempore voluptas dignissimos</a>
+                <a href="#">{{ $p->judul }}</a>
               </h2>
-              <div class="d-flex align-items-center">
-                <img src="{{ asset('assets/mahasiswa/img/person/person-f-12.webp') }}" alt=""
-                  class="img-fluid post-author-img flex-shrink-0">
-                <div class="post-meta">
-                  <p class="post-author">Maria Doe</p>
-                  <p class="post-date">
-                    <time datetime="2022-01-01">Jan 1, 2022</time>
-                  </p>
+
+              <div class="d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center gap-2">
+                  <div class="post-meta">
+                    <p class="post-author mb-0">{{ $p->mahasiswa->nama ?? ($p->user->name ?? 'Mahasiswa') }}</p>
+                    <p class="post-date mb-0">
+                      <time>{{ $p->created_at->format('M d, Y') }}</time>
+                    </p>
+                  </div>
                 </div>
+
+                <!-- Tombol Like -->
+                @auth
+                  @php
+                    $liked = $p->likes->contains('user_id', Auth::id());
+                    $likeCount = $p->likes->count();
+                  @endphp
+                  <form action="{{ route('prestasi.like', $p->id_prestasi) }}" method="POST">
+                    @csrf
+                    <button type="submit" class="btn-like {{ $liked ? 'liked' : '' }}">
+                      <i class="bi {{ $liked ? 'bi-heart-fill' : 'bi-heart' }}"></i>
+                      {{ $likeCount }}
+                    </button>
+                  </form>
+                @else
+                  <a href="{{ route('login') }}" class="btn-like">
+                    <i class="bi bi-heart"></i>
+                    {{ $p->likes->count() }}
+                  </a>
+                @endauth
+
               </div>
             </article>
           </div>
-
-          <div class="col-lg-4">
-            <article>
-              <div class="post-img">
-                <img src="{{ asset('assets/mahasiswa/img/blog/blog-post-2.webp') }}" alt="" class="img-fluid">
-              </div>
-              <p class="post-category">Sports</p>
-              <h2 class="title">
-                <a href="blog-details.html">Nisi magni odit consequatur autem nulla dolorem</a>
-              </h2>
-              <div class="d-flex align-items-center">
-                <img src="{{ asset('assets/mahasiswa/img/person/person-f-13.webp') }}" alt=""
-                  class="img-fluid post-author-img flex-shrink-0">
-                <div class="post-meta">
-                  <p class="post-author">Allisa Mayer</p>
-                  <p class="post-date">
-                    <time datetime="2022-01-01">Jun 5, 2022</time>
-                  </p>
-                </div>
-              </div>
-            </article>
+          @empty
+          <div class="col-12 text-center">
+            <p>Belum ada prestasi yang disetujui.</p>
           </div>
-
-          <div class="col-lg-4">
-            <article>
-              <div class="post-img">
-                <img src="{{ asset('assets/mahasiswa/img/blog/blog-post-3.webp') }}" alt="" class="img-fluid">
-              </div>
-              <p class="post-category">Entertainment</p>
-              <h2 class="title">
-                <a href="blog-details.html">Possimus soluta ut id suscipit ea ut in quo quia et soluta</a>
-              </h2>
-              <div class="d-flex align-items-center">
-                <img src="{{ asset('assets/mahasiswa/img/person/person-m-10.webp') }}" alt=""
-                  class="img-fluid post-author-img flex-shrink-0">
-                <div class="post-meta">
-                  <p class="post-author">Mark Dower</p>
-                  <p class="post-date">
-                    <time datetime="2022-01-01">Jun 22, 2022</time>
-                  </p>
-                </div>
-              </div>
-            </article>
-          </div>
-
+          @endforelse
         </div>
       </div>
-
     </section>
+
   </main>
 
   <footer id="footer" class="footer">
@@ -369,38 +280,35 @@
     </div>
   </footer>
 
-  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i
-      class="bi bi-arrow-up-short"></i></a>
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center">
+    <i class="bi bi-arrow-up-short"></i>
+  </a>
 
-<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-overlay" id="modalOverlay">
     <div class="modal-box">
-        <div class="modal-icon" id="modalIcon"></div>
-        <p class="modal-title" id="modalTitle"></p>
-        <p class="modal-message" id="modalMessage"></p>
-        <button class="modal-btn" onclick="closeModal()">OK</button>
+      <div class="modal-icon" id="modalIcon"></div>
+      <p class="modal-title" id="modalTitle"></p>
+      <p class="modal-message" id="modalMessage"></p>
+      <button class="modal-btn" onclick="closeModal()">OK</button>
     </div>
-</div>
+  </div>
 
-<script>
-    // 2. Fungsi buat nampilin & nutup modal
+  <script>
     function showModal(icon, title, message) {
-        document.getElementById('modalIcon').textContent = icon;
-        document.getElementById('modalTitle').textContent = title;
-        document.getElementById('modalMessage').textContent = message;
-        document.getElementById('modalOverlay').classList.add('active');
+      document.getElementById('modalIcon').textContent = icon;
+      document.getElementById('modalTitle').textContent = title;
+      document.getElementById('modalMessage').textContent = message;
+      document.getElementById('modalOverlay').classList.add('active');
     }
-
     function closeModal() {
-        document.getElementById('modalOverlay').classList.remove('active');
+      document.getElementById('modalOverlay').classList.remove('active');
     }
-
-    // 3. INI KUNCINYA: Cek session pas halaman home kelar loading
     @if(session('success'))
     window.addEventListener('DOMContentLoaded', function() {
-            showModal('✅', 'Upload Berhasil!', '{{ session("success") }}');
-        });
+      showModal('✅', 'Berhasil!', '{{ session("success") }}');
+    });
     @endif
-</script>
+  </script>
 
   <script src="{{ asset('assets/mahasiswa/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
   <script src="{{ asset('assets/mahasiswa/vendor/php-email-form/validate.js') }}"></script>
@@ -410,7 +318,6 @@
   <script src="{{ asset('assets/mahasiswa/vendor/glightbox/js/glightbox.min.js') }}"></script>
   <script src="{{ asset('assets/mahasiswa/js/main.js') }}"></script>
 
-@endif
+  @endif
 </body>
-
 </html>

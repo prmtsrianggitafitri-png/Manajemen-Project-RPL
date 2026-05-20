@@ -31,4 +31,9 @@ class Prestasi extends Model
     {
         return $this->belongsTo(Kategori::class, 'id_kategori', 'id_kategori');
     }
+
+    public function likes()
+    {
+        return $this->hasMany(\App\Models\Like::class, 'id_prestasi', 'id_prestasi');
+    }
 }

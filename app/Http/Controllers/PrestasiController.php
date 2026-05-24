@@ -10,7 +10,13 @@ use Illuminate\Support\Facades\Storage;
 
 class PrestasiController extends Controller
 {
-    // Menampilkan halaman upload prestasi milik mahasiswa
+
+    public function tabelPrestasi(){
+        $kategoris = Kategori::all();
+        $prestasis = Prestasi::all();
+        return view('prestasi.tabelPrestasi', compact('kategoris', 'prestasis'));
+    }
+
     public function index()
     {
         $kategoris = Kategori::all();
@@ -26,7 +32,7 @@ class PrestasiController extends Controller
             'judul'               => 'required|string|max:255',
             'deskripsi'           => 'required|string',
             'bidang'              => 'required|in:akademik,non-akademik',
-            'bukti_prestasi'      => 'required|file|max:512000', 
+            'bukti_prestasi'      => 'required|file|max:512000',
             'dokumentasi_pribadi' => 'nullable|file|max:512000',
         ]);
 
@@ -40,13 +46,13 @@ class PrestasiController extends Controller
 
         Prestasi::create([
             'id_kategori'         => $kategori->id_kategori,
-            'nim'                 => Auth::user()->nim, 
+            'nim'                 => Auth::user()->nim,
             'judul'               => $request->judul,
             'bidang'              => $request->bidang,
             'deskripsi'           => $request->deskripsi,
-            'status'              => 'menunggu', 
+            'status'              => 'menunggu',
             'peringkat'           => $kategori->peringkat,
-            'jumlah_poin'         => $kategori->jumlah_poin,      
+            'jumlah_poin'         => $kategori->jumlah_poin,
             'bukti_prestasi'      => $buktiPath,
             'dokumentasi_pribadi' => $dokPath,
         ]);
@@ -55,11 +61,16 @@ class PrestasiController extends Controller
         return redirect()->route('profile.edit')->with('success', 'Prestasi berhasil diunggah!');
     }
 
-    // Menampilkan Halaman Info Profile & Tabel Ringkasan Prestasi Mahasiswa
     public function edit(Request $request)
     {
         $prestasis = \App\Models\Prestasi::where('nim', $request->user()->nim)->get();
 
+        $stats = [
+            'diunggah'   => $prestasis->count(),
+            'disetujui'  => $prestasis->where('status', 'disetujui')->count(),
+            'direvisi'   => $prestasis->where('status', 'revisi')->count(),
+            'total_poin' => $prestasis->where('status', 'disetujui')->sum('jumlah_poin'),
+        ];
         $stats = [
             'diunggah'   => $prestasis->count(),
             'disetujui'  => $prestasis->where('status', 'disetujui')->count(),
@@ -103,17 +114,17 @@ class PrestasiController extends Controller
             'judul'               => 'required|string|max:255',
             'deskripsi'           => 'required|string',
             'bidang'              => 'required|in:akademik,non-akademik',
-            'bukti_prestasi'      => 'nullable|file|max:512000', 
+            'bukti_prestasi'      => 'nullable|file|max:512000',
             'dokumentasi_pribadi' => 'nullable|file|max:512000',
         ]);
 
         $kategori = Kategori::findOrFail($request->id_kategori);
 
         $prestasi->id_kategori = $request->id_kategori;
-        $prestasi->judul = $request->judul;
-        $prestasi->bidang = $request->bidang;
-        $prestasi->deskripsi = $request->deskripsi;
-        $prestasi->peringkat = $kategori->peringkat;
+        $prestasi->judul       = $request->judul;
+        $prestasi->bidang      = $request->bidang;
+        $prestasi->deskripsi   = $request->deskripsi;
+        $prestasi->peringkat   = $kategori->peringkat;
         $prestasi->jumlah_poin = $kategori->jumlah_poin;
         
         // Begitu di-update, status kembali ke 'menunggu' untuk diverifikasi ulang oleh admin
@@ -135,11 +146,9 @@ class PrestasiController extends Controller
 
         $prestasi->save();
 
-        // REVISI: Diarahkan kembali ke route profil yang benar
-        return redirect()->route('profile.edit')->with('success', 'Prestasi berhasil diperbarui dan sedang menunggu validasi ulang!');
+        return redirect('/tabelPrestasi')->with('success', 'Prestasi berhasil diperbarui!');
     }
 
-    // Menghapus data prestasi beserta filenya
     public function destroy($id)
     {
         $prestasi = Prestasi::findOrFail($id);
@@ -157,7 +166,6 @@ class PrestasiController extends Controller
         return redirect()->back()->with('success', 'Data prestasi berhasil dihapus!');
     }
 
-    // Proses persetujuan oleh Admin
     public function approve($id)
     {
         $prestasi = Prestasi::findOrFail($id);
@@ -165,5 +173,24 @@ class PrestasiController extends Controller
         $prestasi->save();
 
         return redirect()->back()->with('success', 'Prestasi berhasil disetujui!');
+    }
+
+    // ✅ BARU: Toggle Like
+    public function toggleLike($id)
+    {
+        $like = \App\Models\Like::where('user_id', Auth::id())
+            ->where('id_prestasi', $id)
+            ->first();
+
+        if ($like) {
+            $like->delete();
+        } else {
+            \App\Models\Like::create([
+                'user_id'     => Auth::id(),
+                'id_prestasi' => $id,
+            ]);
+        }
+
+        return back();
     }
 }

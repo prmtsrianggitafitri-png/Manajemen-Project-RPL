@@ -9,7 +9,11 @@ use Illuminate\Support\Facades\Route;
 
 // Halaman Utama Publik / Mahasiswa (Bisa diakses tanpa login atau sesudah login)
 Route::get('/', function () {
-    return view('mahasiswa.index');
+    $prestasis = \App\Models\Prestasi::with(['mahasiswa', 'kategori', 'likes'])
+        ->where('status', 'disetujui')
+        ->latest()
+        ->get();
+    return view('mahasiswa.index', compact('prestasis'));
 })->name('home');
 
 Route::get('/sipresma', [LayoutController::class, 'index']);
@@ -39,6 +43,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/prestasi/edit/{id}', [PrestasiController::class, 'edit'])->name('prestasi.edit');
         Route::put('/prestasi/update/{id}', [PrestasiController::class, 'update'])->name('prestasi.update');
         Route::delete('/prestasi/delete/{id}', [PrestasiController::class, 'destroy'])->name('prestasi.destroy');
+        Route::post('/prestasi/{id}/like', [PrestasiController::class, 'toggleLike'])->name('prestasi.like');
     });
 
     // ==========================================

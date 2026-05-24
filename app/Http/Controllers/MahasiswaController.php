@@ -15,6 +15,22 @@ class MahasiswaController extends Controller
         return view('admin.dataMahasiswa', compact('mahasiswa'));
     }
 
+    public function publik()
+    {
+        $mahasiswa = User::where('role', 'mahasiswa')
+            ->withSum(['prestasis as total_poin' => function($q) {
+                $q->where('status', 'disetujui');
+            }], 'jumlah_poin')
+            ->orderByDesc('total_poin')
+            ->get()
+            ->map(function($mhs, $index) {
+                $mhs->ranking = $index + 1;
+                return $mhs;
+            });
+
+        return view('mahasiswa.daftarMahasiswa', compact('mahasiswa'));
+    }
+
     public function edit($id)
     {
         $mhs = User::where('role', 'mahasiswa')->findOrFail($id);

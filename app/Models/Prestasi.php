@@ -36,4 +36,10 @@ class Prestasi extends Model
     {
         return $this->hasMany(\App\Models\Like::class, 'id_prestasi', 'id_prestasi');
     }
+
+    public function mahasiswa()
+    {
+        return $this->belongsTo(User::class, 'nim', 'nim')
+                    ->where('role', 'mahasiswa');
+    }
 }

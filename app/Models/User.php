@@ -55,4 +55,9 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function prestasis()
+    {
+        return $this->hasMany(\App\Models\Prestasi::class, 'nim', 'nim');
+    }
 }

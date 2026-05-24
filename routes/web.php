@@ -16,6 +16,7 @@ Route::get('/', function () {
     return view('mahasiswa.index', compact('prestasis'));
 })->name('home');
 
+Route::get('/DaftarMahasiswa', [MahasiswaController::class, 'publik'])->name('mahasiswa.publik');
 Route::get('/sipresma', [LayoutController::class, 'index']);
 
 // Fitur Autentikasi (Login, Register, dll)

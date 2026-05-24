@@ -49,49 +49,166 @@
                             <table class="table table-hover align-middle">
                                 <thead class="table-light">
                                     <tr>
-                                        <th class="border-0">Nama Prestasi</th>
-                                        <th class="border-0">Bidang</th>
-                                        <th class="border-0">Status</th>
-                                        <th class="border-0">Peringkat</th>
-                                        <th class="border-0">Poin</th>
-                                        <th class="border-0">Aksi</th>
+                                        <th
+                                            class="px-6 py-3 font-bold tracking-normal text-left uppercase align-middle bg-transparent border-b letter border-b-solid text-xxs whitespace-nowrap border-b-gray-200 text-slate-400 opacity-70">
+                                            Judul Prestasi</th>
+                                        <th
+                                            class="px-6 py-3 font-bold tracking-normal text-center uppercase align-middle bg-transparent border-b letter border-b-solid text-xxs whitespace-nowrap border-b-gray-200 text-slate-400 opacity-70">
+                                            Bidang</th>
+                                        <th
+                                            class="px-6 py-3 font-bold tracking-normal text-center uppercase align-middle bg-transparent border-b letter border-b-solid text-xxs whitespace-nowrap border-b-gray-200 text-slate-400 opacity-70">
+                                            Peringkat</th>
+                                        <th
+                                            class="px-6 py-3 font-bold tracking-normal text-center uppercase align-middle bg-transparent border-b letter border-b-solid text-xxs whitespace-nowrap border-b-gray-200 text-slate-400 opacity-70">
+                                            Poin</th>
+                                        <th
+                                            class="px-6 py-3 font-bold tracking-normal text-center uppercase align-middle bg-transparent border-b letter border-b-solid text-xxs whitespace-nowrap border-b-gray-200 text-slate-400 opacity-70">
+                                            Dokumentasi</th>
+                                        <th
+                                            class="px-6 py-3 font-bold tracking-normal text-center uppercase align-middle bg-transparent border-b letter border-b-solid text-xxs whitespace-nowrap border-b-gray-200 text-slate-400 opacity-70">
+                                            Status Verifikasi</th>
+                                        <th
+                                            class="px-6 py-3 font-bold tracking-normal text-center uppercase align-middle bg-transparent border-b letter border-b-solid text-xxs whitespace-nowrap border-b-gray-200 text-slate-400 opacity-70">
+                                            Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($prestasis as $p)
+                                    @forelse($prestasis as $p)
                                         <tr>
-                                            <td class="border-0 text-muted">{{ $p->judul }}</td>
-                                            <td class="border-0 text-muted">{{ $p->bidang }}</td>
-                                            <td class="border-0 text-muted">{{ $p->status }}</td>
-                                            <td class="border-0 text-muted">{{ $p->peringkat }}</td>
-                                            <td class="border-0">
-                                                <span class="fw-bold text-info">+{{ $p->jumlah_poin }}</span>
+                                            <td class="px-6 py-3 align-middle bg-transparent border-b whitespace-nowrap">
+                                                <span
+                                                    class="text-sm font-semibold leading-tight text-slate-600">{{ $p->judul }}</span>
                                             </td>
-                                            <td
-                                                class="p-2 text-center align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
-                                                <a href="/prestasi/{{ $p->id_prestasi }}/edit"
-                                                    onclick="return konfirmasiEdit(event, this.href)"
-                                                    class="inline-block px-4 py-2 mb-0 font-bold text-center uppercase align-middle transition-all bg-transparent border-0 rounded-lg shadow-none leading-pro text-xs ease-soft-in bg-150 tracking-tight-soft bg-x-25 text-slate-400">
-                                                    <i class="fas fa-edit text-info"></i>
-                                                </a>
 
-                                                <form action="/prestasi/{{ $p->id_prestasi }}" method="POST"
-                                                    id="form-hapus-{{ $p->id_prestasi }}" class="inline">
-                                                    @csrf
-                                                    @method('DELETE')
+                                            <td
+                                                class="px-6 py-3 text-center align-middle bg-transparent border-b whitespace-nowrap">
+                                                <span
+                                                    class="text-sm leading-tight text-slate-600">{{ ucfirst($p->bidang) }}</span>
+                                            </td>
+
+                                            <td
+                                                class="px-6 py-3 text-center align-middle bg-transparent border-b whitespace-nowrap">
+                                                <span
+                                                    class="text-sm leading-tight text-slate-600">{{ $p->peringkat ?? '-' }}</span>
+                                            </td>
+
+                                            <td
+                                                class="px-6 py-3 text-center align-middle bg-transparent border-b whitespace-nowrap">
+                                                <span class="text-sm leading-tight text-slate-600">{{ $p->jumlah_poin }}</span>
+                                            </td>
+
+                                            <td
+                                                class="px-6 py-3 text-center align-middle bg-transparent border-b whitespace-nowrap">
+                                                <div class="flex justify-center gap-2">
+                                                    @if($p->bukti_prestasi)
+                                                        <img src="{{ asset('storage/' . $p->bukti_prestasi) }}" class="class="
+                                                            rounded border border-gray-300 object-contain shadow-sm cursor-pointer"
+                                                            style="max-width: 80px; max-height: 60px; width: auto; height: auto;"
+                                                            title="Klik untuk memperbesar bukti" onclick="window.open(this.src, '_blank')
+                                                                        title=" Bukti Prestasi">
+                                                    @endif
+                                                    @if(!$p->bukti_prestasi && !$p->dokumentasi_pribadi) - @endif
+                                                </div>
+                                            </td>
+
+                                            <td
+                                                class="px-6 py-3 text-center align-middle bg-transparent border-b whitespace-nowrap">
+                                                @if($p->status == 'menunggu')
+                                                    <span
+                                                        class="bg-gradient-to-tl from-amber-500 to-orange-400 text-white px-2 py-1 rounded text-xs font-bold uppercase">
+                                                        Menunggu
+                                                    </span>
+                                                @elseif($p->status == 'disetujui')
+                                                    <span style="color: #27ae60; font-size: 12px; font-weight: bold;">Terverifikasi</span>
+                                                @else
+                                                    <span
+                                                        class="bg-gradient-to-tl from-red-600 to-pink-500 text-white px-2 py-1 rounded text-xs font-bold uppercase">
+                                                        Revisi
+                                                    </span>
+                                                @endif
+                                            </td>
+
+                                            <td
+                                                class="px-6 py-3 text-center align-middle bg-transparent border-b whitespace-nowrap">
+                                                @if($p->status == 'menunggu' || $p->status == 'revisi')
+                                                    <a href="javascript:void(0)"
+                                                        class="text-xs font-bold text-amber-500 hover:underline mr-3"
+                                                        onclick="confirmEdit('{{ route('prestasi.edit', $p->id_prestasi) }}', '{{ $p->judul }}')">
+                                                        Edit
+                                                    </a>
+
                                                     <button type="button"
-                                                        onclick="konfirmasiHapus('{{ $p->id_prestasi }}', '{{ $p->judul }}')"
-                                                        class="inline-block px-4 py-2 mb-0 font-bold text-center uppercase align-middle transition-all bg-transparent border-0 rounded-lg shadow-none leading-pro text-xs ease-soft-in bg-150 tracking-tight-soft bg-x-25 text-slate-400">
-                                                        <i class="fas fa-trash text-danger"></i>
+                                                        class="text-xs font-bold text-red-500 hover:underline bg-transparent border-0 cursor-pointer"
+                                                        onclick="confirmDelete('{{ $p->id_prestasi }}', '{{ $p->judul }}')">
+                                                        Hapus
                                                     </button>
-                                                </form>
+
+                                                    <form id="form-delete-{{ $p->id_prestasi }}"
+                                                        action="{{ route('prestasi.destroy', $p->id_prestasi) }}" method="POST"
+                                                        style="display:none;">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                    </form>
+                                                @else
+                                                    <span class="text-xxs font-bold uppercase text-slate-400 italic">Locked</span>
+                                                @endif
                                             </td>
                                         </tr>
-                                    @endforeach
+                                    @empty
+                                        <tr>
+                                            <td colspan="7" class="px-6 py-4 text-center text-sm text-slate-400">Kamu belum
+                                                pernah mengunggah prestasi.</td>
+                                        </tr>
+                                    @endforelse
                                 </tbody>
                             </table>
                         </div>
                     </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-overlay" id="modalEdit"
+            style="display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.4); z-index: 9999; align-items: center; justify-content: center; backdrop-filter: blur(2px);">
+            <div class="modal-box"
+                style="background: white; padding: 2.5rem; border-radius: 15px; width: 90%; max-width: 400px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2);">
+                <div class="modal-icon"
+                    style="width: 80px; height: 80px; border: 4px solid #f39c12; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; color: #f39c12; font-size: 40px; font-weight: bold;">
+                    ?</div>
+                <div class="modal-title" style="font-size: 24px; font-weight: 700; color: #444; margin-bottom: 10px;">
+                    Konfirmasi Perubahan?</div>
+                <div class="modal-text" id="modalEditText" style="font-size: 16px; color: #777; margin-bottom: 25px;">Apakah
+                    Anda ingin mengubah data prestasi ini?</div>
+                <div class="modal-footer" style="display: flex; gap: 10px; justify-content: center;">
+                    <button class="btn-modal"
+                        style="padding: 10px 25px; border-radius: 8px; font-weight: 600; cursor: pointer; border: none; font-size: 14px; background: #94a3b8; color: white;"
+                        onclick="closeEditModal()">Batal</button>
+                    <button class="btn-modal"
+                        style="padding: 10px 25px; border-radius: 8px; font-weight: 600; cursor: pointer; border: none; font-size: 14px; background: #f39c12; color: white;"
+                        id="btnConfirmEdit">Ya, Edit!</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-overlay" id="modalDelete"
+            style="display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.4); z-index: 9999; align-items: center; justify-content: center; backdrop-filter: blur(2px);">
+            <div class="modal-box"
+                style="background: white; padding: 2.5rem; border-radius: 15px; width: 90%; max-width: 400px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2);">
+                <div class="modal-icon"
+                    style="width: 80px; height: 80px; border: 4px solid #f8bb86; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; color: #f8bb86; font-size: 40px; font-weight: bold;">
+                    !</div>
+                <div class="modal-title" style="font-size: 24px; font-weight: 700; color: #444; margin-bottom: 10px;">Anda
+                    yakin akan menghapusnya?</div>
+                <div class="modal-text" id="modalText" style="font-size: 16px; color: #777; margin-bottom: 25px;">Prestasi
+                    ini akan hilang dari sistem!</div>
+                <div class="modal-footer" style="display: flex; gap: 10px; justify-content: center;">
+                    <button class="btn-modal"
+                        style="padding: 10px 25px; border-radius: 8px; font-weight: 600; cursor: pointer; border: none; font-size: 14px; background: #94a3b8; color: white;"
+                        onclick="closeModal()">Batal</button>
+                    <button class="btn-modal"
+                        style="padding: 10px 25px; border-radius: 8px; font-weight: 600; cursor: pointer; border: none; font-size: 14px; background: #d63384; color: white;"
+                        id="btnConfirmDelete">Ya, Hapus!</button>
                 </div>
             </div>
         </div>

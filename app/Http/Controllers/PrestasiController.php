@@ -6,29 +6,21 @@ use App\Models\Prestasi;
 use App\Models\Kategori;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage; // Tambahkan ini untuk fungsi hapus file
+use Illuminate\Support\Facades\Storage;
 
 class PrestasiController extends Controller
 {
-
-    public function tabelPrestasi(){
-        $kategoris = Kategori::all();
-        $prestasis = Prestasi::all();
-        
-        // Tambahkan 'prestasis' di dalam compact
-        return view('prestasi.tabelPrestasi', compact('kategoris', 'prestasis'));
-    }
+    // Menampilkan halaman upload prestasi milik mahasiswa
     public function index()
     {
         $kategoris = Kategori::all();
-        // Pastikan variabel prestasi juga dikirim ke view agar bisa dilooping untuk dihapus
         $prestasis = Prestasi::where('nim', Auth::user()->nim)->get();
         return view('prestasi.upload', compact('kategoris', 'prestasis'));
     }
 
+    // Menyimpan data upload prestasi baru
     public function store(Request $request)
     {
-        
         $request->validate([
             'id_kategori'         => 'required|exists:kategoris,id_kategori',
             'judul'               => 'required|string|max:255',
@@ -39,7 +31,6 @@ class PrestasiController extends Controller
         ]);
 
         $kategori = Kategori::findOrFail($request->id_kategori);
-
         $buktiPath = $request->file('bukti_prestasi')->store('prestasi/bukti', 'public');
 
         $dokPath = null;
@@ -60,46 +51,51 @@ class PrestasiController extends Controller
             'dokumentasi_pribadi' => $dokPath,
         ]);
 
-        return redirect('/')->with('success', 'Prestasi berhasil diunggah!');
+        // Mengarahkan ke profil setelah sukses upload
+        return redirect()->route('profile.edit')->with('success', 'Prestasi berhasil diunggah!');
     }
 
-   public function edit(Request $request)
-{
-    $prestasis = \App\Models\Prestasi::where('nim', $request->user()->nim)->get();
+    // Menampilkan Halaman Info Profile & Tabel Ringkasan Prestasi Mahasiswa
+    public function edit(Request $request)
+    {
+        $prestasis = \App\Models\Prestasi::where('nim', $request->user()->nim)->get();
 
-    $stats = [
-        'diunggah'   => $prestasis->count(),
-        'disetujui'  => $prestasis->where('status', 'disetujui')->count(),
-        'direvisi'   => $prestasis->where('status', 'revisi')->count(),
-        'total_poin' => $prestasis->where('status', 'disetujui')->sum('jumlah_poin'),
-    ];
+        $stats = [
+            'diunggah'   => $prestasis->count(),
+            'disetujui'  => $prestasis->where('status', 'disetujui')->count(),
+            'direvisi'   => $prestasis->where('status', 'revisi')->count(),
+            'total_poin' => $prestasis->where('status', 'disetujui')->sum('jumlah_poin'),
+        ];
 
-    return view('profile.edit', [
-        'user' => $request->user(),
-        'prestasis' => $prestasis, // Data untuk tabel
-        'stats' => $stats,         // Data untuk kotak statistik
-        'status' => session('status'),
-    ]);
-}
-    // public function edit($id)
-    // {
-    //     $prestasi = Prestasi::findOrFail($id);
+        return view('profile.edit', [
+            'user' => $request->user(),
+            'prestasis' => $prestasis, 
+            'stats' => $stats,         
+            'status' => session('status'),
+        ]);
+    }
+
+    // AKTIFKAN KEMBALI: Menampilkan halaman form edit per item prestasi mahasiswa
+    public function editPrestasi($id)
+    {
+        $prestasi = Prestasi::findOrFail($id);
         
-    //     // AC: Jika status disetujui, tidak boleh diedit sama sekali
-    //     if ($prestasi->status == 'disetujui') {
-    //         return redirect('/tabelPrestasi')->with('error', 'Data yang sudah disetujui tidak bisa diubah!');
-    //     }
+        // Proteksi ekstra: Jika status disetujui, tidak boleh diakali via URL langsung
+        if ($prestasi->status == 'disetujui') {
+            return redirect()->route('profile.edit')->with('error', 'Data yang sudah disetujui tidak bisa diubah!');
+        }
 
-    //     $kategoris = Kategori::all();
-    //     return view('prestasi.editPrestasi', compact('prestasi', 'kategoris'));
-    // }
+        $kategoris = Kategori::all();
+        return view('prestasi.editPrestasi', compact('prestasi', 'kategoris'));
+    }
 
+    // Memproses update data prestasi mahasiswa
     public function update(Request $request, $id)
     {
         $prestasi = Prestasi::findOrFail($id);
 
         if ($prestasi->status == 'disetujui') {
-            return redirect('/tabelPrestasi')->with('error', 'Gagal! Data ini sudah permanen (disetujui).');
+            return redirect()->route('profile.edit')->with('error', 'Gagal! Data ini sudah permanen (disetujui).');
         }
 
         $request->validate([
@@ -120,6 +116,7 @@ class PrestasiController extends Controller
         $prestasi->peringkat = $kategori->peringkat;
         $prestasi->jumlah_poin = $kategori->jumlah_poin;
         
+        // Begitu di-update, status kembali ke 'menunggu' untuk diverifikasi ulang oleh admin
         $prestasi->status = 'menunggu';
 
         if ($request->hasFile('bukti_prestasi')) {
@@ -138,36 +135,32 @@ class PrestasiController extends Controller
 
         $prestasi->save();
 
-        return redirect('/tabelPrestasi')->with('success', 'Prestasi berhasil diperbarui dan sedang menunggu validasi ulang!');
+        // REVISI: Diarahkan kembali ke route profil yang benar
+        return redirect()->route('profile.edit')->with('success', 'Prestasi berhasil diperbarui dan sedang menunggu validasi ulang!');
     }
 
-    /**
-     * Fitur Hapus Prestasi
-     */
+    // Menghapus data prestasi beserta filenya
     public function destroy($id)
     {
-        // 1. Cari data prestasi berdasarkan ID
         $prestasi = Prestasi::findOrFail($id);
 
-        // 2. Hapus file bukti_prestasi dari storage jika ada
         if ($prestasi->bukti_prestasi && Storage::disk('public')->exists($prestasi->bukti_prestasi)) {
             Storage::disk('public')->delete($prestasi->bukti_prestasi);
         }
 
-        // 3. Hapus file dokumentasi_pribadi dari storage jika ada
         if ($prestasi->dokumentasi_pribadi && Storage::disk('public')->exists($prestasi->dokumentasi_pribadi)) {
             Storage::disk('public')->delete($prestasi->dokumentasi_pribadi);
         }
 
-        // 4. Hapus data dari database
         $prestasi->delete();
 
         return redirect()->back()->with('success', 'Data prestasi berhasil dihapus!');
     }
+
+    // Proses persetujuan oleh Admin
     public function approve($id)
     {
         $prestasi = Prestasi::findOrFail($id);
-
         $prestasi->status = 'disetujui';
         $prestasi->save();
 

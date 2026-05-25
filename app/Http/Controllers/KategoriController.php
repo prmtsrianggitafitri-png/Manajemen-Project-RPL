@@ -11,15 +11,27 @@ class KategoriController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request) // Tambahkan parameter Request di sini
     {
-    
-        $kategoris = \App\Models\Kategori::all();
+        $keyword = $request->input('search');
 
-         return view("admin.manajemenDataKategori", [
-             "title" => "Data Kategori",
-             "kategoris" => $kategoris, 
-         ]);
+        // Buat query builder awal
+        $query = \App\Models\Kategori::query();
+
+        // Cari berdasarkan kolom: nama_kategori, peringkat, atau jumlah_poin
+        if ($keyword) {
+            $query->where('nama_kategori', 'LIKE', "%$keyword%")
+                  ->orWhere('peringkat', 'LIKE', "%$keyword%")
+                  ->orWhere('jumlah_poin', 'LIKE', "%$keyword%");
+        }
+
+        $kategoris = $query->get();
+
+        // Tetap return ke view dan struktur array bawaan asli kamu
+        return view("admin.manajemenDataKategori", [
+            "title" => "Data Kategori",
+            "kategoris" => $kategoris, 
+        ]);
     }
 
     /**

@@ -8,8 +8,31 @@ use App\Http\Controllers\MahasiswaController;
 use Illuminate\Support\Facades\Route; 
 
 // Halaman Utama Publik / Mahasiswa (Bisa diakses tanpa login atau sesudah login)
-Route::get('/', function () {
-    return view('mahasiswa.index');
+Route::get('/', function (Illuminate\Http\Request $request) { 
+    $keyword = $request->input('search');
+
+    // 1. Ambil data prestasi yang statusnya sudah 'disetujui'
+    $query = \App\Models\Prestasi::with('user')->where('status', 'disetujui')->orderBy('created_at', 'desc');
+
+    // 2. Jika pengunjung memasukkan kata kunci pencarian
+    if ($keyword) {
+        $query->where(function($q) use ($keyword) {
+            $q->where('judul', 'LIKE', "%$keyword%")
+              ->orWhere('bidang', 'LIKE', "%$keyword%")
+              ->orWhere('peringkat', 'LIKE', "%$keyword%");
+
+            // Cari berdasarkan nama mahasiswa melalui relasi 'user'
+            $q->orWhereHas('user', function($queryUser) use ($keyword) {
+                $queryUser->where('nama', 'LIKE', "%$keyword%"); 
+            });
+        });
+    }
+
+    // 3. Eksekusi query
+    $prestasis_publik = $query->get();
+
+    // 4. Lempar variabel ke view beranda
+    return view('mahasiswa.index', compact('prestasis_publik'));
 })->name('home');
 
 Route::get('/sipresma', [LayoutController::class, 'index']);
@@ -46,28 +69,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // ==========================================
     Route::middleware('role:admin')->group(function () {
         // Dashboard Admin
-        Route::get('/Dashboard', function () {
-        // 1. Hitung semua data untuk 4 Card Statistik Admin
-        $stats = [
-            // Card 1: Total mahasiswa unik yang memiliki role 'mahasiswa' 
-            'total_mahasiswa' => \App\Models\User::where('role', 'mahasiswa')->count(),
-            
-            // Card 2: Total seluruh data prestasi yang masuk (semua status)
-            'total_prestasi'  => \App\Models\Prestasi::count(),
-            
-            // Card 3: Total prestasi yang statusnya masih 'menunggu'
-            'menunggu'        => \App\Models\Prestasi::where('status', 'menunggu')->count(),
-            
-            // Card 4: Total akumulasi poin dari prestasi yang SUDAH DISETUJUI
-            'total_poin'      => \App\Models\Prestasi::where('status', 'disetujui')->sum('jumlah_poin'),
-        ];
-
-        // 2. Ambil semua data prestasi untuk isi Tabel (eager loading 'user' agar performa enteng)
-        $prestasis = \App\Models\Prestasi::with('user')->orderBy('created_at', 'desc')->get();
-
-        // 3. Lempar kedua variabel ($stats & $prestasis) ke view
-        return view('admin.dashboardAdmin', compact('stats', 'prestasis')); 
-        })->name('admin.dashboard');
+        Route::get('/Dashboard', [PrestasiController::class, 'dashboardAdmin'])->name('admin.dashboard');
 
         // FITUR UTAMA: Verifikasi & Approval Prestasi oleh Admin
         Route::post('/admin/prestasi/{id}/approve', [PrestasiController::class, 'approve'])->name('prestasi.approve');

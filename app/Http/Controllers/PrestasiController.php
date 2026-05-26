@@ -87,9 +87,10 @@ class PrestasiController extends Controller
     }
 
     // AKTIFKAN KEMBALI: Menampilkan halaman form edit per item prestasi mahasiswa
-    public function editPrestasi($id)
+    public function editPrestasi($id_prestasi)
     {
-        $prestasi = Prestasi::findOrFail($id);
+        // Ubah dari $id menjadi $id_prestasi
+        $prestasi = Prestasi::findOrFail($id_prestasi);
         
         // Proteksi ekstra: Jika status disetujui, tidak boleh diakali via URL langsung
         if ($prestasi->status == 'disetujui') {
@@ -146,7 +147,7 @@ class PrestasiController extends Controller
 
         $prestasi->save();
 
-        return redirect('/tabelPrestasi')->with('success', 'Prestasi berhasil diperbarui!');
+        return redirect()->route('profile.edit')->with('success', 'Prestasi berhasil diperbarui!');
     }
 
     public function destroy($id)
@@ -175,22 +176,44 @@ class PrestasiController extends Controller
         return redirect()->back()->with('success', 'Prestasi berhasil disetujui!');
     }
 
-    // ✅ BARU: Toggle Like
-    public function toggleLike($id)
-    {
-        $like = \App\Models\Like::where('user_id', Auth::id())
-            ->where('id_prestasi', $id)
-            ->first();
-
-        if ($like) {
-            $like->delete();
-        } else {
-            \App\Models\Like::create([
-                'user_id'     => Auth::id(),
-                'id_prestasi' => $id,
-            ]);
-        }
-
-        return back();
+   // CARI FUNGSI INI DI PRESTASICONTROLLER
+public function toggleLike($id)
+{
+    // 1. Tentukan pengenal unik: Kalau login pakai User ID, kalau belum pakai IP Address
+    if (Auth::check()) {
+        $matchCondition = ['user_id' => Auth::id()];
+    } else {
+        $matchCondition = ['ip_address' => request()->ip()];
     }
+
+    // 2. Cari apakah data like sudah ada di database untuk prestasi ini
+    $like = \App\Models\Like::where('id_prestasi', $id)
+        ->where(function($query) use ($matchCondition) {
+            $query->where($matchCondition);
+        })
+        ->first();
+
+    if ($like) {
+        // Kalau sudah ada, maka Unlike (Hapus)
+        $like->delete();
+        $isLiked = false;
+    } else {
+        // Kalau belum ada, maka Like (Tambah)
+        \App\Models\Like::create([
+            'id_prestasi' => $id,
+            'user_id'     => Auth::check() ? Auth::id() : null,
+            'ip_address'  => Auth::check() ? null : request()->ip(),
+        ]);
+        $isLiked = true;
+    }
+
+    // 3. Hitung total like terbaru untuk prestasi ini
+    $likeCount = \App\Models\Like::where('id_prestasi', $id)->count();
+
+    return response()->json([
+        'success'   => true,
+        'isLiked'   => $isLiked,
+        'likeCount' => $likeCount
+    ]);
+}
 }

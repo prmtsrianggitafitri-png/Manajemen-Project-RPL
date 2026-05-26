@@ -13,9 +13,11 @@
   .modal-box { background: white; padding: 30px; border-radius: 15px; text-align: center; min-width: 300px; }
   .modal-title { font-weight: bold; font-size: 18px; margin-bottom: 10px; }
   .modal-message { color: #666; margin-bottom: 20px; }
-  .btn-like { border: none; background: none; cursor: pointer; color: #aaa; font-size: 14px; display: flex; align-items: center; gap: 4px; padding: 0; transition: color 0.2s; }
-  .btn-like.liked { color: #e74c3c; }
-  .btn-like:hover { color: #e74c3c; }
+  
+  /* FIX CSS: Paksa ikon hati di dalam tombol yang aktif agar otomatis berwarna merah cerah */
+  .btn-like { border: none; background: none; cursor: pointer; color: #aaa; font-size: 14px; display: flex; align-items: center; gap: 4px; padding: 0; transition: all 0.2s; }
+  .btn-like.liked, .btn-like.liked i { color: #e74c3c !important; }
+  .btn-like:hover, .btn-like:hover i { color: #e74c3c; }
 </style>
 @endpush
 
@@ -29,7 +31,6 @@
           <p class="my-4">Dokumentasi digital perjalanan prestasi mahasiswa Program Studi Pendidikan Sistem dan Teknologi Informasi.</p>
           <div class="cta-buttons d-flex flex-wrap gap-3">
             <a href="{{ route('prestasi.upload') }}" class="btn btn-primary">Mulai Berprestasi</a>
-            <a href="#" class="btn btn-outline">Eksplorasi</a>
           </div>
         </div>
         <div class="content-right position-relative" data-aos="fade-left" data-aos-delay="300">
@@ -115,24 +116,26 @@
             </div>
             <p class="post-category">{{ $p->bidang }}</p>
             <h2 class="title"><a href="#">{{ $p->judul }}</a></h2>
+
             <div class="d-flex align-items-center justify-content-between">
               <div class="post-meta">
                 <p class="post-author mb-0">{{ $p->mahasiswa->nama ?? ($p->user->name ?? 'Mahasiswa') }}</p>
                 <p class="post-date mb-0"><time>{{ $p->created_at->format('M d, Y') }}</time></p>
               </div>
-              @auth
-                @php $liked = $p->likes->contains('user_id', Auth::id()); $likeCount = $p->likes->count(); @endphp
-                <form action="{{ route('prestasi.like', $p->id_prestasi) }}" method="POST">
-                  @csrf
-                  <button type="submit" class="btn-like {{ $liked ? 'liked' : '' }}">
-                    <i class="bi {{ $liked ? 'bi-heart-fill' : 'bi-heart' }}"></i> {{ $likeCount }}
-                  </button>
-                </form>
-              @else
-                <a href="{{ route('login') }}" class="btn-like">
-                  <i class="bi bi-heart"></i> {{ $p->likes->count() }}
-                </a>
-              @endauth
+              
+              @php 
+                if(Auth::check()) {
+                    $isLikedByMe = $p->likes->contains('user_id', Auth::id());
+                } else {
+                    $isLikedByMe = $p->likes->contains('ip_address', request()->ip());
+                }
+                $likeCount = $p->likes->count(); 
+              @endphp
+
+              <button type="button" class="btn-like ajax-like-btn {{ $isLikedByMe ? 'liked' : '' }}" data-id="{{ $p->id_prestasi }}">
+                <i class="bi {{ $isLikedByMe ? 'bi-heart-fill' : 'bi-heart' }}" id="like-icon-{{ $p->id_prestasi }}"></i> 
+                <span id="like-count-{{ $p->id_prestasi }}">{{ $likeCount }}</span>
+              </button>
             </div>
           </article>
         </div>
@@ -164,10 +167,46 @@
   function closeModal() {
     document.getElementById('modalOverlay').classList.remove('active');
   }
-  @if(session('success'))
-  window.addEventListener('DOMContentLoaded', function() {
-    showModal('✅', 'Berhasil!', '{{ session("success") }}');
+
+  // SCRIPT UTAMA FIX: Sinkronisasi perpindahan kelas ikon dan tombol secara linear
+  document.querySelectorAll('.ajax-like-btn').forEach(button => {
+    button.addEventListener('click', function() {
+        const prestasiId = this.getAttribute('data-id');
+        const icon = document.getElementById(`like-icon-${prestasiId}`);
+        const countSpan = document.getElementById(`like-count-${prestasiId}`);
+        const currentBtn = this;
+
+        fetch(`/prestasi/${prestasiId}/like`, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // 1. Perbarui total angka like
+                countSpan.textContent = data.likeCount;
+
+                // 2. Manipulasi visual warna tombol dan ikon hati secara serentak
+                if (data.isLiked) {
+                    currentBtn.classList.add('liked');
+                    icon.classList.remove('bi-heart');
+                    icon.classList.add('bi-heart-fill');
+                } else {
+                    currentBtn.classList.remove('liked');
+                    icon.classList.remove('bi-heart-fill');
+                    icon.classList.add('bi-heart');
+                }
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showModal('❌', 'Koneksi Gagal', 'Gagal memproses tindakan, silakan coba lagi.');
+        });
+    });
   });
-  @endif
 </script>
 @endpush

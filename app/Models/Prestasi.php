@@ -8,6 +8,7 @@ class Prestasi extends Model
 {
     protected $table = 'prestasis';
     protected $primaryKey = 'id_prestasi';
+    protected $with = ['likes']; 
 
     protected $fillable = [
         'id_kategori',

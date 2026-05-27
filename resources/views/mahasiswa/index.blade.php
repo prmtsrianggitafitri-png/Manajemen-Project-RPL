@@ -31,10 +31,11 @@
           <p class="my-4">Dokumentasi digital perjalanan prestasi mahasiswa Program Studi Pendidikan Sistem dan Teknologi Informasi.</p>
           <div class="cta-buttons d-flex flex-wrap gap-3">
             <a href="{{ route('prestasi.upload') }}" class="btn btn-primary">Mulai Berprestasi</a>
+             <a href="#" class="btn btn-outline">Eksplorasi</a>
           </div>
         </div>
         <div class="content-right position-relative" data-aos="fade-left" data-aos-delay="300">
-          <img src="{{ asset('assets/mahasiswa/img/misc/misc-1.webp') }}" alt="Digital Platform" class="img-fluid rounded-4">
+          <img src="{{ asset('assets/mahasiswa/img/misc/misc-1.webp') }}" alt="Digital Platform" class="img-fluid rounded-4" style="max-height:400px; object-fit:contain;">
           <div class="floating-card">
             <div class="card-icon"><i class="bi bi-people"></i></div>
             <div class="card-content">

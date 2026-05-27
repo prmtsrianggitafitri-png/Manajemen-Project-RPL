@@ -8,25 +8,52 @@ use Illuminate\Http\Request;
 
 class MahasiswaController extends Controller
 {
-    public function index()
+    public function index(Request $request) // Parameter Request dipertahankan agar fitur pencarian admin aktif
     {
-        $mahasiswa = User::where('role', 'mahasiswa')->orderBy('nama', 'asc')->get();
+        $keyword = $request->input('search');
+
+        // Filter dasar: Hanya user yang memiliki role 'mahasiswa'
+        $query = User::where('role', 'mahasiswa')->orderBy('nama', 'asc');
+
+        // Cari berdasarkan kolom: nama, nim, email, atau status_mahasiswa
+        if ($keyword) {
+            $query->where(function($q) use ($keyword) {
+                $q->where('nama', 'LIKE', "%$keyword%")
+                  ->orWhere('nim', 'LIKE', "%$keyword%")
+                  ->orWhere('email', 'LIKE', "%$keyword%")
+                  ->orWhere('status_mahasiswa', 'LIKE', "%$keyword%");
+            });
+        }
+
+        $mahasiswa = $query->get();
 
         return view('admin.dataMahasiswa', compact('mahasiswa'));
     }
 
-    public function publik()
+   public function publik(Request $request) // 1. Tambahkan parameter Request di sini
     {
-        $mahasiswa = User::where('role', 'mahasiswa')
+        $keyword = $request->input('search');
+
+        // 2. Buat query builder awal
+        $query = User::where('role', 'mahasiswa')
             ->withSum(['prestasis as total_poin' => function($q) {
                 $q->where('status', 'disetujui');
             }], 'jumlah_poin')
-            ->orderByDesc('total_poin')
-            ->get()
-            ->map(function($mhs, $index) {
-                $mhs->ranking = $index + 1;
-                return $mhs;
+            ->orderByDesc('total_poin');
+
+        // 3. Tambahkan filter jika ada keyword pencarian (bisa cari pakai Nama atau NIM)
+        if ($keyword) {
+            $query->where(function($q) use ($keyword) {
+                $q->where('nama', 'LIKE', "%$keyword%")
+                  ->orWhere('nim', 'LIKE', "%$keyword%");
             });
+        }
+
+        // 4. Eksekusi query dan hitung ranking secara dinamis
+        $mahasiswa = $query->get()->map(function($mhs, $index) {
+            $mhs->ranking = $index + 1;
+            return $mhs;
+        });
 
         return view('mahasiswa.daftarMahasiswa', compact('mahasiswa'));
     }

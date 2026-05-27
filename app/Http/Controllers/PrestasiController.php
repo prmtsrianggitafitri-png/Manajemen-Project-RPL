@@ -173,7 +173,31 @@ class PrestasiController extends Controller
         $prestasi->status = 'disetujui';
         $prestasi->save();
 
-        return redirect()->back()->with('success', 'Prestasi berhasil disetujui!');
+    // 3. Buat query dasar untuk tabel prestasi (Eager loading 'user' sesuai code awalmu)
+    // Catatan: di file web.php relasimu bernama 'user', maka kita gunakan 'user'
+    $query = \App\Models\Prestasi::with('user')->orderBy('created_at', 'desc');
+
+    // 4. Jalankan pencarian multi-kolom jika keyword diisi
+    if ($keyword) {
+        $query->where(function($q) use ($keyword) {
+            $q->where('judul', 'LIKE', "%$keyword%")
+              ->orWhere('bidang', 'LIKE', "%$keyword%")
+              ->orWhere('peringkat', 'LIKE', "%$keyword%")
+              ->orWhere('jumlah_poin', 'LIKE', "%$keyword%")
+              ->orWhere('status', 'LIKE', "%$keyword%");
+
+            // Mencari berdasarkan nama mahasiswa via relasi 'user'
+            $q->orWhereHas('user', function($queryUser) use ($keyword) {
+                $queryUser->where('nama', 'LIKE', "%$keyword%"); // Sesuaikan jika kolom namanya 'name' atau 'nama'
+            });
+        });
+    }
+
+    // 5. Eksekusi query tabel
+    $prestasis = $query->get();
+
+    // 6. Lempar ke view dashboard admin
+    return view('admin.dashboardAdmin', compact('stats', 'prestasis'));
     }
 
    // CARI FUNGSI INI DI PRESTASICONTROLLER

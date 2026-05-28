@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="apple-touch-icon" sizes="76x76" href="./assets/img/apple-icon.png" />
-  <link rel="icon" type="image/png" href="./assets/img/favicon.png" />
+  <link rel="icon" type="image/jpeg" href="{{ asset('assets/images/logo.jpeg') }}"/>
   <title>Dashboard Admin</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
@@ -16,6 +16,7 @@
   <link href="{{ asset('assets/admin/css/soft-ui-dashboard-tailwind.css') }}" rel="stylesheet" />
   <script defer data-site="YOUR_DOMAIN_HERE" src="https://api.nepcha.com/js/nepcha-analytics.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  @stack('styles')
 </head>
 
 <body class="m-0 font-sans text-base antialiased font-normal leading-default bg-gray-50 text-slate-500">
@@ -34,6 +35,8 @@
 
     <div class="items-center block w-auto max-h-screen overflow-auto h-sidenav grow basis-full">
       <ul class="flex flex-col pl-0 mb-0">
+
+        {{-- Menu Dashboard --}}
         <li class="mt-0.5 w-full">
           <a class="py-2.7 text-sm ease-nav-brand my-0 mx-4 flex items-center whitespace-nowrap px-4 transition-colors {{ Request::is('Dashboard') ? 'rounded-lg bg-white font-semibold text-slate-700 shadow-soft-xl' : 'text-slate-600' }}"
             href="/Dashboard">
@@ -63,11 +66,12 @@
           </a>
         </li>
 
+        {{-- ✅ Menu Data Kategori — aktif juga saat di /kategori/* --}}
         <li class="mt-0.5 w-full">
-          <a class="py-2.7 text-sm ease-nav-brand my-0 mx-4 flex items-center whitespace-nowrap px-4 transition-colors {{ Request::is('DataKategori*') ? 'rounded-lg bg-white font-semibold text-slate-700 shadow-soft-xl' : '' }}"
+          <a class="py-2.7 text-sm ease-nav-brand my-0 mx-4 flex items-center whitespace-nowrap px-4 transition-colors {{ Request::is('DataKategori*') || Request::is('kategori*') ? 'rounded-lg bg-white font-semibold text-slate-700 shadow-soft-xl' : '' }}"
             href="/DataKategori">
             <div
-              class="shadow-soft-2xl mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-white bg-center stroke-0 text-center xl:p-2.5 {{ Request::is('DataKategori*') ? 'bg-gradient-to-tl from-purple-700 to-pink-500 text-white' : '' }}">
+              class="shadow-soft-2xl mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-white bg-center stroke-0 text-center xl:p-2.5 {{ Request::is('DataKategori*') || Request::is('kategori*') ? 'bg-gradient-to-tl from-purple-700 to-pink-500 text-white' : '' }}">
               <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg"
                 xmlns:xlink="http://www.w3.org/1999/xlink">
                 <title>Data Kategori</title>
@@ -76,10 +80,10 @@
                     <g transform="translate(1716.000000, 291.000000)">
                       <g transform="translate(153.000000, 2.000000)">
                         <path
-                          class="{{ Request::is('DataKategori*') ? 'fill-white' : 'fill-slate-800' }} opacity-60"
+                          class="{{ Request::is('DataKategori*') || Request::is('kategori*') ? 'fill-white' : 'fill-slate-800' }} opacity-60"
                           d="M12.25,17.5 L8.75,17.5 L8.75,1.75 C8.75,0.78225 9.53225,0 10.5,0 L31.5,0 C32.46775,0 33.25,0.78225 33.25,1.75 L33.25,12.25 L29.75,12.25 L29.75,3.5 L12.25,3.5 L12.25,17.5 Z">
                         </path>
-                        <path class="{{ Request::is('DataKategori*') ? 'fill-white' : 'fill-slate-800' }}"
+                        <path class="{{ Request::is('DataKategori*') || Request::is('kategori*') ? 'fill-white' : 'fill-slate-800' }}"
                           d="M40.25,14 L24.5,14 C23.53225,14 22.75,14.78225 22.75,15.75 L22.75,38.5 L19.25,38.5 L19.25,22.75 C19.25,21.78225 18.46775,21 17.5,21 L1.75,21 C0.78225,21 0,21.78225 0,22.75 L0,40.25 C0,41.21775 0.78225,42 1.75,42 L40.25,42 C41.21775,42 42,41.21775 42,40.25 L42,15.75 C42,14.78225 41.21775,14 40.25,14 Z M12.25,36.75 L7,36.75 L7,33.25 L12.25,33.25 L12.25,36.75 Z M12.25,29.75 L7,29.75 L7,26.25 L12.25,26.25 L12.25,29.75 Z M35,36.75 L29.75,36.75 L29.75,33.25 L35,33.25 L35,36.75 Z M35,29.75 L29.75,29.75 L29.75,26.25 L35,26.25 L35,29.75 Z M35,22.75 L29.75,22.75 L29.75,19.25 L35,19.25 L35,22.75 Z">
                         </path>
                       </g>
@@ -92,6 +96,7 @@
           </a>
         </li>
 
+        {{-- Menu Data Mahasiswa --}}
         <li class="mt-0.5 w-full">
           <a class="py-2.7 text-sm ease-nav-brand my-0 mx-4 flex items-center whitespace-nowrap px-4 transition-colors {{ Request::is('DataMahasiswa*') || Request::is('mahasiswa*') ? 'rounded-lg bg-white font-semibold text-slate-700 shadow-soft-xl' : '' }}"
             href="/DataMahasiswa">
@@ -122,13 +127,12 @@
           </a>
         </li>
 
+        {{-- Menu Log Out --}}
         <li class="mt-0.5 w-full">
-          <!-- Form Logout -->
           <form method="POST" action="{{ route('logout') }}" id="logout-form">
             @csrf
             <a class="py-2.7 text-sm ease-nav-brand my-0 mx-4 flex items-center whitespace-nowrap px-4 transition-colors cursor-pointer"
               onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-
               <div
                 class="shadow-soft-2xl mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-white bg-center stroke-0 text-center xl:p-2.5">
                 <svg width="12px" height="20px" viewBox="0 0 40 40" version="1.1" xmlns="http://www.w3.org/2000/svg"
@@ -156,15 +160,12 @@
                   </g>
                 </svg>
               </div>
-
-              <span class="ml-1 duration-300 opacity-100 pointer-events-none ease-soft">
-                Log Out
-              </span>
+              <span class="ml-1 duration-300 opacity-100 pointer-events-none ease-soft">Log Out</span>
             </a>
           </form>
         </li>
 
-        </li>
+      </ul>
     </div>
   </aside>
   <!-- end sidenav -->
@@ -175,46 +176,38 @@
       class="relative flex flex-wrap items-center justify-between px-0 py-2 mx-6 transition-all shadow-none duration-250 ease-soft-in rounded-2xl lg:flex-nowrap lg:justify-start"
       navbar-main navbar-scroll="true">
       <div class="flex items-center justify-between w-full px-4 py-1 mx-auto flex-wrap-inherit">
-
-
         <div class="flex items-center mt-2 grow sm:mt-0 sm:mr-6 md:mr-0 lg:flex lg:basis-auto">
           <div class="flex items-center md:ml-auto md:pr-4">
             <div class="relative flex flex-wrap items-stretch w-full transition-all rounded-lg ease-soft">
-  <form action="{{ request()->url() }}" method="GET" class="flex w-full items-center m-0">
-    <span
-      class="text-sm ease-soft leading-5.6 absolute z-50 -ml-px flex h-full items-center whitespace-nowrap rounded-lg rounded-tr-none rounded-br-none border border-r-0 border-transparent bg-transparent py-2 px-2.5 text-center font-normal text-slate-500 transition-all">
-      <i class="fas fa-search"></i>
-    </span>
-    
-    <input type="text" name="search" value="{{ request('search') }}"
-      class="pl-8.75 text-sm focus:shadow-soft-primary-outline ease-soft w-1/100 leading-5.6 relative -ml-px block min-w-0 flex-auto rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding py-2 pr-3 text-gray-700 transition-all placeholder:text-gray-500 focus:border-fuchsia-300 focus:outline-none focus:transition-shadow"
-      placeholder="Search..." />
-  </form>
-</div>
+              <form action="{{ request()->url() }}" method="GET" class="flex w-full items-center m-0">
+                <span
+                  class="text-sm ease-soft leading-5.6 absolute z-50 -ml-px flex h-full items-center whitespace-nowrap rounded-lg rounded-tr-none rounded-br-none border border-r-0 border-transparent bg-transparent py-2 px-2.5 text-center font-normal text-slate-500 transition-all">
+                  <i class="fas fa-search"></i>
+                </span>
+                <input type="text" name="search" value="{{ request('search') }}"
+                  class="pl-8.75 text-sm focus:shadow-soft-primary-outline ease-soft w-1/100 leading-5.6 relative -ml-px block min-w-0 flex-auto rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding py-2 pr-3 text-gray-700 transition-all placeholder:text-gray-500 focus:border-fuchsia-300 focus:outline-none focus:transition-shadow"
+                  placeholder="Search..." />
+              </form>
+            </div>
           </div>
-          <ul class="flex flex-row justify-end pl-0 mb-0 list-none md-max:w-full">
-          </ul>
+          <ul class="flex flex-row justify-end pl-0 mb-0 list-none md-max:w-full"></ul>
         </div>
       </div>
     </nav>
     <!-- end Navbar -->
 
-    <!-- cards -->
     <div class="w-full px-6 py-6 mx-auto">
       <div class="content-wrapper">
         @yield('content')
       </div>
     </div>
-    <!-- end cards -->
   </main>
+
+  @stack('scripts')
 </body>
-<!-- plugin for charts  -->
 <script src="./assets/js/plugins/chartjs.min.js" async></script>
-<!-- plugin for scrollbar  -->
 <script src="./assets/js/plugins/perfect-scrollbar.min.js" async></script>
-<!-- github button -->
 <script async defer src="https://buttons.github.io/buttons.js"></script>
-<!-- main script file  -->
 <script src="./assets/js/soft-ui-dashboard-tailwind.js?v=1.0.5" async></script>
 
 </html>

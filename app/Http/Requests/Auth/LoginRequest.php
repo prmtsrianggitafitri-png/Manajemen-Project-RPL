@@ -38,7 +38,7 @@ class LoginRequest extends FormRequest
 
         if (!$attemptNpsn) {
             RateLimiter::hit($this->throttleKey());
-            throw ValidationException::withMessages(['login' => trans('auth.failed')]);
+            throw ValidationException::withMessages(['login' => 'NIM/NPSN atau password salah. Silakan periksa kembali.']);
         }
     }
 

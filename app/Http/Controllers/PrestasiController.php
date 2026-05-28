@@ -24,7 +24,7 @@ class PrestasiController extends Controller
         return view('prestasi.upload', compact('kategoris', 'prestasis'));
     }
 
-    // Menyimpan data upload prestasi baru
+
     public function store(Request $request)
     {
         $request->validate([
@@ -166,6 +166,46 @@ class PrestasiController extends Controller
 
         return redirect()->back()->with('success', 'Data prestasi berhasil dihapus!');
     }
+
+    //fungsi pencarian prestasi yg didashboard
+    public function dashboardAdmin(Request $request)
+    {
+    // 1. Ambil keyword dari form pencarian navbar
+    $keyword = $request->input('search');
+
+    // 2. Hitung semua data untuk 4 Card Statistik Admin (Tetap tampil utuh)
+    $stats = [
+        'total_mahasiswa' => \App\Models\User::where('role', 'mahasiswa')->count(),
+        'total_prestasi'  => \App\Models\Prestasi::count(),
+        'menunggu'        => \App\Models\Prestasi::where('status', 'menunggu')->count(),
+        'total_poin'      => \App\Models\Prestasi::where('status', 'disetujui')->sum('jumlah_poin'),
+    ];
+
+    // 3. Buat query dasar untuk tabel prestasi (Eager loading 'user' sesuai code awalmu)
+    // Catatan: di file web.php relasimu bernama 'user', maka kita gunakan 'user'
+    $query = \App\Models\Prestasi::with('user')->orderBy('created_at', 'desc');
+
+    // 4. Jalankan pencarian multi-kolom jika keyword diisi
+    if ($keyword) {
+        $query->where(function($q) use ($keyword) {
+            $q->where('judul', 'LIKE', "%$keyword%")
+              ->orWhere('bidang', 'LIKE', "%$keyword%")
+              ->orWhere('peringkat', 'LIKE', "%$keyword%")
+              ->orWhere('jumlah_poin', 'LIKE', "%$keyword%")
+              ->orWhere('status', 'LIKE', "%$keyword%");
+
+            // Mencari berdasarkan nama mahasiswa via relasi 'user'
+            $q->orWhereHas('user', function($queryUser) use ($keyword) {
+                $queryUser->where('nama', 'LIKE', "%$keyword%"); // Sesuaikan jika kolom namanya 'name' atau 'nama'
+            });
+        });
+    }
+
+    // 5. Eksekusi query tabel
+    $prestasis = $query->get();
+
+    // 6. Lempar ke view dashboard admin
+    return view('admin.dashboardAdmin', compact('stats', 'prestasis'));
 
     public function approve($id)
     {

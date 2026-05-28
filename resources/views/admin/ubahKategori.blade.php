@@ -28,7 +28,7 @@
                     </div>
 
                     <div class="flex justify-end mt-6">
-                        <a href="/manajemenDataKategori" class="inline-block px-6 py-3 mr-3 font-bold text-xs text-slate-400">Batal</a>
+                        <a href="/DataKategori" class="inline-block px-6 py-3 mr-3 font-bold text-xs text-slate-400">Batal</a>
                         <button type="submit" class="inline-block px-6 py-3 font-bold text-white uppercase bg-gradient-to-tl from-blue-600 to-cyan-400 rounded-lg text-xs shadow-soft-md">
                             Update Data
                         </button>

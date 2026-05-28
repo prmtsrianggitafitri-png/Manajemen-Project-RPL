@@ -10,8 +10,40 @@ use Illuminate\Support\Facades\Storage;
 
 class PrestasiController extends Controller
 {
+    // Menambahkan fitur pencarian publik
+    public function home(Request $request)
+    {
+        // 1. Ambil kata kunci pencarian dari navbar (?search=...)
+        $keyword = $request->query('search');
 
-    public function tabelPrestasi(){
+        // 2. Buat query dasar untuk mengambil prestasi yang berstatus disetujui
+        $query = Prestasi::where('status', 'disetujui')
+                        ->with(['mahasiswa', 'user', 'likes'])
+                        ->latest();
+
+        // 3. Jika ada kata kunci pencarian, saring data berdasarkan judul, deskripsi, atau nama mahasiswa
+        if ($keyword) {
+            $query->where(function($q) use ($keyword) {
+                $q->where('judul', 'LIKE', "%$keyword%")
+                  ->orWhere('deskripsi', 'LIKE', "%$keyword%")
+                  ->orWhere('bidang', 'LIKE', "%$keyword%")
+                  ->orWhere('peringkat', 'LIKE', "%$keyword%");
+
+                // Pencarian berdasarkan nama mahasiswa yang mengunggah (lewat relasi 'user')
+                $q->orWhereHas('user', function($queryUser) use ($keyword) {
+                    $queryUser->where('nama', 'LIKE', "%$keyword%");
+                });
+            });
+        }
+
+        // 4. Eksekusi data hasil saringan
+        $prestasis = $query->get();
+
+        return view('mahasiswa.index', compact('prestasis'));
+    }
+
+    public function tabelPrestasi()
+    {
         $kategoris = Kategori::all();
         $prestasis = Prestasi::all();
         return view('prestasi.tabelPrestasi', compact('kategoris', 'prestasis'));
@@ -23,7 +55,6 @@ class PrestasiController extends Controller
         $prestasis = Prestasi::where('nim', Auth::user()->nim)->get();
         return view('prestasi.upload', compact('kategoris', 'prestasis'));
     }
-
 
     public function store(Request $request)
     {
@@ -57,7 +88,6 @@ class PrestasiController extends Controller
             'dokumentasi_pribadi' => $dokPath,
         ]);
 
-        // Mengarahkan ke profil setelah sukses upload
         return redirect()->route('profile.edit')->with('success', 'Prestasi berhasil diunggah!');
     }
 
@@ -71,28 +101,19 @@ class PrestasiController extends Controller
             'direvisi'   => $prestasis->where('status', 'revisi')->count(),
             'total_poin' => $prestasis->where('status', 'disetujui')->sum('jumlah_poin'),
         ];
-        $stats = [
-            'diunggah'   => $prestasis->count(),
-            'disetujui'  => $prestasis->where('status', 'disetujui')->count(),
-            'direvisi'   => $prestasis->where('status', 'revisi')->count(),
-            'total_poin' => $prestasis->where('status', 'disetujui')->sum('jumlah_poin'),
-        ];
 
         return view('profile.edit', [
-            'user' => $request->user(),
-            'prestasis' => $prestasis, 
-            'stats' => $stats,         
-            'status' => session('status'),
+            'user'      => $request->user(),
+            'prestasis' => $prestasis,
+            'stats'     => $stats,
+            'status'    => session('status'),
         ]);
     }
 
-    // AKTIFKAN KEMBALI: Menampilkan halaman form edit per item prestasi mahasiswa
     public function editPrestasi($id_prestasi)
     {
-        // Ubah dari $id menjadi $id_prestasi
         $prestasi = Prestasi::findOrFail($id_prestasi);
-        
-        // Proteksi ekstra: Jika status disetujui, tidak boleh diakali via URL langsung
+
         if ($prestasi->status == 'disetujui') {
             return redirect()->route('profile.edit')->with('error', 'Data yang sudah disetujui tidak bisa diubah!');
         }
@@ -101,7 +122,6 @@ class PrestasiController extends Controller
         return view('prestasi.editPrestasi', compact('prestasi', 'kategoris'));
     }
 
-    // Memproses update data prestasi mahasiswa
     public function update(Request $request, $id)
     {
         $prestasi = Prestasi::findOrFail($id);
@@ -127,9 +147,7 @@ class PrestasiController extends Controller
         $prestasi->deskripsi   = $request->deskripsi;
         $prestasi->peringkat   = $kategori->peringkat;
         $prestasi->jumlah_poin = $kategori->jumlah_poin;
-        
-        // Begitu di-update, status kembali ke 'menunggu' untuk diverifikasi ulang oleh admin
-        $prestasi->status = 'menunggu';
+        $prestasi->status      = 'menunggu';
 
         if ($request->hasFile('bukti_prestasi')) {
             if ($prestasi->bukti_prestasi) {
@@ -167,45 +185,39 @@ class PrestasiController extends Controller
         return redirect()->back()->with('success', 'Data prestasi berhasil dihapus!');
     }
 
-    //fungsi pencarian prestasi yg didashboard
     public function dashboardAdmin(Request $request)
     {
-    // 1. Ambil keyword dari form pencarian navbar
-    $keyword = $request->input('search');
+        $keyword = $request->input('search');
 
-    // 2. Hitung semua data untuk 4 Card Statistik Admin (Tetap tampil utuh)
-    $stats = [
-        'total_mahasiswa' => \App\Models\User::where('role', 'mahasiswa')->count(),
-        'total_prestasi'  => \App\Models\Prestasi::count(),
-        'menunggu'        => \App\Models\Prestasi::where('status', 'menunggu')->count(),
-        'total_poin'      => \App\Models\Prestasi::where('status', 'disetujui')->sum('jumlah_poin'),
-    ];
+        $stats = [
+            'total_mahasiswa' => \App\Models\User::where('role', 'mahasiswa')->count(),
+            'total_prestasi'  => \App\Models\Prestasi::count(),
+            'menunggu'        => \App\Models\Prestasi::where('status', 'menunggu')->count(),
+            'total_poin'      => \App\Models\Prestasi::where('status', 'disetujui')->sum('jumlah_poin'),
+        ];
 
-    // 3. Buat query dasar untuk tabel prestasi (Eager loading 'user' sesuai code awalmu)
-    // Catatan: di file web.php relasimu bernama 'user', maka kita gunakan 'user'
-    $query = \App\Models\Prestasi::with('user')->orderBy('created_at', 'desc');
+        $query = \App\Models\Prestasi::with('user')->orderBy('created_at', 'desc');
 
-    // 4. Jalankan pencarian multi-kolom jika keyword diisi
-    if ($keyword) {
-        $query->where(function($q) use ($keyword) {
-            $q->where('judul', 'LIKE', "%$keyword%")
-              ->orWhere('bidang', 'LIKE', "%$keyword%")
-              ->orWhere('peringkat', 'LIKE', "%$keyword%")
-              ->orWhere('jumlah_poin', 'LIKE', "%$keyword%")
-              ->orWhere('status', 'LIKE', "%$keyword%");
+        if ($keyword) {
+            $query->where(function($q) use ($keyword) {
+                $q->where('judul', 'LIKE', "%$keyword%")
+                  ->orWhere('bidang', 'LIKE', "%$keyword%")
+                  ->orWhere('peringkat', 'LIKE', "%$keyword%")
+                  ->orWhere('jumlah_poin', 'LIKE', "%$keyword%")
+                  ->orWhere('status', 'LIKE', "%$keyword%");
 
-            // Mencari berdasarkan nama mahasiswa via relasi 'user'
-            $q->orWhereHas('user', function($queryUser) use ($keyword) {
-                $queryUser->where('nama', 'LIKE', "%$keyword%"); // Sesuaikan jika kolom namanya 'name' atau 'nama'
+                // Mencari berdasarkan nama mahasiswa via relasi 'user'
+                $q->orWhereHas('user', function($queryUser) use ($keyword) {
+                    $queryUser->where('nama', 'LIKE', "%$keyword%");
+                });
             });
-        });
-    }
 
-    // 5. Eksekusi query tabel
-    $prestasis = $query->get();
+        }
 
-    // 6. Lempar ke view dashboard admin
-    return view('admin.dashboardAdmin', compact('stats', 'prestasis'));
+        $prestasis = $query->get();
+
+        return view('admin.dashboardAdmin', compact('stats', 'prestasis'));
+    } // ✅ Kurung tutup dashboardAdmin yang tadinya hilang
 
     public function approve($id)
     {
@@ -216,44 +228,38 @@ class PrestasiController extends Controller
         return redirect()->back()->with('success', 'Prestasi berhasil disetujui!');
     }
 
-   // CARI FUNGSI INI DI PRESTASICONTROLLER
-public function toggleLike($id)
-{
-    // 1. Tentukan pengenal unik: Kalau login pakai User ID, kalau belum pakai IP Address
-    if (Auth::check()) {
-        $matchCondition = ['user_id' => Auth::id()];
-    } else {
-        $matchCondition = ['ip_address' => request()->ip()];
-    }
+    public function toggleLike($id)
+    {
+        if (Auth::check()) {
+            $matchCondition = ['user_id' => Auth::id()];
+        } else {
+            $matchCondition = ['ip_address' => request()->ip()];
+        }
 
-    // 2. Cari apakah data like sudah ada di database untuk prestasi ini
-    $like = \App\Models\Like::where('id_prestasi', $id)
-        ->where(function($query) use ($matchCondition) {
-            $query->where($matchCondition);
-        })
-        ->first();
+        $like = \App\Models\Like::where('id_prestasi', $id)
+            ->where(function($query) use ($matchCondition) {
+                $query->where($matchCondition);
+            })
+            ->first();
 
-    if ($like) {
-        // Kalau sudah ada, maka Unlike (Hapus)
-        $like->delete();
-        $isLiked = false;
-    } else {
-        // Kalau belum ada, maka Like (Tambah)
-        \App\Models\Like::create([
-            'id_prestasi' => $id,
-            'user_id'     => Auth::check() ? Auth::id() : null,
-            'ip_address'  => Auth::check() ? null : request()->ip(),
+        if ($like) {
+            $like->delete();
+            $isLiked = false;
+        } else {
+            \App\Models\Like::create([
+                'id_prestasi' => $id,
+                'user_id'     => Auth::check() ? Auth::id() : null,
+                'ip_address'  => Auth::check() ? null : request()->ip(),
+            ]);
+            $isLiked = true;
+        }
+
+        $likeCount = \App\Models\Like::where('id_prestasi', $id)->count();
+
+        return response()->json([
+            'success'   => true,
+            'isLiked'   => $isLiked,
+            'likeCount' => $likeCount
         ]);
-        $isLiked = true;
     }
-
-    // 3. Hitung total like terbaru untuk prestasi ini
-    $likeCount = \App\Models\Like::where('id_prestasi', $id)->count();
-
-    return response()->json([
-        'success'   => true,
-        'isLiked'   => $isLiked,
-        'likeCount' => $likeCount
-    ]);
-}
 }

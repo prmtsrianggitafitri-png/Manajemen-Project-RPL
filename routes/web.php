@@ -29,10 +29,10 @@ Route::get('/', function (Illuminate\Http\Request $request) {
     }
 
     // 3. Eksekusi query
-    $prestasis_publik = $query->get();
+    $prestasis = $query->get();
 
     // 4. Lempar variabel ke view beranda
-    return view('mahasiswa.index', compact('prestasis_publik'));
+    return view('mahasiswa.index', compact('prestasis'));
 })->name('home');
 
 Route::get('/DaftarMahasiswa', [MahasiswaController::class, 'publik'])->name('mahasiswa.publik');

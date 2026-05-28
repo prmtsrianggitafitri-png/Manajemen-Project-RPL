@@ -10,13 +10,34 @@ use Illuminate\Support\Facades\Storage;
 
 class PrestasiController extends Controller
 {
-    // ✅ TAMBAH INI: Untuk halaman utama publik (mahasiswa/index.blade.php)
-    public function home()
+    // Menambahkan fitur pencarian publik
+    public function home(Request $request)
     {
-        $prestasis = Prestasi::where('status', 'disetujui')
+        // 1. Ambil kata kunci pencarian dari navbar (?search=...)
+        $keyword = $request->query('search');
+
+        // 2. Buat query dasar untuk mengambil prestasi yang berstatus disetujui
+        $query = Prestasi::where('status', 'disetujui')
                         ->with(['mahasiswa', 'user', 'likes'])
-                        ->latest()
-                        ->get();
+                        ->latest();
+
+        // 3. Jika ada kata kunci pencarian, saring data berdasarkan judul, deskripsi, atau nama mahasiswa
+        if ($keyword) {
+            $query->where(function($q) use ($keyword) {
+                $q->where('judul', 'LIKE', "%$keyword%")
+                  ->orWhere('deskripsi', 'LIKE', "%$keyword%")
+                  ->orWhere('bidang', 'LIKE', "%$keyword%")
+                  ->orWhere('peringkat', 'LIKE', "%$keyword%");
+
+                // Pencarian berdasarkan nama mahasiswa yang mengunggah (lewat relasi 'user')
+                $q->orWhereHas('user', function($queryUser) use ($keyword) {
+                    $queryUser->where('nama', 'LIKE', "%$keyword%");
+                });
+            });
+        }
+
+        // 4. Eksekusi data hasil saringan
+        $prestasis = $query->get();
 
         return view('mahasiswa.index', compact('prestasis'));
     }
@@ -183,11 +204,14 @@ class PrestasiController extends Controller
                   ->orWhere('bidang', 'LIKE', "%$keyword%")
                   ->orWhere('peringkat', 'LIKE', "%$keyword%")
                   ->orWhere('jumlah_poin', 'LIKE', "%$keyword%")
-                  ->orWhere('status', 'LIKE', "%$keyword%")
-                  ->orWhereHas('user', function($queryUser) use ($keyword) {
-                      $queryUser->where('nama', 'LIKE', "%$keyword%");
-                  });
+                  ->orWhere('status', 'LIKE', "%$keyword%");
+
+                // Mencari berdasarkan nama mahasiswa via relasi 'user'
+                $q->orWhereHas('user', function($queryUser) use ($keyword) {
+                    $queryUser->where('nama', 'LIKE', "%$keyword%");
+                });
             });
+
         }
 
         $prestasis = $query->get();

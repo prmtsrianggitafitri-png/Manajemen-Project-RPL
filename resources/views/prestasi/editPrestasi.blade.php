@@ -25,9 +25,9 @@
         .error-message { font-size: 12px; color: #e24b4a; }
         .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.4); z-index: 9999; align-items: center; justify-content: center; backdrop-filter: blur(2px); }
         .modal-box { background: white; padding: 2rem; border-radius: 15px; width: 90%; max-width: 400px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
-        .modal-icon { width: 60px; height: 60px; border: 3px solid #f8bb86; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; color: #f8bb86; font-size: 30px; font-weight: bold; }
+        .modal-icon { width: 60px; height: 60px; border: 3px solid #f39c12; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; color: #f39c12; font-size: 30px; font-weight: bold; }
         .btn-modal { padding: 10px 20px; border-radius: 8px; cursor: pointer; border: none; font-weight: 600; }
-        .btn-confirm { background: #d63384; color: white; }
+        .btn-confirm { background: #f39c12; color: white; }
         .btn-cancel { background: #94a3b8; color: white; }
     </style>
 </head>
@@ -92,7 +92,8 @@
                 </div>
 
                 <button type="button" class="btn-primary" onclick="showConfirmModal()">Simpan Perubahan</button>
-                <a href="{{ url('/tabelPrestasi') }}" style="text-align: center; display: block; font-size: 13px; color: #666; text-decoration: none; margin-top: 10px;">Batal</a>
+                
+                <a href="{{ route('profile.edit') }}" style="text-align: center; display: block; font-size: 13px; color: #e24b4a; text-decoration: none; margin-top: 15px; font-weight: bold;">Batal dan Kembali</a>
             </div>
         </form>
     </div>
@@ -100,12 +101,12 @@
 
 <div class="modal-overlay" id="confirmModal">
     <div class="modal-box">
-        <div class="modal-icon">!</div>
+        <div class="modal-icon">?</div>
         <h3 style="margin-bottom: 10px; color: #333;">Simpan Perubahan?</h3>
-        <p style="font-size: 14px; color: #777; margin-bottom: 20px;">Pastikan data sudah benar. Status akan kembali menjadi "menunggu" untuk divalidasi ulang.</p>
+        <p style="font-size: 14px; color: #777; margin-bottom: 20px;">Pastikan data sudah benar. Status akan kembali menjadi "menunggu" untuk divalidasi ulang oleh admin.</p>
         <div style="display: flex; gap: 10px; justify-content: center;">
-            <button class="btn-modal btn-cancel" onclick="hideModal()">Batal</button>
-            <button class="btn-modal btn-confirm" onclick="submitForm()">Ya, Simpan!</button>
+            <button type="button" class="btn-modal btn-cancel" onclick="hideModal()">Batal</button>
+            <button type="button" class="btn-modal btn-confirm" onclick="submitForm()">Ya, Simpan!</button>
         </div>
     </div>
 </div>
@@ -118,6 +119,7 @@
         document.getElementById('confirmModal').style.display = 'none';
     }
     function submitForm() {
+        // Eksekusi penyerahan data form asli ke controller
         document.getElementById('editForm').submit();
     }
 </script>

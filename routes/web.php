@@ -52,18 +52,21 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/profile', [PrestasiController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::post('/prestasi/{id}/like', [PrestasiController::class, 'toggleLike'])->name('prestasi.like');
 
     // ==========================================
     // KHUSUS ROLE: MAHASISWA
     // ==========================================
     Route::middleware('role:mahasiswa')->group(function () {
-        Route::get('/prestasi/upload', [PrestasiController::class, 'index'])->name('prestasi.upload');
-        Route::post('/prestasi/upload', [PrestasiController::class, 'store'])->name('prestasi.store');
-        Route::get('/tabelPrestasi', [PrestasiController::class, 'tabelPrestasi']);
-        Route::get('/prestasi/edit/{id}', [PrestasiController::class, 'edit'])->name('prestasi.edit');
-        Route::put('/prestasi/update/{id}', [PrestasiController::class, 'update'])->name('prestasi.update');
-        Route::delete('/prestasi/delete/{id}', [PrestasiController::class, 'destroy'])->name('prestasi.destroy');
-        Route::post('/prestasi/{id}/like', [PrestasiController::class, 'toggleLike'])->name('prestasi.like');
+    Route::get('/prestasi/upload', [PrestasiController::class, 'index'])->name('prestasi.upload');
+    Route::post('/prestasi/upload', [PrestasiController::class, 'store'])->name('prestasi.store');
+    Route::get('/tabelPrestasi', [PrestasiController::class, 'tabelPrestasi']);
+    
+    // UBAH METHOD YANG DIPANGGIL: dari 'edit' menjadi 'editPrestasi'
+    Route::get('/prestasi/edit/{id_prestasi}', [PrestasiController::class, 'editPrestasi'])->name('prestasi.edit');
+    
+    Route::put('/prestasi/update/{id_prestasi}', [PrestasiController::class, 'update'])->name('prestasi.update');
+    Route::delete('/prestasi/delete/{id_prestasi}', [PrestasiController::class, 'destroy'])->name('prestasi.destroy');
     });
 
     // ==========================================

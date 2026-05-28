@@ -7,41 +7,12 @@ use App\Http\Controllers\PrestasiController;
 use App\Http\Controllers\MahasiswaController;
 use Illuminate\Support\Facades\Route; 
 
-<<<<<<< HEAD
 Route::get('/', function () {
     $prestasis = \App\Models\Prestasi::with(['mahasiswa', 'kategori', 'likes'])
         ->where('status', 'disetujui')
         ->latest()
         ->get();
     return view('mahasiswa.index', compact('prestasis'));
-=======
-// Halaman Utama Publik / Mahasiswa (Bisa diakses tanpa login atau sesudah login)
-Route::get('/', function (Illuminate\Http\Request $request) { 
-    $keyword = $request->input('search');
-
-    // 1. Ambil data prestasi yang statusnya sudah 'disetujui'
-    $query = \App\Models\Prestasi::with('user')->where('status', 'disetujui')->orderBy('created_at', 'desc');
-
-    // 2. Jika pengunjung memasukkan kata kunci pencarian
-    if ($keyword) {
-        $query->where(function($q) use ($keyword) {
-            $q->where('judul', 'LIKE', "%$keyword%")
-              ->orWhere('bidang', 'LIKE', "%$keyword%")
-              ->orWhere('peringkat', 'LIKE', "%$keyword%");
-
-            // Cari berdasarkan nama mahasiswa melalui relasi 'user'
-            $q->orWhereHas('user', function($queryUser) use ($keyword) {
-                $queryUser->where('nama', 'LIKE', "%$keyword%"); 
-            });
-        });
-    }
-
-    // 3. Eksekusi query
-    $prestasis_publik = $query->get();
-
-    // 4. Lempar variabel ke view beranda
-    return view('mahasiswa.index', compact('prestasis_publik'));
->>>>>>> 00372da84e460ca28db95fe32b2eb0fd8656f786
 })->name('home');
 
 Route::get('/DaftarMahasiswa', [MahasiswaController::class, 'publik'])->name('mahasiswa.publik');
@@ -73,7 +44,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     });
 
     Route::middleware('role:admin')->group(function () {
-<<<<<<< HEAD
         Route::get('/Dashboard', function () {
             $stats = [
                 'total_mahasiswa' => \App\Models\User::where('role', 'mahasiswa')->count(),
@@ -84,10 +54,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
             $prestasis = \App\Models\Prestasi::with('user')->orderBy('created_at', 'desc')->get();
             return view('admin.dashboardAdmin', compact('stats', 'prestasis')); 
         })->name('admin.dashboard');
-=======
-        // Dashboard Admin
-        Route::get('/Dashboard', [PrestasiController::class, 'dashboardAdmin'])->name('admin.dashboard');
->>>>>>> 00372da84e460ca28db95fe32b2eb0fd8656f786
 
         Route::post('/admin/prestasi/{id}/approve', [PrestasiController::class, 'approve'])->name('prestasi.approve');
         Route::get('/DataKategori', [KategoriController::class, 'index']);

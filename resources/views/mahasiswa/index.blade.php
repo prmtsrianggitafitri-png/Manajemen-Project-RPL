@@ -182,7 +182,7 @@
               
               @php 
                 if(Auth::check()) {
-                    $isLikedByMe = $p->likes->contains('user_id', Auth::id());
+                    $isLikedByMe = $p->likes->contains('nim', Auth::id());
                 } else {
                     $isLikedByMe = $p->likes->contains('ip_address', request()->ip());
                 }

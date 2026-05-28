@@ -229,37 +229,37 @@ class PrestasiController extends Controller
     }
 
     public function toggleLike($id)
-    {
-        if (Auth::check()) {
-            $matchCondition = ['user_id' => Auth::id()];
-        } else {
-            $matchCondition = ['ip_address' => request()->ip()];
-        }
-
-        $like = \App\Models\Like::where('id_prestasi', $id)
-            ->where(function($query) use ($matchCondition) {
-                $query->where($matchCondition);
-            })
-            ->first();
-
-        if ($like) {
-            $like->delete();
-            $isLiked = false;
-        } else {
-            \App\Models\Like::create([
-                'id_prestasi' => $id,
-                'user_id'     => Auth::check() ? Auth::id() : null,
-                'ip_address'  => Auth::check() ? null : request()->ip(),
-            ]);
-            $isLiked = true;
-        }
-
-        $likeCount = \App\Models\Like::where('id_prestasi', $id)->count();
-
-        return response()->json([
-            'success'   => true,
-            'isLiked'   => $isLiked,
-            'likeCount' => $likeCount
-        ]);
+{
+    if (Auth::check()) {
+        $matchCondition = ['nim' => Auth::id()];
+    } else {
+        $matchCondition = ['ip_address' => request()->ip()];
     }
+
+    $like = \App\Models\Like::where('id_prestasi', $id)
+        ->where(function($query) use ($matchCondition) {
+            $query->where($matchCondition);
+        })
+        ->first();
+
+    if ($like) {
+        $like->delete();
+        $isLiked = false;
+    } else {
+        \App\Models\Like::create([
+            'id_prestasi' => $id,
+            'nim'         => Auth::check() ? Auth::id() : null,
+            'ip_address'  => Auth::check() ? null : request()->ip(),
+        ]);
+        $isLiked = true;
+    }
+
+    $likeCount = \App\Models\Like::where('id_prestasi', $id)->count();
+
+    return response()->json([
+        'success'   => true,
+        'isLiked'   => $isLiked,
+        'likeCount' => $likeCount
+    ]);
+}
 }

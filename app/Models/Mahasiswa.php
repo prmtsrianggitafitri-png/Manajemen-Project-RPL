@@ -30,10 +30,16 @@ class Mahasiswa extends Authenticatable
         'remember_token',
     ];
 
+    public function getRoleAttribute()
+{
+    return 'mahasiswa';
+}
+
     protected function casts(): array
     {
         return [
             'password' => 'hashed',
         ];
     }
+    
 }

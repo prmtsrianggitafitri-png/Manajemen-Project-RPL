@@ -70,9 +70,9 @@
           <div class="swiper-slide">
             <div class="blog-post-item">
               @if($p->bukti_prestasi)
-                <img src="{{ asset('storage/' . $p->bukti_prestasi) }}" alt="{{ $p->judul }}" style="width:100%; height:220px; object-fit:cover;">
+                <img src="{{ asset('storage/' . $p->bukti_prestasi) }}" alt="{{ $p->judul }}" style="width:100%; height:200px; object-fit:cover;">
               @else
-                <img src="{{ asset('assets/mahasiswa/img/blog/blog-post-portrait-1.webp') }}" alt="Default">
+                <img src="{{ asset('assets/mahasiswa/img/blog/blog-post-portrait-1.webp') }}" alt="Default" style="width:100%; height:200px; object-fit:cover;">
               @endif
               <div class="blog-post-content">
                 <div class="post-meta">
@@ -88,7 +88,7 @@
           @empty
           <div class="swiper-slide">
             <div class="blog-post-item">
-              <img src="{{ asset('assets/mahasiswa/img/blog/blog-post-portrait-1.webp') }}" alt="Default">
+              <img src="{{ asset('assets/mahasiswa/img/blog/blog-post-portrait-1.webp') }}" alt="Default" style="width:100%; height:200px; object-fit:cover;">
               <div class="blog-post-content"><p>Belum ada prestasi yang disetujui.</p></div>
             </div>
           </div>
@@ -112,7 +112,7 @@
               @if($p->bukti_prestasi)
                 <img src="{{ asset('storage/' . $p->bukti_prestasi) }}" alt="{{ $p->judul }}" class="img-fluid" style="height:200px; object-fit:cover; width:100%;">
               @else
-                <img src="{{ asset('assets/mahasiswa/img/blog/blog-post-1.webp') }}" alt="" class="img-fluid">
+                <img src="{{ asset('assets/mahasiswa/img/blog/blog-post-1.webp') }}" alt="" class="img-fluid" style="height:200px; object-fit:cover; width:100%;">
               @endif
             </div>
             <p class="post-category">{{ $p->bidang }}</p>

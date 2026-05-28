@@ -54,7 +54,7 @@ class MahasiswaController extends Controller
             'status_mahasiswa' => $request->status_mahasiswa,
         ]);
 
-        return redirect('/dataMahasiswa')->with('success', 'Data dan Status Mahasiswa berhasil diperbarui!');
+        return redirect('/DataMahasiswa')->with('success', 'Data dan Status Mahasiswa berhasil diperbarui!');
     }
 
     public function destroy($id)

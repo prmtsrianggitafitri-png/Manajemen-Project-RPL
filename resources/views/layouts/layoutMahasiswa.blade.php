@@ -36,10 +36,14 @@
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
       </nav>
       <div class="header-right d-flex align-items-center gap-3 m-0 p-0">
-        <div class="search-bar position-relative d-none d-md-block">
-          <input type="text" placeholder="Search..." class="form-control ps-4 pe-6 py-2 custom-search-input">
-          <i class="bi bi-search position-absolute top-50 end-0 translate-middle-y pe-3 text-muted" style="font-size: 0.85rem;"></i>
-        </div>
+        <form action="{{ route('home') }}" method="GET" class="d-flex align-items-center m-0">
+          <div class="search-bar position-relative d-none d-md-block">
+            <input type="text" name="search" placeholder="Search..." value="{{ request('search') }}" class="form-control ps-4 pe-6 py-2 custom-search-input">
+            <button type="submit" class="btn p-0 position-absolute end-0 top-50 translate-middle-y pe-3" style="border: none; background: none; z-index: 5;">
+              <i class="bi bi-search text-muted" style="font-size: 0.85rem;"></i>
+            </button>
+          </div>
+        </form>
         @auth
           <div class="dropdown">
             <button class="btn dropdown-toggle d-flex align-items-center gap-2 custom-btn-login" type="button"

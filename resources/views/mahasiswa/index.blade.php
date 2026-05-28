@@ -81,12 +81,7 @@
           </div>
         </div>
         @empty
-        <div class="swiper-slide">
-          <div class="blog-post-item">
-            <img src="{{ asset('assets/mahasiswa/img/blog/blog-post-portrait-1.webp') }}" alt="Default">
-            <div class="blog-post-content"><p>Belum ada prestasi yang disetujui.</p></div>
-          </div>
-        </div>
+        <div class="col-12 text-center"><p>Belum ada prestasi yang disetujui.</p></div>
         @endforelse
       </div>
     </div>

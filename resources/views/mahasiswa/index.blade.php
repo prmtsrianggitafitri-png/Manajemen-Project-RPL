@@ -14,10 +14,57 @@
   .modal-title { font-weight: bold; font-size: 18px; margin-bottom: 10px; }
   .modal-message { color: #666; margin-bottom: 20px; }
   
-  /* FIX CSS: Paksa ikon hati di dalam tombol yang aktif agar otomatis berwarna merah cerah */
   .btn-like { border: none; background: none; cursor: pointer; color: #aaa; font-size: 14px; display: flex; align-items: center; gap: 4px; padding: 0; transition: all 0.2s; }
   .btn-like.liked, .btn-like.liked i { color: #e74c3c !important; }
   .btn-like:hover, .btn-like:hover i { color: #e74c3c; }
+
+  /* Modal Detail Prestasi */
+  .modal-detail-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.5); z-index: 9999;
+    align-items: center; justify-content: center;
+    padding: 20px;
+  }
+  .modal-detail-overlay.active { display: flex !important; }
+  .modal-detail-box {
+    background: white; border-radius: 15px;
+    width: 100%; max-width: 550px;
+    max-height: 90vh; overflow-y: auto;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+  }
+  .modal-detail-img {
+    width: 100%; height: 250px; object-fit: cover;
+    border-radius: 15px 15px 0 0;
+  }
+  .modal-detail-body { padding: 25px; }
+  .modal-detail-category {
+    font-size: 13px; color: #888;
+    text-transform: uppercase; letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
+  .modal-detail-title {
+    font-size: 22px; font-weight: 700;
+    color: #2d465e; margin-bottom: 15px;
+  }
+  .modal-detail-desc {
+    font-size: 15px; color: #444;
+    line-height: 1.7; margin-bottom: 20px;
+  }
+  .modal-detail-meta {
+    display: flex; gap: 15px; flex-wrap: wrap;
+    font-size: 13px; color: #666;
+    border-top: 1px solid #eee; padding-top: 15px;
+    margin-bottom: 20px;
+  }
+  .modal-detail-meta span { display: flex; align-items: center; gap: 5px; }
+  .modal-detail-close {
+    width: 100%; padding: 10px;
+    background: #107ec2; color: white;
+    border: none; border-radius: 8px;
+    font-size: 14px; font-weight: 600;
+    cursor: pointer; transition: 0.2s;
+  }
+  .modal-detail-close:hover { background: #0d6ba8; }
 </style>
 @endpush
 
@@ -81,7 +128,16 @@
                 </div>
                 <h2><a href="#">{{ $p->judul }}</a></h2>
                 <p>{{ Str::limit($p->deskripsi, 100) }}</p>
-                <a href="#" class="read-more">Read More <i class="bi bi-arrow-right"></i></a>
+                <a href="#" class="read-more btn-read-more"
+                  data-judul="{{ $p->judul }}"
+                  data-deskripsi="{{ $p->deskripsi }}"
+                  data-bidang="{{ $p->bidang }}"
+                  data-nama="{{ $p->mahasiswa->nama ?? ($p->user->name ?? 'Mahasiswa') }}"
+                  data-poin="{{ $p->jumlah_poin ?? 0 }}"
+                  data-tanggal="{{ $p->created_at->format('M d, Y') }}"
+                  data-img="{{ $p->bukti_prestasi ? asset('storage/' . $p->bukti_prestasi) : asset('assets/mahasiswa/img/blog/blog-post-portrait-1.webp') }}">
+                  Read More <i class="bi bi-arrow-right"></i>
+                </a>
               </div>
             </div>
           </div>
@@ -147,6 +203,24 @@
     </div>
   </section>
 
+  <!-- Modal Detail Prestasi -->
+  <div class="modal-detail-overlay" id="modalDetailOverlay">
+    <div class="modal-detail-box">
+      <img src="" alt="" class="modal-detail-img" id="modalDetailImg">
+      <div class="modal-detail-body">
+        <p class="modal-detail-category" id="modalDetailCategory"></p>
+        <h3 class="modal-detail-title" id="modalDetailTitle"></h3>
+        <p class="modal-detail-desc" id="modalDetailDesc"></p>
+        <div class="modal-detail-meta">
+          <span><i class="bi bi-person"></i> <span id="modalDetailNama"></span></span>
+          <span><i class="bi bi-trophy"></i> <span id="modalDetailPoin"></span> Poin</span>
+          <span><i class="bi bi-calendar"></i> <span id="modalDetailTanggal"></span></span>
+        </div>
+        <button class="modal-detail-close" onclick="closeDetailModal()">Tutup</button>
+      </div>
+    </div>
+  </div>
+
 @endsection
 
 @push('scripts')
@@ -169,13 +243,40 @@
     document.getElementById('modalOverlay').classList.remove('active');
   }
 
-  // SCRIPT UTAMA FIX: Sinkronisasi perpindahan kelas ikon dan tombol secara linear
+  // Modal Detail Prestasi
+  function closeDetailModal() {
+    document.getElementById('modalDetailOverlay').classList.remove('active');
+  }
+
+  document.querySelectorAll('.btn-read-more').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+      e.preventDefault();
+      document.getElementById('modalDetailImg').src = this.dataset.img;
+      document.getElementById('modalDetailImg').alt = this.dataset.judul;
+      document.getElementById('modalDetailCategory').textContent = this.dataset.bidang;
+      document.getElementById('modalDetailTitle').textContent = this.dataset.judul;
+      document.getElementById('modalDetailDesc').textContent = this.dataset.deskripsi;
+      document.getElementById('modalDetailNama').textContent = this.dataset.nama;
+      document.getElementById('modalDetailPoin').textContent = this.dataset.poin;
+      document.getElementById('modalDetailTanggal').textContent = this.dataset.tanggal;
+      document.getElementById('modalDetailOverlay').classList.add('active');
+    });
+  });
+
+  // Tutup modal kalau klik di luar box
+  document.getElementById('modalDetailOverlay').addEventListener('click', function(e) {
+    if (e.target === this) closeDetailModal();
+  });
+
+  // Like button
   document.querySelectorAll('.ajax-like-btn').forEach(button => {
     button.addEventListener('click', function() {
         const prestasiId = this.getAttribute('data-id');
         const icon = document.getElementById(`like-icon-${prestasiId}`);
         const countSpan = document.getElementById(`like-count-${prestasiId}`);
         const currentBtn = this;
+
+        currentBtn.disabled = true;
 
         fetch(`/prestasi/${prestasiId}/like`, {
             method: 'POST',
@@ -185,13 +286,18 @@
                 'Accept': 'application/json'
             }
         })
-        .then(response => response.json())
+        .then(response => {
+            const contentType = response.headers.get('content-type');
+            if (!contentType || !contentType.includes('application/json')) {
+                showModal('⚠️', 'Gagal', 'Terjadi kesalahan. Coba refresh halaman.');
+                return null;
+            }
+            return response.json();
+        })
         .then(data => {
+            if (!data) return;
             if (data.success) {
-                // 1. Perbarui total angka like
                 countSpan.textContent = data.likeCount;
-
-                // 2. Manipulasi visual warna tombol dan ikon hati secara serentak
                 if (data.isLiked) {
                     currentBtn.classList.add('liked');
                     icon.classList.remove('bi-heart');
@@ -206,6 +312,9 @@
         .catch(error => {
             console.error('Error:', error);
             showModal('❌', 'Koneksi Gagal', 'Gagal memproses tindakan, silakan coba lagi.');
+        })
+        .finally(() => {
+            currentBtn.disabled = false;
         });
     });
   });

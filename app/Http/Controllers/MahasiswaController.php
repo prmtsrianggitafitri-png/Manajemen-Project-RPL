@@ -11,16 +11,19 @@ class MahasiswaController extends Controller
     public function index()
     {
         $mahasiswa = User::where('role', 'mahasiswa')->orderBy('nama', 'asc')->get();
-
         return view('admin.dataMahasiswa', compact('mahasiswa'));
     }
 
     public function publik()
     {
         $mahasiswa = User::where('role', 'mahasiswa')
+            ->where('status_mahasiswa', 'aktif')
             ->withSum(['prestasis as total_poin' => function($q) {
                 $q->where('status', 'disetujui');
             }], 'jumlah_poin')
+            ->withCount(['prestasis as prestasis_count' => function($q) {
+                $q->where('status', 'disetujui');
+            }])
             ->orderByDesc('total_poin')
             ->get()
             ->map(function($mhs, $index) {
@@ -31,10 +34,35 @@ class MahasiswaController extends Controller
         return view('mahasiswa.daftarMahasiswa', compact('mahasiswa'));
     }
 
+    public function alumni()
+    {
+        $mahasiswa = User::where('role', 'mahasiswa')
+            ->where('status_mahasiswa', 'alumni')
+            ->withSum(['prestasis as total_poin' => function($q) {
+                $q->where('status', 'disetujui');
+            }], 'jumlah_poin')
+            ->withCount(['prestasis as prestasis_count' => function($q) {
+                $q->where('status', 'disetujui');
+            }])
+            ->orderByDesc('total_poin')
+            ->get()
+            ->map(function($mhs, $index) {
+                $mhs->ranking = $index + 1;
+                return $mhs;
+            });
+
+        return view('mahasiswa.daftarAlumni', compact('mahasiswa'));
+    }
+
+    public function profil($id)
+    {
+        $mhs = User::where('role', 'mahasiswa')->findOrFail($id);
+        return view('mahasiswa.profilMahasiswa', compact('mhs'));
+    }
+
     public function edit($id)
     {
         $mhs = User::where('role', 'mahasiswa')->findOrFail($id);
-
         return view('admin.editdataMahasiswa', compact('mhs'));
     }
 
@@ -61,7 +89,6 @@ class MahasiswaController extends Controller
     {
         $mhs = User::where('role', 'mahasiswa')->findOrFail($id);
         $mhs->delete();
-
         return redirect('/dataMahasiswa')->with('success', 'Data mahasiswa berhasil dihapus dari sistem.');
     }
 }

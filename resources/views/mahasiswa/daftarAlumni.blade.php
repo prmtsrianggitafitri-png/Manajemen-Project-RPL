@@ -1,6 +1,6 @@
 @extends('layouts.layoutMahasiswa')
 
-@section('title', 'SIPRESMA - Daftar Mahasiswa')
+@section('title', 'SIPRESMA - Daftar Alumni')
 
 @push('styles')
 <style>
@@ -21,7 +21,8 @@
   .podium-card {
     background: white; border-radius: 16px; padding: 24px 20px;
     text-align: center; box-shadow: 0 2px 12px rgba(0,0,0,0.07);
-    position: relative; transition: 0.2s; cursor: pointer; text-decoration: none; display: block; color: inherit;
+    position: relative; transition: 0.2s; cursor: pointer;
+    text-decoration: none; display: block; color: inherit;
   }
   .podium-card:hover { transform: translateY(-4px); box-shadow: 0 6px 20px rgba(0,0,0,0.12); color: inherit; }
   .podium-rank {
@@ -55,7 +56,7 @@
     background: white; border-radius: 12px; padding: 16px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.07);
     display: flex; align-items: center; gap: 14px;
-    transition: 0.2s; cursor: pointer; text-decoration: none; color: inherit; display: flex;
+    transition: 0.2s; text-decoration: none; color: inherit;
   }
   .mhs-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.12); color: inherit; }
   .badge-poin {
@@ -70,16 +71,16 @@
 <div class="container">
 
   @php
-    $totalMahasiswa = $mahasiswa->count();
+    $totalAlumni = $mahasiswa->count();
     $totalPoin = $mahasiswa->sum(fn($m) => $m->total_poin ?? 0);
   @endphp
   <div class="stats-bar d-flex justify-content-around flex-wrap gap-3" data-aos="fade-up">
     <div class="stat-item">
-      <div class="stat-number" style="color:#e74c3c;">{{ $totalMahasiswa }}</div>
-      <div class="stat-label">Mahasiswa</div>
+      <div class="stat-number" style="color:#e74c3c;">{{ $totalAlumni }}</div>
+      <div class="stat-label">Alumni</div>
     </div>
     <div class="stat-item">
-      <div class="stat-number" style="color:#3498db;">{{ \App\Models\Prestasi::where('status','disetujui')->count() }}</div>
+      <div class="stat-number" style="color:#3498db;">{{ \App\Models\Prestasi::whereHas('user', fn($q) => $q->where('status_mahasiswa','alumni'))->where('status','disetujui')->count() }}</div>
       <div class="stat-label">Total Prestasi</div>
     </div>
     <div class="stat-item">
@@ -90,7 +91,7 @@
 
   @if($mahasiswa->count() >= 1)
   <div class="top3-section" data-aos="fade-up" data-aos-delay="100">
-    <h5><i class="bi bi-trophy-fill"></i> Top Mahasiswa Berprestasi</h5>
+    <h5><i class="bi bi-trophy-fill"></i> Top Alumni Berprestasi</h5>
     <div class="row g-4 justify-content-center">
       @php $colors = ['#f39c12','#9b59b6','#2ecc71','#e74c3c','#3498db','#e67e22','#1abc9c','#e91e63']; @endphp
       @foreach($mahasiswa->take(3) as $mhs)
@@ -123,7 +124,7 @@
   </div>
   @endif
 
-  <div class="section-label" data-aos="fade-up">Semua Mahasiswa</div>
+  <div class="section-label" data-aos="fade-up">Semua Alumni</div>
   <div class="row g-3" data-aos="fade-up" data-aos-delay="50">
     @php $colors = ['#f39c12','#9b59b6','#2ecc71','#e74c3c','#3498db','#e67e22','#1abc9c','#e91e63']; @endphp
     @forelse($mahasiswa as $mhs)
@@ -144,7 +145,7 @@
         </a>
       </div>
     @empty
-      <div class="col-12 text-center text-muted">Belum ada mahasiswa terdaftar.</div>
+      <div class="col-12 text-center text-muted py-5">Belum ada alumni terdaftar.</div>
     @endforelse
   </div>
 

@@ -21,7 +21,7 @@
   @stack('styles')
 </head>
 
-<body class="index-page">
+<body class="index-page" style="display:flex; flex-direction:column; min-height:100vh;"></body>
 
   <header id="header" class="header d-flex align-items-center fixed-top custom-header">
     <div class="container-fluid container-xl d-flex align-items-center justify-content-between custom-container">
@@ -31,8 +31,8 @@
       <nav id="navmenu" class="navmenu m-0 p-0 d-none d-xl-flex">
         <ul class="d-flex align-items-center gap-4 mb-0 list-unstyled">
           <li><a href="{{ url('/') }}" class="{{ Request::is('/') ? 'active custom-nav-link' : 'custom-nav-link-normal' }}">Beranda</a></li>
-          <li><a href="{{ route('mahasiswa.publik') }}" class="{{ Request::is('daftar-mahasiswa') ? 'active custom-nav-link' : 'custom-nav-link-normal' }}">Mahasiswa</a></li>
-          <li><a href="#" class="custom-nav-link-normal">Alumni</a></li>
+<li><a href="{{ route('mahasiswa.publik') }}" class="{{ Request::is('DaftarMahasiswa') || Request::routeIs('mahasiswa.profil') ? 'active custom-nav-link' : 'custom-nav-link-normal' }}">Mahasiswa</a></li>
+<li><a href="{{ route('mahasiswa.alumni') }}" class="{{ Request::is('DaftarAlumni') ? 'active custom-nav-link' : 'custom-nav-link-normal' }}">Alumni</a></li>
         </ul>
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
       </nav>
@@ -68,7 +68,7 @@
     </div>
   </header>
 
-  <main class="main" style="margin-top: 110px; padding-bottom: 60px;">
+  <main class="main" style="margin-top: 110px; padding-bottom: 60px; flex: 1;">
     @yield('content')
   </main>
 

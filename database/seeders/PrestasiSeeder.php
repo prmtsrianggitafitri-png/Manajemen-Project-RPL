@@ -3,102 +3,25 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\User;
-use App\Models\Kategori;
 use App\Models\Prestasi;
-use Illuminate\Support\Facades\Hash;
+use App\Models\Kategori;
+use App\Models\User;
 
-class DatabaseSeeder extends Seeder
+class PrestasiSeeder extends Seeder
 {
     public function run(): void
     {
-     
-        // 1. SEED DATA USERS (ADMIN & MAHASISWA)
-     
-        User::updateOrCreate(
-            ['email' => 'admin@sipresma.com'],
-            [
-                'nama' => 'Admin Utama Sipresma',
-                'username' => 'admin_sipresma',
-                'password' => Hash::make('password123'),
-                'role' => 'admin',
-                'is_verified' => true,
-                'npsn' => '12345678',
-            ]
-        );
-
-        User::updateOrCreate(
-            ['email' => 'maulana@student.ac.id'],
-            [
-                'nama' => 'Muhamad Maulana',
-                'username' => 'maulana_psti',
-                'password' => Hash::make('password123'),
-                'nim' => '220102030',
-                'jenis_kelamin' => 'laki-laki',
-                'no_telepon' => '081234567890',
-                'tahun_masuk' => 2022,
-                'status_mahasiswa' => 'aktif',
-                'role' => 'mahasiswa',
-                'is_verified' => true,
-            ]
-        );
-
-        User::updateOrCreate(
-            ['email' => 'anggita@student.ac.id'],
-            [
-                'nama' => 'Pramesti Anggita Fitri',
-                'username' => 'anggita_png',
-                'password' => Hash::make('password123'),
-                'nim' => '220102031',
-                'jenis_kelamin' => 'perempuan',
-                'no_telepon' => '089876543210',
-                'tahun_masuk' => 2022,
-                'status_mahasiswa' => 'aktif',
-                'role' => 'mahasiswa',
-                'is_verified' => true,
-            ]
-        );
-
-        User::updateOrCreate(
-            ['email' => 'alumni_psti@gmail.com'],
-            [
-                'nama' => 'Ega Bagus Pratama',
-                'username' => 'ega_alumni',
-                'password' => Hash::make('password123'),
-                'nim' => '200102005',
-                'jenis_kelamin' => 'laki-laki',
-                'no_telepon' => '085522334455',
-                'tahun_masuk' => 2020,
-                'status_mahasiswa' => 'alumni',
-                'role' => 'mahasiswa',
-                'is_verified' => true,
-            ]
-        );
-
-        $this->command->info('Kategori Seeding: Data Users berhasil dimasukkan!');
-
-    
-        // 2. SEED DATA MASTER KATEGORI
-      
-        $kategoriData = [
-            ['id_kategori' => 1, 'nama_kategori' => 'Tingkat Internasional', 'peringkat' => 'Juara 1', 'jumlah_poin' => 400],
-            ['id_kategori' => 2, 'nama_kategori' => 'Tingkat Internasional', 'peringkat' => 'Juara 2', 'jumlah_poin' => 300],
-            ['id_kategori' => 3, 'nama_kategori' => 'Tingkat Nasional', 'peringkat' => 'Juara 1', 'jumlah_poin' => 200],
-            ['id_kategori' => 4, 'nama_kategori' => 'Tingkat Nasional', 'peringkat' => 'Juara 2', 'jumlah_poin' => 150],
-            ['id_kategori' => 5, 'nama_kategori' => 'Tingkat Provinsi', 'peringkat' => 'Juara 1', 'jumlah_poin' => 100],
-        ];
-
-        foreach ($kategoriData as $k) {
-            Kategori::updateOrCreate(['id_kategori' => $k['id_kategori']], $k);
-        }
-
-        $this->command->info('Kategori Seeding: Data Kategori berhasil dimasukkan!');
-
-        // 3. SEED 10 DATA PRESTASI MAHASISWA
-   
+        // Ambil semua ID kategori dan NIM mahasiswa yang ada di DB lu
         $kategoriIds = Kategori::pluck('id_kategori')->toArray();
         $mahasiswaNims = User::where('role', 'mahasiswa')->pluck('nim')->toArray();
 
+        // Jaga-jaga kalau data kategori atau mahasiswa lu masih kosong melompong
+        if (empty($kategoriIds) || empty($mahasiswaNims)) {
+            $this->command->warn('Gagal Seeding: Pastikan tabel kategoris dan users (role mahasiswa) sudah ada isinya terlebih dahulu!');
+            return;
+        }
+
+        // Daftar 10 data prestasi tiruan yang variatif
         $daftarPrestasi = [
             [
                 'judul' => 'Juara 1 Lomba Karya Tulis Ilmiah Nasional (LKTIN)',
@@ -153,8 +76,11 @@ class DatabaseSeeder extends Seeder
         ];
 
         foreach ($daftarPrestasi as $data) {
+            // Pilih kategori & mahasiswa acak untuk setiap baris data
             $idKategoriAcak = $kategoriIds[array_rand($kategoriIds)];
             $nimAcak = $mahasiswaNims[array_rand($mahasiswaNims)];
+            
+            // Ambil detail kategori buat nyalin poin & peringkatnya sesuai cara kerja controller lu
             $kategori = Kategori::find($idKategoriAcak);
 
             Prestasi::create([
@@ -163,14 +89,12 @@ class DatabaseSeeder extends Seeder
                 'judul' => $data['judul'],
                 'bidang' => $data['bidang'],
                 'deskripsi' => $data['deskripsi'],
-                'status' => 'menunggu',
-                'peringkat' => $kategori->peringkat,
-                'jumlah_poin' => $kategori->jumlah_poin,
-                'bukti_prestasi' => 'prestasi/bukti/dummy_bukti.pdf',
+                'status' => 'menunggu', // Status default sesuai controller
+                'peringkat' => $kategori->peringkat ?? 'Juara 1',
+                'jumlah_poin' => $kategori->jumlah_poin ?? 100,
+                'bukti_prestasi' => 'prestasi/bukti/dummy_bukti.pdf', // Path file tiruan
                 'dokumentasi_pribadi' => 'prestasi/dokumentasi/dummy_dok.jpg',
             ]);
         }
-
-        $this->command->info('Kategori Seeding: 10 Data Prestasi Mahasiswa sukses di-generate!');
     }
 }

@@ -65,6 +65,181 @@
     cursor: pointer; transition: 0.2s;
   }
   .modal-detail-close:hover { background: #0d6ba8; }
+
+  .hall-card {
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  background: white;
+}
+.hall-card-img {
+  width: 100%;
+  height: 380px;
+  object-fit: cover;
+  display: block;
+}
+.hall-card-info {
+  background: white !important;
+  padding: 14px 18px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  border-top: 1px solid #f0f0f0 !important;
+}
+.hall-card-name {
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  color: #2d465e !important;
+}
+.hall-card-poin {
+  font-size: 13px !important;
+  color: #f39c12 !important;
+  font-weight: 700 !important;
+  white-space: nowrap !important;
+}
+.hall-card-avatar {
+  width: 34px !important;
+  height: 34px !important;
+  border-radius: 50% !important;
+  background: linear-gradient(135deg, #107ec2, #47e098) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  color: white !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  flex-shrink: 0 !important;
+}
+
+/* Wall of Inspiration - Modern Cards */
+.inspo-card {
+  border-radius: 20px;
+  overflow: hidden;
+  background: white;
+  box-shadow: 0 4px 24px rgba(16,126,194,0.08);
+  transition: all 0.35s cubic-bezier(.4,0,.2,1);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.inspo-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 16px 48px rgba(16,126,194,0.18);
+}
+.inspo-card .inspo-img-wrap {
+  position: relative;
+  height: 210px;
+  overflow: hidden;
+}
+.inspo-card .inspo-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+.inspo-card:hover .inspo-img-wrap img {
+  transform: scale(1.06);
+}
+.inspo-card .inspo-badge {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  padding: 5px 13px;
+  border-radius: 30px;
+  backdrop-filter: blur(6px);
+  background: rgba(16,126,194,0.85);
+  color: white;
+}
+.inspo-card .inspo-badge.non-akademik {
+  background: rgba(230,126,34,0.85);
+}
+.inspo-card .inspo-like-wrap {
+  position: absolute;
+  bottom: 12px;
+  right: 14px;
+  background: white;
+  border-radius: 30px;
+  padding: 5px 12px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.12);
+}
+.inspo-card .inspo-body {
+  padding: 20px 22px 16px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.inspo-card .inspo-title {
+  font-size: 18px;
+  font-weight: 800;
+  color: #1a2e3d;
+  margin-bottom: 16px;
+  line-height: 1.35;
+  flex: 1;
+}
+.inspo-card .inspo-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 14px;
+  border-top: 1.5px solid #f0f4f8;
+}
+.inspo-card .inspo-author {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.inspo-card .inspo-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #107ec2, #47e098);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 14px;
+  font-weight: 800;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(16,126,194,0.25);
+}
+.inspo-card .inspo-author-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: #2d465e;
+  display: block;
+  line-height: 1.2;
+}
+.inspo-card .inspo-author-date {
+  font-size: 11px;
+  color: #b0bec5;
+  display: block;
+}
+.inspo-card .inspo-readmore {
+  font-size: 12px;
+  font-weight: 700;
+  color: #107ec2;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: #e8f4fd;
+  padding: 7px 14px;
+  border-radius: 30px;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.inspo-card .inspo-readmore:hover {
+  background: #107ec2;
+  color: white;
+}
+
 </style>
 @endpush
 
@@ -78,7 +253,6 @@
           <p class="my-4">Dokumentasi digital perjalanan prestasi mahasiswa Program Studi Pendidikan Sistem dan Teknologi Informasi.</p>
           <div class="cta-buttons d-flex flex-wrap gap-3">
             <a href="{{ route('prestasi.upload') }}" class="btn btn-primary">Mulai Berprestasi</a>
-             <a href="#" class="btn btn-outline">Eksplorasi</a>
           </div>
         </div>
         <div class="content-right position-relative" data-aos="fade-left" data-aos-delay="300">
@@ -102,106 +276,146 @@
     </div>
   </section>
 
-  <section id="featured-posts" class="featured-posts section">
-    <div class="container section-title" data-aos="fade-up">
-      <h2>Hall of Fame</h2>
-      <div><span>Mahasiswa Terbaik PSTI</span></div>
-    </div>
-    <div class="container" data-aos="fade-up" data-aos-delay="100">
+<section id="featured-posts" class="featured-posts section">
+  <div class="container section-title" data-aos="fade-up">
+    <h2>Hall of Fame</h2>
+    <div><span>Mahasiswa Terbaik PSTI</span></div>
+  </div>
+  <div class="container" data-aos="fade-up" data-aos-delay="100">
+    {{-- Ubah pengecekan menjadi $mahasiswaTerbaik --}}
+    @if($mahasiswaTerbaik->isEmpty())
+      <div class="row">
+        <div class="col-12 text-center">
+          <p>Belum ada prestasi yang disetujui.</p>
+        </div>
+      </div>
+    @else
       <div class="blog-posts-slider swiper init-swiper">
         <script type="application/json" class="swiper-config">
           {"loop": true,"speed": 800,"autoplay": {"delay": 3000},"slidesPerView": 3,"spaceBetween": 30,"breakpoints": {"320": {"slidesPerView": 1,"spaceBetween": 20},"768": {"slidesPerView": 2,"spaceBetween": 20},"1200": {"slidesPerView": 3,"spaceBetween": 30}}}
         </script>
         <div class="swiper-wrapper">
-          @forelse($prestasis->take(6) as $p)
+          {{-- GANTI DI SINI: dari $prestasis menjadi $mahasiswaTerbaik --}}
+          @foreach($mahasiswaTerbaik as $p)
+          @if($p->user) 
           <div class="swiper-slide">
-            <div class="blog-post-item">
-              @if($p->bukti_prestasi)
-                <img src="{{ asset('storage/' . $p->bukti_prestasi) }}" alt="{{ $p->judul }}" style="width:100%; height:200px; object-fit:cover;">
+            <div class="hall-card">
+              {{-- Gambar dokumentasi dari prestasi TERBARU --}}
+              @if($p->dokumentasi_pribadi)
+                <img src="{{ asset('storage/' . $p->dokumentasi_pribadi) }}"
+                  alt="{{ $p->judul }}"
+                  class="hall-card-img">
               @else
-                <img src="{{ asset('assets/mahasiswa/img/blog/blog-post-portrait-1.webp') }}" alt="Default" style="width:100%; height:200px; object-fit:cover;">
-              @endif
-              <div class="blog-post-content">
-                <div class="post-meta">
-                  <span><i class="bi bi-person"></i> {{ $p->mahasiswa->nama ?? ($p->user->name ?? 'Mahasiswa') }}</span>
-                  <span><i class="bi bi-trophy"></i> {{ $p->jumlah_poin ?? 0 }} Poin</span>
+                <div style="width:100%; height:380px; background:#eef2f7; display:flex; align-items:center; justify-content:center; flex-direction:column; color:#aaa;">
+                  <i class="bi bi-image" style="font-size:40px;"></i>
+                  <p style="font-size:12px; margin-top:8px;">Tidak ada dokumentasi</p>
                 </div>
-                <h2><a href="#">{{ $p->judul }}</a></h2>
-                <p>{{ Str::limit($p->deskripsi, 100) }}</p>
-                <a href="#" class="read-more btn-read-more"
-                  data-judul="{{ $p->judul }}"
-                  data-deskripsi="{{ $p->deskripsi }}"
-                  data-bidang="{{ $p->bidang }}"
-                  data-nama="{{ $p->mahasiswa->nama ?? ($p->user->name ?? 'Mahasiswa') }}"
-                  data-poin="{{ $p->jumlah_poin ?? 0 }}"
-                  data-tanggal="{{ $p->created_at->format('M d, Y') }}"
-                  data-img="{{ $p->bukti_prestasi ? asset('storage/' . $p->bukti_prestasi) : asset('assets/mahasiswa/img/blog/blog-post-portrait-1.webp') }}">
-                  Read More <i class="bi bi-arrow-right"></i>
-                </a>
+              @endif
+
+              {{-- Info nama & akumulasi total poin --}}
+              <div class="hall-card-info">
+                <div style="display:flex; align-items:center; gap:10px;">
+                  <div class="hall-card-avatar">
+                    {{ strtoupper(substr($p->user->nama ?? $p->user->name ?? 'M', 0, 1)) }}
+                  </div>
+                  <span class="hall-card-name">
+                    {{ $p->user->nama ?? $p->user->name ?? 'Mahasiswa' }}
+                  </span>
+                </div>
+                <span class="hall-card-poin">
+                  🏆 {{ $p->user->prestasis->where('status','disetujui')->sum('jumlah_poin') }} Poin
+                </span>
               </div>
             </div>
           </div>
-          @empty
-          <div class="swiper-slide">
-            <div class="blog-post-item">
-              <img src="{{ asset('assets/mahasiswa/img/blog/blog-post-portrait-1.webp') }}" alt="Default" style="width:100%; height:200px; object-fit:cover;">
-              <div class="blog-post-content"><p>Belum ada prestasi yang disetujui.</p></div>
-            </div>
-          </div>
-          @endforelse
+          @endif
+          @endforeach
         </div>
       </div>
-    </div>
-  </section>
+    @endif
+  </div>
+</section>
 
-  <section id="latest-posts" class="latest-posts section">
-    <div class="container section-title" data-aos="fade-up">
-      <h2>Wall of Inspiration</h2>
-      <div><span>Galeri Prestasi Mahasiswa PSTI</span></div>
-    </div>
-    <div class="container" data-aos="fade-up" data-aos-delay="100">
-      <div class="row gy-4">
-        @forelse($prestasis as $p)
-        <div class="col-lg-4">
-          <article>
-            <div class="post-img">
-              @if($p->bukti_prestasi)
-                <img src="{{ asset('storage/' . $p->bukti_prestasi) }}" alt="{{ $p->judul }}" class="img-fluid" style="height:200px; object-fit:cover; width:100%;">
-              @else
-                <img src="{{ asset('assets/mahasiswa/img/blog/blog-post-1.webp') }}" alt="" class="img-fluid" style="height:200px; object-fit:cover; width:100%;">
-              @endif
-            </div>
-            <p class="post-category">{{ $p->bidang }}</p>
-            <h2 class="title"><a href="#">{{ $p->judul }}</a></h2>
+ <section id="latest-posts" class="latest-posts section">
+  <div class="container section-title" data-aos="fade-up">
+    <h2>Wall of Inspiration</h2>
+    <div><span>Galeri Prestasi Mahasiswa PSTI</span></div>
+  </div>
+  <div class="container" data-aos="fade-up" data-aos-delay="100">
+    <div class="row gy-4">
+      @forelse($prestasis as $p)
+      <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
+        <div class="inspo-card">
 
-            <div class="d-flex align-items-center justify-content-between">
-              <div class="post-meta">
-                <p class="post-author mb-0">{{ $p->mahasiswa->nama ?? ($p->user->name ?? 'Mahasiswa') }}</p>
-                <p class="post-date mb-0"><time>{{ $p->created_at->format('M d, Y') }}</time></p>
+          {{-- Gambar + badge + like --}}
+          <div class="inspo-img-wrap">
+            @if($p->bukti_prestasi)
+              <img src="{{ asset('storage/' . $p->bukti_prestasi) }}" alt="{{ $p->judul }}">
+            @else
+              <div style="width:100%;height:100%;background:linear-gradient(135deg,#e8f4fd,#d4edda);display:flex;align-items:center;justify-content:center;">
+                <i class="bi bi-image" style="font-size:40px;color:#b0bec5;"></i>
               </div>
-              
-              @php 
-                if(Auth::check()) {
-                    $isLikedByMe = $p->likes->contains('nim', Auth::id());
-                } else {
-                    $isLikedByMe = $p->likes->contains('ip_address', request()->ip());
-                }
-                $likeCount = $p->likes->count(); 
-              @endphp
+            @endif
 
-              <button type="button" class="btn-like ajax-like-btn {{ $isLikedByMe ? 'liked' : '' }}" data-id="{{ $p->id_prestasi }}">
-                <i class="bi {{ $isLikedByMe ? 'bi-heart-fill' : 'bi-heart' }}" id="like-icon-{{ $p->id_prestasi }}"></i> 
+            {{-- Badge bidang --}}
+            <span class="inspo-badge {{ $p->bidang == 'non-akademik' ? 'non-akademik' : '' }}">
+              {{ $p->bidang }}
+            </span>
+
+            {{-- Like button di atas gambar --}}
+            @php 
+              if(Auth::check()) {
+                  $isLikedByMe = $p->likes->contains('nim', Auth::id());
+              } else {
+                  $isLikedByMe = $p->likes->contains('ip_address', request()->ip());
+              }
+              $likeCount = $p->likes->count(); 
+            @endphp
+            <div class="inspo-like-wrap">
+              <button type="button" class="btn-like ajax-like-btn {{ $isLikedByMe ? 'liked' : '' }}" data-id="{{ $p->id_prestasi }}" style="padding:0;">
+                <i class="bi {{ $isLikedByMe ? 'bi-heart-fill' : 'bi-heart' }}" id="like-icon-{{ $p->id_prestasi }}"></i>
                 <span id="like-count-{{ $p->id_prestasi }}">{{ $likeCount }}</span>
               </button>
             </div>
-          </article>
+          </div>
+
+          <div class="inspo-body">
+            {{-- Judul --}}
+            <h2 class="inspo-title">{{ $p->judul }}</h2>
+
+            {{-- Footer --}}
+            <div class="inspo-footer">
+              <div class="inspo-author">
+                <div class="inspo-avatar">
+                  {{ strtoupper(substr($p->user->nama ?? $p->user->name ?? 'M', 0, 1)) }}
+                </div>
+                <div>
+                  <span class="inspo-author-name">{{ $p->user->nama ?? $p->user->name ?? 'Mahasiswa' }}</span>
+                  <span class="inspo-author-date">{{ $p->created_at->format('M d, Y') }}</span>
+                </div>
+              </div>
+
+              <a href="#" class="inspo-readmore btn-read-more"
+                data-judul="{{ $p->judul }}"
+                data-deskripsi="{{ $p->deskripsi }}"
+                data-bidang="{{ $p->bidang }}"
+                data-nama="{{ $p->user->nama ?? $p->user->name ?? 'Mahasiswa' }}"
+                data-poin="{{ $p->jumlah_poin ?? 0 }}"
+                data-tanggal="{{ $p->created_at->format('M d, Y') }}"
+                data-img="{{ $p->bukti_prestasi ? asset('storage/' . $p->bukti_prestasi) : asset('assets/mahasiswa/img/blog/blog-post-portrait-1.webp') }}">
+                Lihat <i class="bi bi-arrow-right"></i>
+              </a>
+            </div>
+          </div>
+
         </div>
-        @empty
-        <div class="col-12 text-center"><p>Belum ada prestasi yang disetujui.</p></div>
-        @endforelse
       </div>
+      @empty
+      <div class="col-12 text-center"><p>Belum ada prestasi yang disetujui.</p></div>
+      @endforelse
     </div>
-  </section>
+  </div>
+</section>
 
   <!-- Modal Detail Prestasi -->
   <div class="modal-detail-overlay" id="modalDetailOverlay">

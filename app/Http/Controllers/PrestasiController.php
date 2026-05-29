@@ -10,36 +10,57 @@ use Illuminate\Support\Facades\Storage;
 
 class PrestasiController extends Controller
 {
-    // Menambahkan fitur pencarian publik
+  // Menambahkan fitur pencarian publik
+   // Menambahkan fitur pencarian publik
     public function home(Request $request)
     {
         // 1. Ambil kata kunci pencarian dari navbar (?search=...)
         $keyword = $request->query('search');
 
-        // 2. Buat query dasar untuk mengambil prestasi yang berstatus disetujui
-        $query = Prestasi::where('status', 'disetujui')
-                        ->with(['mahasiswa', 'user', 'likes'])
-                        ->latest();
+        // ==========================================
+        // QUERY 1: UNTUK HALL OF FAME (Disesuaikan ke id_prestasi)
+        // ==========================================
+        $mahasiswaTerbaik = Prestasi::with(['user.prestasis' => function($q) {
+                                $q->where('status', 'disetujui');
+                            }])
+                            ->where('status', 'disetujui')
+                            ->whereIn('id_prestasi', function($q) { // <-- DIUBAH DI SINI
+                                $q->select(\DB::raw('MAX(id_prestasi)')) // <-- DIUBAH DI SINI
+                                  ->from('prestasis')
+                                  ->where('status', 'disetujui')
+                                  ->groupBy('nim');
+                            })
+                            ->latest()
+                            ->take(6)
+                            ->get();
 
-        // 3. Jika ada kata kunci pencarian, saring data berdasarkan judul, deskripsi, atau nama mahasiswa
+        // ==========================================
+        // QUERY 2: UNTUK WALL OF INSPIRATION (Semua Postingan Prestasi)
+        // ==========================================
+        $queryInspirasi = Prestasi::where('status', 'disetujui')
+                                  ->with(['mahasiswa', 'user', 'likes'])
+                                  ->latest();
+
+        // 3. Jika ada kata kunci pencarian, saring data Wall of Inspiration
         if ($keyword) {
-            $query->where(function($q) use ($keyword) {
+            $queryInspirasi->where(function($q) use ($keyword) {
                 $q->where('judul', 'LIKE', "%$keyword%")
                   ->orWhere('deskripsi', 'LIKE', "%$keyword%")
                   ->orWhere('bidang', 'LIKE', "%$keyword%")
                   ->orWhere('peringkat', 'LIKE', "%$keyword%");
 
-                // Pencarian berdasarkan nama mahasiswa yang mengunggah (lewat relasi 'user')
+                // Pencarian berdasarkan nama mahasiswa (lewat relasi 'user')
                 $q->orWhereHas('user', function($queryUser) use ($keyword) {
                     $queryUser->where('nama', 'LIKE', "%$keyword%");
                 });
             });
         }
 
-        // 4. Eksekusi data hasil saringan
-        $prestasis = $query->get();
+        // 4. Eksekusi data hasil saringan untuk Wall of Inspiration
+        $prestasis = $queryInspirasi->get();
 
-        return view('mahasiswa.index', compact('prestasis'));
+        // Kirim kedua variabel ke View
+        return view('mahasiswa.index', compact('mahasiswaTerbaik', 'prestasis'));
     }
 
     public function tabelPrestasi()
@@ -55,7 +76,7 @@ class PrestasiController extends Controller
         $prestasis = Prestasi::where('nim', Auth::user()->nim)->get();
         return view('prestasi.upload', compact('kategoris', 'prestasis'));
     }
-
+    
     public function store(Request $request)
     {
         $request->validate([

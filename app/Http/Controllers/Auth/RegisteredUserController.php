@@ -3,10 +3,9 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Models\Mahasiswa;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
 
@@ -21,15 +20,15 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'nama'          => ['required', 'string', 'max:255'],
-            'email'         => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:mahasiswas,email'],
-            'nim'           => ['required', 'string', 'max:20', 'unique:mahasiswas,nim'],
+            'email'         => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:users,email'],
+            'nim'           => ['required', 'string', 'max:20', 'unique:users,nim'],
             'jenis_kelamin' => ['required', 'in:laki-laki,perempuan'],
             'tahun_masuk'   => ['required', 'digits:4', 'integer', 'min:2000', 'max:'.date('Y')],
             'no_telepon'    => ['required', 'string', 'max:15'],
             'password'      => ['required', 'confirmed', 'min:8'],
         ]);
 
-        Mahasiswa::create([
+        User::create([
             'nim'           => $request->nim,
             'nama'          => $request->nama,
             'email'         => $request->email,

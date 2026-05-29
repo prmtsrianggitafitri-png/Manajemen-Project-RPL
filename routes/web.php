@@ -7,14 +7,7 @@ use App\Http\Controllers\PrestasiController;
 use App\Http\Controllers\MahasiswaController;
 use Illuminate\Support\Facades\Route; 
 
-Route::get('/', function () {
-    $prestasis = \App\Models\Prestasi::with(['mahasiswa', 'kategori', 'likes'])
-        ->where('status', 'disetujui')
-        ->latest()
-        ->get();
-    return view('mahasiswa.index', compact('prestasis'));
-})->name('home');
-
+Route::get('/', [PrestasiController::class, 'home'])->name('home');
 Route::get('/DaftarMahasiswa', [MahasiswaController::class, 'publik'])->name('mahasiswa.publik');
 Route::get('/DaftarAlumni', [MahasiswaController::class, 'alumni'])->name('mahasiswa.alumni');
 Route::get('/mahasiswa/{id}', [MahasiswaController::class, 'profil'])->name('mahasiswa.profil');

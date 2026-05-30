@@ -8,11 +8,25 @@ use Illuminate\Http\Request;
 
 class MahasiswaController extends Controller
 {
-    public function index()
-    {
-        $mahasiswa = User::where('role', 'mahasiswa')->orderBy('nama', 'asc')->get();
-        return view('admin.dataMahasiswa', compact('mahasiswa'));
+    // ✅ PERBAIKAN — tambahkan Request dan filter search
+public function index(Request $request)
+{
+    $keyword = $request->input('search');
+
+    $query = User::where('role', 'mahasiswa')->orderBy('nama', 'asc');
+
+    if ($keyword) {
+        $query->where(function($q) use ($keyword) {
+            $q->where('nama', 'LIKE', "%$keyword%")
+              ->orWhere('nim', 'LIKE', "%$keyword%")
+              ->orWhere('email', 'LIKE', "%$keyword%")
+              ->orWhere('status_mahasiswa', 'LIKE', "%$keyword%");
+        });
     }
+
+    $mahasiswa = $query->get();
+    return view('admin.dataMahasiswa', compact('mahasiswa'));
+}
 
     public function publik()
     {

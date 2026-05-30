@@ -37,16 +37,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     });
 
     Route::middleware('role:admin')->group(function () {
-        Route::get('/Dashboard', function () {
-            $stats = [
-                'total_mahasiswa' => \App\Models\User::where('role', 'mahasiswa')->count(),
-                'total_prestasi'  => \App\Models\Prestasi::count(),
-                'menunggu'        => \App\Models\Prestasi::where('status', 'menunggu')->count(),
-                'total_poin'      => \App\Models\Prestasi::where('status', 'disetujui')->sum('jumlah_poin'),
-            ];
-            $prestasis = \App\Models\Prestasi::with('user')->orderBy('created_at', 'desc')->get();
-            return view('admin.dashboardAdmin', compact('stats', 'prestasis')); 
-        })->name('admin.dashboard');
+        Route::get('/Dashboard', [PrestasiController::class, 'dashboardAdmin'])->name('admin.dashboard');
 
         Route::post('/admin/prestasi/{id}/approve', [PrestasiController::class, 'approve'])->name('prestasi.approve');
         Route::get('/DataKategori', [KategoriController::class, 'index']);

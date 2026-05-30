@@ -1,4 +1,4 @@
-@extends('mahasiswa.index')
+@extends('layouts.layoutMahasiswa')
 
 @section('content')
     <div class="container-fluid" style="padding-top: 10px; padding-bottom: 50px; min-height: 100vh;">

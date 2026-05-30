@@ -80,7 +80,7 @@
       <div class="stat-label">Alumni</div>
     </div>
     <div class="stat-item">
-      <div class="stat-number" style="color:#3498db;">{{ \App\Models\Prestasi::whereHas('user', fn($q) => $q->where('status_mahasiswa','alumni'))->where('status','disetujui')->count() }}</div>
+      <div class="stat-number" style="color:#3498db;">{{ \App\Models\Prestasi::whereHas('mahasiswa', fn($q) => $q->where('status','alumni'))->where('status','disetujui')->count() }}</div>
       <div class="stat-label">Total Prestasi</div>
     </div>
     <div class="stat-item">
@@ -102,7 +102,7 @@
           $rankClass = 'rank-'.$mhs->ranking;
         @endphp
         <div class="col-lg-3 col-md-4 col-sm-6">
-          <a href="{{ route('mahasiswa.profil', $mhs->id) }}" class="podium-card">
+          <a href="{{ route('mahasiswa.profil', $mhs->nim) }}" class="podium-card">
             <div class="podium-rank {{ $rankClass }}">{{ $mhs->ranking }}</div>
             <div class="podium-avatar" style="background:{{ $color }}">{{ $inisial }}</div>
             <div class="podium-name">{{ $mhs->nama }}</div>
@@ -134,7 +134,7 @@
         $color = $colors[($mhs->ranking-1) % count($colors)];
       @endphp
       <div class="col-lg-3 col-md-4 col-sm-6">
-        <a href="{{ route('mahasiswa.profil', $mhs->id) }}" class="mhs-card">
+        <a href="{{ route('mahasiswa.profil', $mhs->nim) }}" class="mhs-card">
           <div class="avatar-circle" style="background:{{ $color }}">{{ $inisial }}</div>
           <div>
             <div class="fw-semibold" style="font-size:15px;">{{ $mhs->nama }}</div>

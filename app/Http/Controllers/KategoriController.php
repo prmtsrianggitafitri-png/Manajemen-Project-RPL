@@ -25,7 +25,10 @@ class KategoriController extends Controller
                   ->orWhere('jumlah_poin', 'LIKE', "%$keyword%");
         }
 
-        $kategoris = $query->get();
+        $kategoris = $query
+        ->orderBy('nama_kategori', 'asc')
+        ->orderBy('peringkat', 'asc')
+        ->get();
 
         // Tetap return ke view dan struktur array bawaan asli kamu
         return view("admin.manajemenDataKategori", [

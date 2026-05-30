@@ -84,7 +84,7 @@
       <div class="stat-label">Total Prestasi</div>
     </div>
     <div class="stat-item">
-      <div class="stat-number" style="color:#2ecc71;">{{ number_format($totalPoin, 2) }}</div>
+      <div class="stat-number" style="color:#2ecc71;">{{ number_format($totalPoin) }}</div>
       <div class="stat-label">Total Poin</div>
     </div>
   </div>

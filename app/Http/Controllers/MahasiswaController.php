@@ -96,13 +96,14 @@ public function index(Request $request)
             'status_mahasiswa' => $request->status_mahasiswa,
         ]);
 
-        return redirect('/dataMahasiswa')->with('success', 'Data dan Status Mahasiswa berhasil diperbarui!');
+        return redirect('/DataMahasiswa')->with('success', 'Data dan Status Mahasiswa berhasil diperbarui!');
     }
 
     public function destroy($id)
     {
         $mhs = User::where('role', 'mahasiswa')->findOrFail($id);
         $mhs->delete();
-        return redirect('/dataMahasiswa')->with('success', 'Data mahasiswa berhasil dihapus dari sistem.');
+        return redirect()->route('admin.mahasiswa.index')
+            ->with('success', 'Data mahasiswa berhasil dihapus dari sistem.');
     }
 }

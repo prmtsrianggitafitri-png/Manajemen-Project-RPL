@@ -20,19 +20,17 @@ class PrestasiController extends Controller
         // ==========================================
         // QUERY 1: UNTUK HALL OF FAME (Disesuaikan ke id_prestasi)
         // ==========================================
-        $mahasiswaTerbaik = Prestasi::with(['user.prestasis' => function($q) {
-                                $q->where('status', 'disetujui');
-                            }])
-                            ->where('status', 'disetujui')
-                            ->whereIn('id_prestasi', function($q) { // <-- DIUBAH DI SINI
-                                $q->select(\DB::raw('MAX(id_prestasi)')) // <-- DIUBAH DI SINI
-                                  ->from('prestasis')
-                                  ->where('status', 'disetujui')
-                                  ->groupBy('nim');
-                            })
-                            ->latest()
-                            ->take(6)
-                            ->get();
+       $mahasiswaTerbaik = \App\Models\User::where('role', 'mahasiswa')
+            ->withSum(['prestasis as total_poin' => function($q) {
+                $q->where('status', 'disetujui');
+            }], 'jumlah_poin')
+            ->withCount(['prestasis as prestasis_count' => function($q) {
+                $q->where('status', 'disetujui');
+            }])
+            ->having('total_poin', '>', 0)
+            ->orderByDesc('total_poin')
+            ->take(6)
+            ->get();
 
         // ==========================================
         // QUERY 2: UNTUK WALL OF INSPIRATION (Semua Postingan Prestasi)
@@ -57,7 +55,7 @@ class PrestasiController extends Controller
         }
 
         // 4. Eksekusi data hasil saringan untuk Wall of Inspiration
-        $prestasis = $queryInspirasi->get();
+        $prestasis = $queryInspirasi->paginate(9);
 
         // Kirim kedua variabel ke View
         return view('mahasiswa.index', compact('mahasiswaTerbaik', 'prestasis'));
@@ -72,7 +70,7 @@ class PrestasiController extends Controller
 
     public function index()
     {
-        $kategoris = Kategori::all();
+        $kategoris = Kategori::orderBy('nama_kategori', 'asc')->orderBy('peringkat', 'asc')->get();
         $prestasis = Prestasi::where('nim', Auth::user()->nim)->get();
         return view('prestasi.upload', compact('kategoris', 'prestasis'));
     }

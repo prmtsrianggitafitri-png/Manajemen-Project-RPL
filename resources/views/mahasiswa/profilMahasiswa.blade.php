@@ -78,7 +78,7 @@
 <div class="container">
 
   <a href="{{ route('mahasiswa.publik') }}" class="back-link">
-    <i class="bi bi-arrow-left"></i> Kembali ke Direktori
+    <i class="bi bi-arrow-left"></i> Kembali
   </a>
 
   @php

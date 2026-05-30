@@ -36,6 +36,8 @@ class RegisteredUserController extends Controller
             'tahun_masuk'   => $request->tahun_masuk,
             'jenis_kelamin' => $request->jenis_kelamin,
             'password'      => Hash::make($request->password),
+            'status_mahasiswa' => 'aktif', 
+            'role'             => 'mahasiswa', 
         ]);
 
         return redirect(route('login'))->with('success', 'Registrasi berhasil! Silakan masuk.');

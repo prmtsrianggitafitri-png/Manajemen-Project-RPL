@@ -43,14 +43,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/DataKategori', [KategoriController::class, 'index']);
         Route::resource('kategori', KategoriController::class);
         Route::get('/DataMahasiswa', [MahasiswaController::class, 'index'])->name('admin.mahasiswa.index');
-        Route::resource('mahasiswa', MahasiswaController::class)->names([
+        Route::resource('mahasiswa', MahasiswaController::class)
+        ->except(['index', 'show', 'create', 'store'])
+        ->names([
             'edit' => 'admin.mahasiswa.edit',
             'update' => 'admin.mahasiswa.update',
             'destroy' => 'admin.mahasiswa.destroy',
         ]);
-        Route::get('/cek', function () {
-            return view('layouts.layoutAdmin');
-        });
     }); 
 
 });

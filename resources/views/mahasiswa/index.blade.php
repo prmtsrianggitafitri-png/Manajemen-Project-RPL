@@ -101,7 +101,6 @@
   width: 34px !important;
   height: 34px !important;
   border-radius: 50% !important;
-  background: linear-gradient(135deg, #107ec2, #47e098) !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
@@ -199,7 +198,6 @@
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #107ec2, #47e098);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -207,7 +205,6 @@
   font-size: 14px;
   font-weight: 800;
   flex-shrink: 0;
-  box-shadow: 0 2px 8px rgba(16,126,194,0.25);
 }
 .inspo-card .inspo-author-name {
   font-size: 13px;
@@ -239,7 +236,39 @@
   background: #107ec2;
   color: white;
 }
-
+/* Pagination */
+.pagination {
+  gap: 4px;
+}
+.pagination .page-link {
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 600;
+  border: 1px solid #e8edf2;
+  color: #2d465e;
+  background: white;
+  transition: all 0.2s;
+}
+.pagination .page-link:hover {
+  border-color: #107ec2;
+  color: #107ec2;
+  background: #f0f8ff;
+}
+.pagination .page-item.active .page-link {
+  background: #107ec2;
+  border-color: #107ec2;
+  color: white;
+}
+.pagination .page-item.disabled .page-link {
+  background: #f8f9fa;
+  border-color: #e8edf2;
+  color: #ccc;
+}
 </style>
 @endpush
 
@@ -295,42 +324,42 @@
           {"loop": true,"speed": 800,"autoplay": {"delay": 3000},"slidesPerView": 3,"spaceBetween": 30,"breakpoints": {"320": {"slidesPerView": 1,"spaceBetween": 20},"768": {"slidesPerView": 2,"spaceBetween": 20},"1200": {"slidesPerView": 3,"spaceBetween": 30}}}
         </script>
         <div class="swiper-wrapper">
-          {{-- GANTI DI SINI: dari $prestasis menjadi $mahasiswaTerbaik --}}
-          @foreach($mahasiswaTerbaik as $p)
-          @if($p->user) 
-          <div class="swiper-slide">
-            <div class="hall-card">
-              {{-- Gambar dokumentasi dari prestasi TERBARU --}}
-              @if($p->dokumentasi_pribadi)
-                <img src="{{ asset('storage/' . $p->dokumentasi_pribadi) }}"
-                  alt="{{ $p->judul }}"
-                  class="hall-card-img">
-              @else
-                <div style="width:100%; height:380px; background:#eef2f7; display:flex; align-items:center; justify-content:center; flex-direction:column; color:#aaa;">
-                  <i class="bi bi-image" style="font-size:40px;"></i>
-                  <p style="font-size:12px; margin-top:8px;">Tidak ada dokumentasi</p>
-                </div>
-              @endif
+  @foreach($mahasiswaTerbaik as $mhs)
+  <div class="swiper-slide">
+    <div class="hall-card">
+      @php
+        $prestasiTerbaru = $mhs->prestasis->where('status','disetujui')->sortByDesc('created_at')->first();
+      @endphp
 
-              {{-- Info nama & akumulasi total poin --}}
-              <div class="hall-card-info">
-                <div style="display:flex; align-items:center; gap:10px;">
-                  <div class="hall-card-avatar">
-                    {{ strtoupper(substr($p->user->nama ?? $p->user->name ?? 'M', 0, 1)) }}
-                  </div>
-                  <span class="hall-card-name">
-                    {{ $p->user->nama ?? $p->user->name ?? 'Mahasiswa' }}
-                  </span>
-                </div>
-                <span class="hall-card-poin">
-                  🏆 {{ $p->user->prestasis->where('status','disetujui')->sum('jumlah_poin') }} Poin
-                </span>
-              </div>
-            </div>
-          </div>
-          @endif
-          @endforeach
+      @if($prestasiTerbaru && $prestasiTerbaru->dokumentasi_pribadi)
+        <img src="{{ asset('storage/' . $prestasiTerbaru->dokumentasi_pribadi) }}"
+          alt="{{ $mhs->nama }}" class="hall-card-img">
+      @else
+        <div style="width:100%; height:380px; background:#eef2f7; display:flex; align-items:center; justify-content:center; flex-direction:column; color:#aaa;">
+          <i class="bi bi-image" style="font-size:40px;"></i>
+          <p style="font-size:12px; margin-top:8px;">Tidak ada dokumentasi</p>
         </div>
+      @endif
+
+     <div class="hall-card-info">
+  <div style="display:flex; align-items:center; gap:10px;">
+    @php
+      $colors = ['#f39c12','#9b59b6','#2ecc71','#e74c3c','#3498db','#e67e22','#1abc9c','#e91e63'];
+      $color = $colors[$loop->index % count($colors)];
+      $words = explode(' ', trim($mhs->nama ?? 'M'));
+      $inisial = strtoupper(substr($words[0],0,1).(isset($words[1])?substr($words[1],0,1):''));
+    @endphp
+    <div class="hall-card-avatar" style="background:{{ $color }} !important;">
+      {{ $inisial }}
+    </div>
+    <span class="hall-card-name">{{ $mhs->nama }}</span>
+  </div>
+  <span class="hall-card-poin">🏆 {{ $mhs->total_poin }} Poin</span>
+</div>
+    </div>
+  </div>
+  @endforeach
+</div>
       </div>
     @endif
   </div>
@@ -386,14 +415,20 @@
             {{-- Footer --}}
             <div class="inspo-footer">
               <div class="inspo-author">
-                <div class="inspo-avatar">
-                  {{ strtoupper(substr($p->user->nama ?? $p->user->name ?? 'M', 0, 1)) }}
-                </div>
-                <div>
-                  <span class="inspo-author-name">{{ $p->user->nama ?? $p->user->name ?? 'Mahasiswa' }}</span>
-                  <span class="inspo-author-date">{{ $p->created_at->format('M d, Y') }}</span>
-                </div>
+              @php
+                $colors = ['#f39c12','#9b59b6','#2ecc71','#e74c3c','#3498db','#e67e22','#1abc9c','#e91e63'];
+                $color = $colors[$loop->index % count($colors)];
+                $words = explode(' ', trim($p->user->nama ?? 'M'));
+                $inisial = strtoupper(substr($words[0],0,1).(isset($words[1])?substr($words[1],0,1):''));
+              @endphp
+              <div class="inspo-avatar" style="background:{{ $color }};">
+                {{ $inisial }}
               </div>
+              <div>
+                <span class="inspo-author-name">{{ $p->user->nama ?? $p->user->name ?? 'Mahasiswa' }}</span>
+                <span class="inspo-author-date">{{ $p->created_at->format('M d, Y') }}</span>
+              </div>
+            </div>
 
               <a href="#" class="inspo-readmore btn-read-more"
                 data-judul="{{ $p->judul }}"
@@ -413,6 +448,10 @@
       @empty
       <div class="col-12 text-center"><p>Belum ada prestasi yang disetujui.</p></div>
       @endforelse
+    </div>
+
+    <div class="d-flex justify-content-center mt-5">
+      {{ $prestasis->withQueryString()->links() }}
     </div>
   </div>
 </section>

@@ -20,7 +20,7 @@ return new class extends Migration
             $table->enum('jenis_kelamin', ['laki-laki', 'perempuan'])->nullable();
             $table->string('no_telepon')->nullable();
             $table->year('tahun_masuk')->nullable();
-            $table->enum('status_mahasiswa', ['aktif', 'alumni'])->nullable();
+            $table->enum('status_mahasiswa', ['aktif', 'alumni'])->default('aktif')->nullable();
 
             // Kolom buat admin
             $table->string('npsn')->nullable()->unique(); 

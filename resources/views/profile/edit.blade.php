@@ -102,6 +102,16 @@
                                                         @csrf
                                                         @method('DELETE')
                                                     </form>
+                                                @elseif($p->status == 'disetujui')
+                                                    <div class="d-flex justify-content-center gap-1">
+                                                        <button type="button" class="btn btn-sm btn-outline-danger border-0 rounded-3 text-xs fw-bold px-2 py-1" onclick="confirmDelete('{{ $p->id_prestasi }}', '{{ $p->judul }}')">
+                                                            <i class="fa-solid fa-trash"></i> Hapus
+                                                        </button>
+                                                    </div>
+                                                    <form id="form-delete-{{ $p->id_prestasi }}" action="{{ route('prestasi.destroy', $p->id_prestasi) }}" method="POST" style="display:none;">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                    </form>
                                                 @else
                                                     <span class="badge bg-light text-muted px-2.5 py-1.5 rounded-3 text-xs fw-medium italic border">
                                                         <i class="fa-solid fa-lock me-1"></i> Locked

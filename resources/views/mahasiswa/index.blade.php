@@ -287,18 +287,18 @@
         <div class="content-right position-relative" data-aos="fade-left" data-aos-delay="300">
           <img src="{{ asset('assets/mahasiswa/img/misc/misc-1.webp') }}" alt="Digital Platform" class="img-fluid rounded-4" style="max-height:400px; object-fit:contain;">
           <div class="floating-card">
-            <div class="card-icon"><i class="bi bi-people"></i></div>
-            <div class="card-content">
-              <span class="stats-number">200+</span>
-              <span class="stats-text">Mahasiswa Aktif</span>
-            </div>
+    <div class="card-icon"><i class="bi bi-people"></i></div>
+    <div class="card-content">
+        <span class="stats-number">{{ $totalMahasiswaAktif }}+</span>
+        <span class="stats-text">Mahasiswa Aktif</span>
+    </div>
           </div>
           <div class="floating-card-top">
-            <div class="card-icon"><i class="bi bi-trophy"></i></div>
-            <div class="card-content">
-              <span class="stats-number">{{ $prestasis->count() }}+</span>
-              <span class="stats-text">Total Prestasi</span>
-            </div>
+              <div class="card-icon"><i class="bi bi-trophy"></i></div>
+              <div class="card-content">
+                  <span class="stats-number">{{ $totalPrestasi }}+</span>
+                  <span class="stats-text">Total Prestasi</span>
+              </div>
           </div>
         </div>
       </div>

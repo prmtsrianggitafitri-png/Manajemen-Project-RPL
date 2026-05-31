@@ -17,6 +17,11 @@ class PrestasiController extends Controller
         // 1. Ambil kata kunci pencarian dari navbar (?search=...)
         $keyword = $request->query('search');
 
+        $totalPrestasi = Prestasi::where('status', 'disetujui')->count();
+        $totalMahasiswaAktif = \App\Models\User::where('role', 'mahasiswa')
+                            ->where('status_mahasiswa', 'aktif')
+                            ->count();
+
         // ==========================================
         // QUERY 1: UNTUK HALL OF FAME (Disesuaikan ke id_prestasi)
         // ==========================================
@@ -58,7 +63,7 @@ class PrestasiController extends Controller
         $prestasis = $queryInspirasi->paginate(9);
 
         // Kirim kedua variabel ke View
-        return view('mahasiswa.index', compact('mahasiswaTerbaik', 'prestasis'));
+        return view('mahasiswa.index', compact('mahasiswaTerbaik', 'prestasis', 'totalPrestasi', 'totalMahasiswaAktif'));
     }
 
     public function tabelPrestasi()

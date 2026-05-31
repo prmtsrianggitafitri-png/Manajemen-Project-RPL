@@ -77,9 +77,10 @@
 @section('content')
 <div class="container">
 
-  <a href="{{ route('mahasiswa.publik') }}" class="back-link">
+  @php $from = request()->query('from', 'mahasiswa'); @endphp
+<a href="{{ $from == 'alumni' ? route('mahasiswa.alumni') : route('mahasiswa.publik') }}" class="back-link">
     <i class="bi bi-arrow-left"></i> Kembali
-  </a>
+</a>
 
   @php
     $colors = ['#f39c12','#9b59b6','#2ecc71','#e74c3c','#3498db','#e67e22','#1abc9c','#e91e63'];

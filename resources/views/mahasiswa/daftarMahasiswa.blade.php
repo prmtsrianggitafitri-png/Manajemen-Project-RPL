@@ -101,7 +101,7 @@
           $rankClass = 'rank-'.$mhs->ranking;
         @endphp
         <div class="col-lg-3 col-md-4 col-sm-6">
-          <a href="{{ route('mahasiswa.profil', $mhs->id) }}" class="podium-card">
+          <a href="{{ route('mahasiswa.profil', $mhs->id) }}?from=mahasiswa" class="podium-card">
             <div class="podium-rank {{ $rankClass }}">{{ $mhs->ranking }}</div>
             <div class="podium-avatar" style="background:{{ $color }}">{{ $inisial }}</div>
             <div class="podium-name">{{ $mhs->nama }}</div>
@@ -133,7 +133,7 @@
         $color = $colors[($mhs->ranking-1) % count($colors)];
       @endphp
       <div class="col-lg-3 col-md-4 col-sm-6">
-        <a href="{{ route('mahasiswa.profil', $mhs->id) }}" class="mhs-card">
+        <a href="{{ route('mahasiswa.profil', $mhs->id) }}?from=mahasiswa" class="mhs-card">
           <div class="avatar-circle" style="background:{{ $color }}">{{ $inisial }}</div>
           <div>
             <div class="fw-semibold" style="font-size:15px;">{{ $mhs->nama }}</div>

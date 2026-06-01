@@ -9,62 +9,99 @@ use Illuminate\Http\Request;
 class MahasiswaController extends Controller
 {
     // ✅ PERBAIKAN — tambahkan Request dan filter search
-public function index(Request $request)
-{
-    $keyword = $request->input('search');
+    public function index(Request $request)
+    {
+        $keyword = $request->input('search');
 
-    $query = User::where('role', 'mahasiswa')->orderBy('nama', 'asc');
+        $query = User::where('role', 'mahasiswa')->orderBy('nama', 'asc');
 
-    if ($keyword) {
-        $query->where(function($q) use ($keyword) {
-            $q->where('nama', 'LIKE', "%$keyword%")
-              ->orWhere('nim', 'LIKE', "%$keyword%")
-              ->orWhere('email', 'LIKE', "%$keyword%")
-              ->orWhere('status_mahasiswa', 'LIKE', "%$keyword%");
-        });
+        if ($keyword) {
+            $query->where(function ($q) use ($keyword) {
+                $q->where('nama', 'LIKE', "%$keyword%")
+                    ->orWhere('nim', 'LIKE', "%$keyword%")
+                    ->orWhere('email', 'LIKE', "%$keyword%")
+                    ->orWhere('status_mahasiswa', 'LIKE', "%$keyword%");
+            });
+        }
+
+        $mahasiswa = $query->get();
+        return view('admin.dataMahasiswa', compact('mahasiswa'));
     }
 
-    $mahasiswa = $query->get();
-    return view('admin.dataMahasiswa', compact('mahasiswa'));
-}
-
-    public function publik()
+    public function publik(Request $request)
     {
-        $mahasiswa = User::where('role', 'mahasiswa')
-            ->where('status_mahasiswa', 'aktif')
-            ->withSum(['prestasis as total_poin' => function($q) {
-                $q->where('status', 'disetujui');
-            }], 'jumlah_poin')
-            ->withCount(['prestasis as prestasis_count' => function($q) {
-                $q->where('status', 'disetujui');
-            }])
-            ->orderByDesc('total_poin')
-            ->get()
-            ->map(function($mhs, $index) {
-                $mhs->ranking = $index + 1;
-                return $mhs;
-            });
+        // 1. Tangkap kata kunci pencarian dari navbar
+        $keyword = $request->input('search');
 
+        // 2. Siapkan query dasar untuk mahasiswa aktif
+        $query = User::where('role', 'mahasiswa')
+            ->where('status_mahasiswa', 'aktif')
+            ->withSum([
+                'prestasis as total_poin' => function ($q) {
+                    $q->where('status', 'disetujui');
+                }
+            ], 'jumlah_poin')
+            ->withCount([
+                'prestasis as prestasis_count' => function ($q) {
+                    $q->where('status', 'disetujui');
+                }
+            ])
+            ->orderByDesc('total_poin');
+
+        // 3. JIKA ada kata kunci yang dicari, saring berdasarkan Nama atau NIM
+        if ($keyword) {
+            $query->where(function ($q) use ($keyword) {
+                $q->where('nama', 'LIKE', "%$keyword%")
+                    ->orWhere('nim', 'LIKE', "%$keyword%");
+            });
+        }
+
+        // 4. Ambil datanya dan buat rangking seperti bawaan awal kelompokmu
+        $mahasiswa = $query->get()->map(function ($mhs, $index) {
+            $mhs->ranking = $index + 1;
+            return $mhs;
+        });
+
+        // 5. Kembalikan ke tampilan view tanpa merubah struktur variabel
         return view('mahasiswa.daftarMahasiswa', compact('mahasiswa'));
     }
 
-    public function alumni()
-    {
-        $mahasiswa = User::where('role', 'mahasiswa')
-            ->where('status_mahasiswa', 'alumni')
-            ->withSum(['prestasis as total_poin' => function($q) {
-                $q->where('status', 'disetujui');
-            }], 'jumlah_poin')
-            ->withCount(['prestasis as prestasis_count' => function($q) {
-                $q->where('status', 'disetujui');
-            }])
-            ->orderByDesc('total_poin')
-            ->get()
-            ->map(function($mhs, $index) {
-                $mhs->ranking = $index + 1;
-                return $mhs;
-            });
 
+    public function alumni(Request $request)
+    {
+        // 1. Tangkap kata kunci pencarian dari navbar adaptif
+        $keyword = $request->input('search');
+
+        // 2. Siapkan query dasar untuk mengambil user ber-role mahasiswa yang berstatus alumni
+        $query = User::where('role', 'mahasiswa')
+            ->where('status_mahasiswa', 'alumni')
+            ->withSum([
+                'prestasis as total_poin' => function ($q) {
+                    $q->where('status', 'disetujui');
+                }
+            ], 'jumlah_poin')
+            ->withCount([
+                'prestasis as prestasis_count' => function ($q) {
+                    $q->where('status', 'disetujui');
+                }
+            ])
+            ->orderByDesc('total_poin');
+
+        // 3. jika ada input search di navbar alumni, saring berdasarkan Nama atau NIM alumni
+        if ($keyword) {
+            $query->where(function ($q) use ($keyword) {
+                $q->where('nama', 'LIKE', "%$keyword%")
+                    ->orWhere('nim', 'LIKE', "%$keyword%");
+            });
+        }
+
+        // 4. Ambil datanya dan petakan nomor rangking bawaan awal aplikasi kalian
+        $mahasiswa = $query->get()->map(function ($mhs, $index) {
+            $mhs->ranking = $index + 1;
+            return $mhs;
+        });
+
+        // 5. Kembalikan ke view daftarAlumni tanpa merusak nama variabel aslinya
         return view('mahasiswa.daftarAlumni', compact('mahasiswa'));
     }
 

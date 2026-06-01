@@ -10,8 +10,8 @@ use Illuminate\Support\Facades\Storage;
 
 class PrestasiController extends Controller
 {
-  // Menambahkan fitur pencarian publik
-   // Menambahkan fitur pencarian publik
+    // Menambahkan fitur pencarian publik
+    // Menambahkan fitur pencarian publik
     public function home(Request $request)
     {
         // 1. Ambil kata kunci pencarian dari navbar (?search=...)
@@ -19,19 +19,23 @@ class PrestasiController extends Controller
 
         $totalPrestasi = Prestasi::where('status', 'disetujui')->count();
         $totalMahasiswaAktif = \App\Models\User::where('role', 'mahasiswa')
-                            ->where('status_mahasiswa', 'aktif')
-                            ->count();
+            ->where('status_mahasiswa', 'aktif')
+            ->count();
 
         // ==========================================
         // QUERY 1: UNTUK HALL OF FAME (Disesuaikan ke id_prestasi)
         // ==========================================
-       $mahasiswaTerbaik = \App\Models\User::where('role', 'mahasiswa')
-            ->withSum(['prestasis as total_poin' => function($q) {
-                $q->where('status', 'disetujui');
-            }], 'jumlah_poin')
-            ->withCount(['prestasis as prestasis_count' => function($q) {
-                $q->where('status', 'disetujui');
-            }])
+        $mahasiswaTerbaik = \App\Models\User::where('role', 'mahasiswa')
+            ->withSum([
+                'prestasis as total_poin' => function ($q) {
+                    $q->where('status', 'disetujui');
+                }
+            ], 'jumlah_poin')
+            ->withCount([
+                'prestasis as prestasis_count' => function ($q) {
+                    $q->where('status', 'disetujui');
+                }
+            ])
             ->having('total_poin', '>', 0)
             ->orderByDesc('total_poin')
             ->take(6)
@@ -41,19 +45,19 @@ class PrestasiController extends Controller
         // QUERY 2: UNTUK WALL OF INSPIRATION (Semua Postingan Prestasi)
         // ==========================================
         $queryInspirasi = Prestasi::where('status', 'disetujui')
-                                  ->with(['mahasiswa', 'user', 'likes'])
-                                  ->latest();
+            ->with(['mahasiswa', 'user', 'likes'])
+            ->latest();
 
         // 3. Jika ada kata kunci pencarian, saring data Wall of Inspiration
         if ($keyword) {
-            $queryInspirasi->where(function($q) use ($keyword) {
+            $queryInspirasi->where(function ($q) use ($keyword) {
                 $q->where('judul', 'LIKE', "%$keyword%")
-                  ->orWhere('deskripsi', 'LIKE', "%$keyword%")
-                  ->orWhere('bidang', 'LIKE', "%$keyword%")
-                  ->orWhere('peringkat', 'LIKE', "%$keyword%");
+                    ->orWhere('deskripsi', 'LIKE', "%$keyword%")
+                    ->orWhere('bidang', 'LIKE', "%$keyword%")
+                    ->orWhere('peringkat', 'LIKE', "%$keyword%");
 
                 // Pencarian berdasarkan nama mahasiswa (lewat relasi 'user')
-                $q->orWhereHas('user', function($queryUser) use ($keyword) {
+                $q->orWhereHas('user', function ($queryUser) use ($keyword) {
                     $queryUser->where('nama', 'LIKE', "%$keyword%");
                 });
             });
@@ -79,15 +83,15 @@ class PrestasiController extends Controller
         $prestasis = Prestasi::where('nim', Auth::user()->nim)->get();
         return view('prestasi.upload', compact('kategoris', 'prestasis'));
     }
-    
+
     public function store(Request $request)
     {
         $request->validate([
-            'id_kategori'         => 'required|exists:kategoris,id_kategori',
-            'judul'               => 'required|string|max:255',
-            'deskripsi'           => 'required|string',
-            'bidang'              => 'required|in:akademik,non-akademik',
-            'bukti_prestasi'      => 'required|file|max:512000',
+            'id_kategori' => 'required|exists:kategoris,id_kategori',
+            'judul' => 'required|string|max:255',
+            'deskripsi' => 'required|string',
+            'bidang' => 'required|in:akademik,non-akademik',
+            'bukti_prestasi' => 'required|file|max:512000',
             'dokumentasi_pribadi' => 'nullable|file|max:512000',
         ]);
 
@@ -100,15 +104,15 @@ class PrestasiController extends Controller
         }
 
         Prestasi::create([
-            'id_kategori'         => $kategori->id_kategori,
-            'nim'                 => Auth::user()->nim,
-            'judul'               => $request->judul,
-            'bidang'              => $request->bidang,
-            'deskripsi'           => $request->deskripsi,
-            'status'              => 'menunggu',
-            'peringkat'           => $kategori->peringkat,
-            'jumlah_poin'         => $kategori->jumlah_poin,
-            'bukti_prestasi'      => $buktiPath,
+            'id_kategori' => $kategori->id_kategori,
+            'nim' => Auth::user()->nim,
+            'judul' => $request->judul,
+            'bidang' => $request->bidang,
+            'deskripsi' => $request->deskripsi,
+            'status' => 'menunggu',
+            'peringkat' => $kategori->peringkat,
+            'jumlah_poin' => $kategori->jumlah_poin,
+            'bukti_prestasi' => $buktiPath,
             'dokumentasi_pribadi' => $dokPath,
         ]);
 
@@ -117,20 +121,47 @@ class PrestasiController extends Controller
 
     public function edit(Request $request)
     {
-        $prestasis = \App\Models\Prestasi::where('nim', $request->user()->nim)->get();
+        // 1. Tangkap kata kunci pencarian dari navbar global dan hapus spasi ujungnya
+        $keyword = trim($request->input('search'));
+
+        // 2. KOTAK STATISTIK: Ambil seluruh data asli tanpa filter keyword agar angkanya tidak berubah
+        $semuaPrestasi = \App\Models\Prestasi::where('nim', $request->user()->nim)->get();
 
         $stats = [
-            'diunggah'   => $prestasis->count(),
-            'disetujui'  => $prestasis->where('status', 'disetujui')->count(),
-            'direvisi'   => $prestasis->where('status', 'revisi')->count(),
-            'total_poin' => $prestasis->where('status', 'disetujui')->sum('jumlah_poin'),
+            'diunggah' => $semuaPrestasi->count(),
+            'disetujui' => $semuaPrestasi->where('status', 'disetujui')->count(),
+            'direvisi' => $semuaPrestasi->where('status', 'revisi')->count(),
+            'total_poin' => $semuaPrestasi->where('status', 'disetujui')->sum('jumlah_poin'),
         ];
 
+        // 3. DAFTAR TABEL HISTORI: Siapkan query yang bisa disaring berdasarkan keyword
+        $prestasiQuery = \App\Models\Prestasi::where('nim', $request->user()->nim);
+
+        // 4. JIKA USER MELAKUKAN PENCARIAN
+        if (!empty($keyword)) {
+            // Manipulasi keyword: jika user mengetik "terverifikasi" atau "terverif", arahkan pencarian database ke kata "disetujui"
+            $dbKeyword = $keyword;
+            if (str_contains(strtolower($keyword), 'verif')) {
+                $dbKeyword = 'disetujui';
+            }
+
+            $prestasiQuery->where(function ($q) use ($dbKeyword) {
+                $q->where('judul', 'LIKE', '%' . $dbKeyword . '%')
+                    ->orWhere('bidang', 'LIKE', '%' . $dbKeyword . '%')
+                    ->orWhere('peringkat', 'LIKE', '%' . $dbKeyword . '%')
+                    ->orWhere('status', 'LIKE', '%' . $dbKeyword . '%');
+            });
+        }
+
+        // 5. Eksekusi query tabel histori dengan urutan data terbaru
+        $prestasis = $prestasiQuery->latest()->get();
+
+        // 6. Kembalikan data dengan struktur array asosiatif yang persis dengan bawaan awal kelompokmu
         return view('profile.edit', [
-            'user'      => $request->user(),
-            'prestasis' => $prestasis,
-            'stats'     => $stats,
-            'status'    => session('status'),
+            'user' => $request->user(),
+            'prestasis' => $prestasis, // <-- Berisi data hasil saringan kata kunci pencarian
+            'stats' => $stats,     // <-- Angka statistik card warna-warni tetap utuh dan aman
+            'status' => session('status'),
         ]);
     }
 
@@ -155,23 +186,23 @@ class PrestasiController extends Controller
         }
 
         $request->validate([
-            'id_kategori'         => 'required|exists:kategoris,id_kategori',
-            'judul'               => 'required|string|max:255',
-            'deskripsi'           => 'required|string',
-            'bidang'              => 'required|in:akademik,non-akademik',
-            'bukti_prestasi'      => 'nullable|file|max:512000',
+            'id_kategori' => 'required|exists:kategoris,id_kategori',
+            'judul' => 'required|string|max:255',
+            'deskripsi' => 'required|string',
+            'bidang' => 'required|in:akademik,non-akademik',
+            'bukti_prestasi' => 'nullable|file|max:512000',
             'dokumentasi_pribadi' => 'nullable|file|max:512000',
         ]);
 
         $kategori = Kategori::findOrFail($request->id_kategori);
 
         $prestasi->id_kategori = $request->id_kategori;
-        $prestasi->judul       = $request->judul;
-        $prestasi->bidang      = $request->bidang;
-        $prestasi->deskripsi   = $request->deskripsi;
-        $prestasi->peringkat   = $kategori->peringkat;
+        $prestasi->judul = $request->judul;
+        $prestasi->bidang = $request->bidang;
+        $prestasi->deskripsi = $request->deskripsi;
+        $prestasi->peringkat = $kategori->peringkat;
         $prestasi->jumlah_poin = $kategori->jumlah_poin;
-        $prestasi->status      = 'menunggu';
+        $prestasi->status = 'menunggu';
 
         if ($request->hasFile('bukti_prestasi')) {
             if ($prestasi->bukti_prestasi) {
@@ -211,37 +242,69 @@ class PrestasiController extends Controller
 
     public function dashboardAdmin(Request $request)
     {
-        $keyword = $request->input('search');
+        // 1. Tangkap kata kunci pencarian dari navbar admin
+        $keyword = trim($request->input('search'));
 
+        // 2. KOTAK STATISTIK ADMIN: Tetap hitung murni dari database agar angkanya tidak rusak saat searching
         $stats = [
             'total_mahasiswa' => \App\Models\User::where('role', 'mahasiswa')->count(),
-            'total_prestasi'  => \App\Models\Prestasi::count(),
-            'menunggu'        => \App\Models\Prestasi::where('status', 'menunggu')->count(),
-            'total_poin'      => \App\Models\Prestasi::where('status', 'disetujui')->sum('jumlah_poin'),
+            'total_prestasi' => \App\Models\Prestasi::count(),
+            'menunggu' => \App\Models\Prestasi::where('status', 'menunggu')->count(),
+            'total_poin' => \App\Models\Prestasi::where('status', 'disetujui')->sum('jumlah_poin'),
         ];
 
+        // 3. QUERY DASAR TABEL: Ambil data dengan relasi user bawaan asli kelompokmu
         $query = \App\Models\Prestasi::with('user')->orderBy('created_at', 'desc');
 
+        // 4. LOGIKA PENCARIAN CERDAS (Tombol 'Setujui' dan Teks 'Disetujui')
         if ($keyword) {
-            $query->where(function($q) use ($keyword) {
-                $q->where('judul', 'LIKE', "%$keyword%")
-                  ->orWhere('bidang', 'LIKE', "%$keyword%")
-                  ->orWhere('peringkat', 'LIKE', "%$keyword%")
-                  ->orWhere('jumlah_poin', 'LIKE', "%$keyword%")
-                  ->orWhere('status', 'LIKE', "%$keyword%");
+            $dbKeyword = $keyword;
+            $isStatusSearch = false;
+            $lowerKeyword = strtolower($keyword);
 
-                // Mencari berdasarkan nama mahasiswa via relasi 'user'
-                $q->orWhereHas('user', function($queryUser) use ($keyword) {
-                    $queryUser->where('nama', 'LIKE', "%$keyword%");
-                });
+            // A. Jika admin mencari yang BELUM disetujui (tombol hijau visual)
+            if ($lowerKeyword === 'menunggu' || $lowerKeyword === 'setuju' || $lowerKeyword === 'setujui') {
+                $dbKeyword = 'menunggu';
+                $isStatusSearch = true;
+            }
+            // B. Jika admin mencari yang SUDAH disetujui (teks abu-abu visual)
+            elseif ($lowerKeyword === 'disetujui' || $lowerKeyword === 'sudah disetujui') {
+                $dbKeyword = 'disetujui';
+                $isStatusSearch = true;
+            }
+            // C. Jika admin mencari yang direvisi
+            elseif ($lowerKeyword === 'revisi') {
+                $dbKeyword = 'revisi';
+                $isStatusSearch = true;
+            }
+
+            // Jalankan filter bersarang ke query builder
+            $query->where(function ($q) use ($dbKeyword, $isStatusSearch, $keyword) {
+                if ($isStatusSearch) {
+                    // Jika mencari kata status, kunci pencarian HANYA di kolom status secara mutlak
+                    $q->where('status', $dbKeyword);
+                } else {
+                    // Jika mencari keyword umum, jalankan LIKE bawaan kelompokmu
+                    $q->where('judul', 'LIKE', "%$dbKeyword%")
+                        ->orWhere('bidang', 'LIKE', "%$dbKeyword%")
+                        ->orWhere('peringkat', 'LIKE', "%$dbKeyword%")
+                        ->orWhere('jumlah_poin', 'LIKE', "%$dbKeyword%")
+                        ->orWhere('status', 'LIKE', "%$dbKeyword%");
+
+                    // Tetap pertahankan fitur andalan: mencari nama mahasiswa via relasi 'user'
+                    $q->orWhereHas('user', function ($queryUser) use ($keyword) {
+                        $queryUser->where('nama', 'LIKE', "%$keyword%");
+                    });
+                }
             });
-
         }
 
+        // 5. Eksekusi data akhir
         $prestasis = $query->get();
 
+        // 6. Kembalikan variabel 'stats' dan 'prestasis' dengan aman ke view asli admin
         return view('admin.dashboardAdmin', compact('stats', 'prestasis'));
-    } // ✅ Kurung tutup dashboardAdmin yang tadinya hilang
+    }
 
     public function approve($id)
     {
@@ -253,37 +316,37 @@ class PrestasiController extends Controller
     }
 
     public function toggleLike($id)
-{
-    if (Auth::check()) {
-        $matchCondition = ['nim' => Auth::id()];
-    } else {
-        $matchCondition = ['ip_address' => request()->ip()];
-    }
+    {
+        if (Auth::check()) {
+            $matchCondition = ['nim' => Auth::id()];
+        } else {
+            $matchCondition = ['ip_address' => request()->ip()];
+        }
 
-    $like = \App\Models\Like::where('id_prestasi', $id)
-        ->where(function($query) use ($matchCondition) {
-            $query->where($matchCondition);
-        })
-        ->first();
+        $like = \App\Models\Like::where('id_prestasi', $id)
+            ->where(function ($query) use ($matchCondition) {
+                $query->where($matchCondition);
+            })
+            ->first();
 
-    if ($like) {
-        $like->delete();
-        $isLiked = false;
-    } else {
-        \App\Models\Like::create([
-            'id_prestasi' => $id,
-            'nim'         => Auth::check() ? Auth::id() : null,
-            'ip_address'  => Auth::check() ? null : request()->ip(),
+        if ($like) {
+            $like->delete();
+            $isLiked = false;
+        } else {
+            \App\Models\Like::create([
+                'id_prestasi' => $id,
+                'nim' => Auth::check() ? Auth::id() : null,
+                'ip_address' => Auth::check() ? null : request()->ip(),
+            ]);
+            $isLiked = true;
+        }
+
+        $likeCount = \App\Models\Like::where('id_prestasi', $id)->count();
+
+        return response()->json([
+            'success' => true,
+            'isLiked' => $isLiked,
+            'likeCount' => $likeCount
         ]);
-        $isLiked = true;
     }
-
-    $likeCount = \App\Models\Like::where('id_prestasi', $id)->count();
-
-    return response()->json([
-        'success'   => true,
-        'isLiked'   => $isLiked,
-        'likeCount' => $likeCount
-    ]);
-}
 }

@@ -13,30 +13,26 @@
 
                 <div class="col-12 col-lg-8">
                    <div class="row g-3 mb-4">
-                        <div class="col-6 col-md-3">
-                            <div class="card border-0 shadow-sm rounded-4 text-center p-3 text-white" style="background-color: #5b9af8;">
-                                <h3 class="fw-bold mb-0">{{ $stats['diunggah'] }}</h3>
-                                <small class="text-uppercase" style="font-size: 0.65rem; opacity: 0.9;">Diunggah</small>
-                            </div>
+                    <div class="col-6 col-md-4">
+                        <div class="card border-0 shadow-sm rounded-4 text-center p-3 text-white" style="background-color: #5b9af8;">
+                            <h3 class="fw-bold mb-0">{{ $stats['diunggah'] }}</h3>
+                            <small class="text-uppercase" style="font-size: 0.65rem; opacity: 0.9;">Diunggah</small>
                         </div>
-                        <div class="col-6 col-md-3">
-                            <div class="card border-0 shadow-sm rounded-4 text-center p-3 text-white" style="background-color: #47e098;">
-                                <h3 class="fw-bold mb-0">{{ $stats['disetujui'] }}</h3>
-                                <small class="text-uppercase" style="font-size: 0.65rem; opacity: 0.9;">Disetujui</small>
-                            </div>
+                    </div>
+                    
+                    <div class="col-6 col-md-4">
+                        <div class="card border-0 shadow-sm rounded-4 text-center p-3 text-white" style="background-color: #47e098;">
+                            <h3 class="fw-bold mb-0">{{ $stats['disetujui'] }}</h3>
+                            <small class="text-uppercase" style="font-size: 0.65rem; opacity: 0.9;">Disetujui</small>
                         </div>
-                        <div class="col-6 col-md-3">
-                            <div class="card border-0 shadow-sm rounded-4 text-center p-3 text-white" style="background-color: #e29072;">
-                                <h3 class="fw-bold mb-0">{{ $stats['direvisi'] }}</h3>
-                                <small class="text-uppercase" style="font-size: 0.65rem; opacity: 0.9;">Direvisi</small>
-                            </div>
+                    </div>
+                    
+                    <div class="col-12 col-md-4">
+                        <div class="card border-0 shadow-sm rounded-4 text-center p-3 text-white" style="background-color: #0dcaf0;">
+                            <h3 class="fw-bold mb-0">{{ $stats['total_poin'] }}</h3>
+                            <small class="text-uppercase" style="font-size: 0.65rem; opacity: 0.9;">Total Poin</small>
                         </div>
-                        <div class="col-6 col-md-3">
-                            <div class="card border-0 shadow-sm rounded-4 text-center p-3 text-white" style="background-color: #0dcaf0;">
-                                <h3 class="fw-bold mb-0">{{ $stats['total_poin'] }}</h3>
-                                <small class="text-uppercase" style="font-size: 0.65rem; opacity: 0.9;">Total Poin</small>
-                            </div>
-                        </div>
+                    </div>
                 </div>
 
                     <div class="card shadow-sm border-0 rounded-4 p-4 bg-white">
